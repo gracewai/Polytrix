@@ -1,9 +1,9 @@
 Polytrix 
 ========
-[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](http://polytrix.github.io)
-[![Platform](https://img.shields.io/badge/platform-web-lightgrey.svg)](http://polytrix.github.io)
-[![Build Version](https://img.shields.io/badge/version-0.1.1-brightgreen.svg)](http://polytrix.github.io)
-[![License](https://img.shields.io/badge/license-MIT-orange.svg)](http://polytrix.github.io)
+[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](http://code.polytrix.me)
+[![Platform](https://img.shields.io/badge/platform-web-lightgrey.svg)](http://code.polytrix.me)
+[![Build Version](https://img.shields.io/badge/version-0.1.1-brightgreen.svg)](http://code.polytrix.me)
+[![License](https://img.shields.io/badge/license-MIT-orange.svg)](http://code.polytrix.me)
 
 
 Polytrix is a web application for managing your files lives across all your cloud storage services
