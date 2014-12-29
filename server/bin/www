@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+var debug = require('debug')('server');
+var app = require('../app');
+var https = require('https');
+var fs = require('fs');
+
+app.set('port', process.env.PORT || 3000);
+
+var server = app.listen(app.get('port'), function() {
+  console.log('Express server listening on port ' + server.address().port);
+});
+
+
+//setting up https server
+
+var options = {
+    key: fs.readFileSync(__dirname + '/ssl/key.pem'),
+    cert: fs.readFileSync(__dirname + '/ssl/cert.pem')
+};
+
+var httpsServer = https.createServer(options, app).listen(8000, function() {
+  console.log('https server listening on port ' + httpsServer.address().port);
+});

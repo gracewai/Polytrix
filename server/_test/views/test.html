@@ -1,0 +1,44 @@
+<html ng-app="dropbox" ng-controller="fileInfo as f">
+<head>
+	<title>test - using</title>
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
+	<script src="/test/js/test.js"></script>
+</head>
+<body>
+	
+	<h2>Step 1</h2>
+	<select ng-model="using">
+		<option value="dropbox">Dropbox</option>
+		<option value="onedrive">One Drive</option>
+		<option value="googledrive">Google Drive</option>
+	</select>
+	<a href="#" ng-click="getAuthUrl();">get auth link {{using}}</a><br>
+	<a ng-show="redirectUrl" href="{{redirectUrl}}" target="_blank">go to auth</a>
+	<h2>Step 2</h2>
+	<div>
+	Search your folder
+		<form onsubmit="return false;" ng-submit="submit();">
+			<input ng-model="i" type="text" />
+			<input type="submit" value="submit" />
+		</form>
+		<div> {{ status }} </div>
+		<ul>
+			<li>
+				<a href="javascript:void(0);" ng-click="click('/');">
+					../
+				</a>
+			</li>
+			<li ng-repeat="item in data">
+				<a ng-show="item.is_folder" href="javascript:void(0);" ng-click="click(item.identifier);"> {{ item.name }} </a>
+				<a ng-show="item.is_file">{{ item.name }}</a>
+				<a href="javascript:void(0);" ng-show="item.is_file" ng-click="download(item.identifier);"> download (ajax)</a>
+				<a href="/api/download/{{using}}/?i={{item.identifier}}"> download</a>
+			</li>
+			
+		</ul>
+	</div>
+</body>
+
+</html>
