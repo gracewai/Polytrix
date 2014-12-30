@@ -8,7 +8,7 @@
 </head>
 <body>
 	
-	<h2>Step 1</h2>
+	<h2>Auth</h2>
 	<select ng-model="using">
 		<option value="dropbox">Dropbox</option>
 		<option value="onedrive">One Drive</option>
@@ -16,22 +16,25 @@
 	</select>
 	<a href="#" ng-click="getAuthUrl();">get auth link {{using}}</a><br>
 	<a ng-show="redirectUrl" href="{{redirectUrl}}" target="_blank">go to auth</a>
-	<h2>Step 2</h2>
+	<h2>Auto Login</h2>
+	<a href="#" ng-click="autologin();">click here to login</a>
+	<h2>Browse files</h2>
 	<div>
 	Search your folder
-		<form onsubmit="return false;" ng-submit="submit();">
+		<form onsubmit="return false;" ng-submit="fileIndex();">
 			<input ng-model="i" type="text" />
 			<input type="submit" value="submit" />
 		</form>
 		<div> {{ status }} </div>
 		<ul>
 			<li>
-				<a href="javascript:void(0);" ng-click="click('/');">
-					../
+				go to 
+				<a href="javascript:void(0);" ng-click="toRoot();">
+					{{using == 'dropbox' ? '/' : using == 'onedrive' ? 'me/skydrive' : 'root'}}
 				</a>
 			</li>
 			<li ng-repeat="item in data">
-				<a ng-show="item.is_folder" href="javascript:void(0);" ng-click="click(item.identifier);"> {{ item.name }} </a>
+				<a ng-show="item.is_folder" href="javascript:void(0);" ng-click="toFolder(item.identifier);"> {{ item.name }} </a>
 				<a ng-show="item.is_file">{{ item.name }}</a>
 				<a href="javascript:void(0);" ng-show="item.is_file" ng-click="download(item.identifier);"> download (ajax)</a>
 				<a href="/api/download/{{using}}/?i={{item.identifier}}"> download</a>

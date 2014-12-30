@@ -6,13 +6,7 @@
 'use strict';
 
 var router = require('express').Router();
-var userLogin = require('../login/login');
-
-// router.get('/login', function(req, res) {
-//   // send the login page file
-//   //res.sendFile(__dirname + );
-// });
-
+var userLogin = require('../component/login');
 
 //	format of loginStatus:
 //	{
@@ -54,5 +48,22 @@ router.post('/logout', function(req, res, next) {
 	});
 });
 
+function requireLogined(req, res, next){
+	var sess = req.session;
+	if(sess.uid){
+		req.uid = sess.uid;
+		next();
+	}else{
+
+		var result = {
+			success : false,
+			logined : false,
+			msg : 'user not logined'
+		};
+
+		res.send(result);
+	}
+}
 
 module.exports = router;
+module.exports.requireLogined = requireLogined;

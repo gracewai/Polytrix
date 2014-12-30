@@ -10,6 +10,19 @@ app.controller('fileInfo',function($scope){
 	$scope.using = 'dropbox';
 	$scope.redirectUrl = null;
 	
+	$scope.autologin = function(){
+		$scope.status = 'loging in...';
+		$.ajax({
+			type: 'GET',
+			url: '/test/logined'
+		}).done(function(res){
+			if(res.success){
+				$scope.status = 'login successful';
+				$scope.$apply();
+			}
+		});
+	}
+
 	$scope.getAuthUrl = function(){
 		$.ajax({
 			type: 'GET',
@@ -22,7 +35,7 @@ app.controller('fileInfo',function($scope){
 		});
 	};
 
-	$scope.submit = function(){
+	$scope.fileIndex = function(){
 		$scope.status = 'loading...';
 		//$scope.data = [];
 		$.ajax({
@@ -30,15 +43,23 @@ app.controller('fileInfo',function($scope){
 			url: '/api/fileIndex/' + $scope.using,
 			data: { i : $scope.i }
 		}).done(function(res){
-			$scope.status = 'ready';
-			$scope.data = res.content;
-			$scope.$apply();
 			console.log(res);
+			if(res.success){
+				$scope.status = 'ready';
+				$scope.data = res.content;
+			}else{
+				$scope.status = res.msg;
+			}
+			$scope.$apply();
 		});
 	};
-	$scope.click = function(i){
+	$scope.toFolder = function(i){
 		$scope.i = i;
-		$scope.submit();
+		$scope.fileIndex();
+	};
+	$scope.toRoot = function(){
+		$scope.i = $scope.using == 'dropbox' ? '/' : $scope.using == 'onedrive' ? 'me/skydrive' : 'root';
+		$scope.fileIndex();
 	};
 	$scope.download = function(i){
 		$scope.status = 'downlading...';
@@ -51,4 +72,5 @@ app.controller('fileInfo',function($scope){
 			console.log(res);
 		});
 	};
+	$scope.autologin();
 });
