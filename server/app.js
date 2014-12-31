@@ -5,31 +5,38 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var passport = require('passport');
+
+var dbconnect = require('./database/dbconnect');
+var passportStrategies = require('./controllers/passport');
 
 var index = require('./routes/index');
 var rest = require('./routes/rest');
 var login = require('./routes/login');
 var test = require('./_test/routes');
-//var users = require('./routes/users');
 
 var app = express();
 
-// view engine setup (deprecated)
+(function configure(){
+    // uncomment after placing your favicon in /public
+    //app.use(favicon(__dirname + '/public/favicon.ico'));
+    app.use(logger('dev'));
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(cookieParser());
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+    //enable session
+    app.use(session({
+        secret: 'polytrix_session',
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: app.get('env') === 'production' ? true : false }
+    }));
 
-//enable session
-app.use(session({
-    secret: 'polytrix_session',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: app.get('env') === 'production' ? true : false }
-}));
+    //passport
+    app.use(passport.initialize());
+    app.use(passport.session());
+})();
 
 //routers
 app.use(index);

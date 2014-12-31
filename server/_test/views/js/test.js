@@ -2,6 +2,28 @@
 
 var app = angular.module('dropbox',[]);
 
+app.controller('formPost',function($scope){
+	$scope.postTarget = '/login';
+	$scope.resBody = '';
+	$scope.postData = JSON.stringify({
+		strategy:'local',
+		uid:'test',
+		upw:'test',
+		name:'test',
+		email:'test@te.st'
+	});
+	$scope.post = function(){
+		$.ajax({
+			type: 'POST',
+			url: $scope.postTarget,
+			data: JSON.parse($scope.postData)
+		}).done(function(res){
+			$scope.resBody = res;
+			$scope.$apply();
+		});
+	}
+});
+
 app.controller('fileInfo',function($scope){
 
 	$scope.data = [];

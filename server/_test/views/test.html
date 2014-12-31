@@ -8,6 +8,17 @@
 </head>
 <body>
 	
+	<h2>post</h2>
+	<div ng-controller="formPost">
+		<form onsubmit="return false;" ng-submit="post();">
+			<input type="text" ng-model="postTarget">
+			<textarea ng-model="postData"></textarea>
+			<input type="submit">
+		</form>
+		<div class="output" ng-model="resBody">
+		</div>
+	</div>
+	
 	<h2>Auth</h2>
 	<select ng-model="using">
 		<option value="dropbox">Dropbox</option>
