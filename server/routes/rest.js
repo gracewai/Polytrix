@@ -4,9 +4,9 @@
 //	date:	2014-12-27
 //
 //	REST link format:
-//		/api/[action]/[drive id]/[the drive resources identifier]?other_arguments
+//		/api/[action]/[drive id]/?i=[the drive resources identifier]&other_arguments
 //	example:
-//		/api/download/1/study%20files/year1%20sem%20A/ast20401/lecture/lec1.pptx
+//		/api/download/1/?i=study%20files/year1%20sem%20A/ast20401/lecture/lec1.pptx
 //
 //	actions:
 //		info GET
@@ -36,6 +36,22 @@ router.param('drive', function(req, res, next, val){
 	}else{
 		res.status(404).send('<h1>404 not found</h1>');// send 404
 	}
+});
+
+router.param('driveId', function(req, res, next, val){
+	console.log('routing rest.js :driveId');
+	var drive = req.user.getDrive(req.params.driveId);
+	
+	if(drive){
+		var client = api[drive._type];
+		if(client){
+			req.drive = drive;
+			next();
+			return;
+		}
+	}
+
+	res.status(404).send('<h1>404 not found</h1>');// send 404
 });
 
 
@@ -107,7 +123,7 @@ router.get('/api/redirect/:drive', function(req, res) {
 
 /////////////////////////////
 
-router.get('/api/info/:drive',function(req,res){
+router.get('/api/info/:driveId',function(req,res){
 	var result = {
 		success: false,
 		logined: true,
@@ -150,29 +166,38 @@ router.get('/api/download/onedrive', function(req, res) {
 	);
 });
 
-router.get('/api/download/:drive', function(req, res) {
-	var client = api[req.params.drive];
-	var driveConfig = req.session[req.params.drive];
+router.get('/api/download/:driveId', function(req, res) {
+	var drive = req.drive;
+	var client = api[drive._type];
 
-	client.downloadFile(req.query.i,driveConfig.access_token,driveConfig.refresh_token)
-	.then(function(result)
-	{
-		if(result.success){
-			res.writeHead(200, {
-				'Content-Type': result.contentType,
-				'Content-Length': result.contentLength,
-				'Content-Disposition': 'attachment;'
-			});
-			res.write(result.file);
-			res.end();
-		}else{
-			res.send(result);
-		}
-	})
-	.done();
+	if(client.downloadFilePipe){
+		client.downloadFilePipe(
+			req.query.i,
+			drive.access_token,
+			drive.refresh_token,
+			res
+		);
+	}else{
+		client.downloadFile(req.query.i,drive.access_token,drive.refresh_token)
+		.then(function(result)
+		{
+			if(result.success){
+				res.writeHead(200, {
+					'Content-Type': result.contentType,
+					'Content-Length': result.contentLength,
+					'Content-Disposition': 'attachment;'
+				});
+				res.write(result.file);
+				res.end();
+			}else{
+				res.send(result);
+			}
+		})
+		.done();
+	}
 });
 
-router.get('/api/upload/:drive',function(req,res){
+router.get('/api/upload/:driveId',function(req,res){
 	var result = {
 		success: false,
 		logined: true,
@@ -181,7 +206,7 @@ router.get('/api/upload/:drive',function(req,res){
 	res.send(result);
 });
 
-router.get('/api/delete/:drive',function(req,res){
+router.get('/api/delete/:driveId',function(req,res){
 	var result = {
 		success: false,
 		logined: true,
@@ -190,20 +215,23 @@ router.get('/api/delete/:drive',function(req,res){
 	res.send(result);
 });
 
-router.get('/api/fileIndex/:drive', function(req, res) {
-	var client = api[req.params.drive];
-	var driveConfig = req.session[req.params.drive];
+router.get('/api/fileIndex/:driveId', function(req, res) {
+	console.log('routing rest.js /api/fileIndex/:driveId');
+	
+	var drive = req.drive;
+	var client = api[drive._type];
 
-	client.getFileIndex(req.query.i,driveConfig.access_token,driveConfig.refresh_token)
+	client.getFileIndex(req.query.i,drive.access_token,drive.refresh_token)
 	.then(function(result)
 	{
 		result.logined = true;
 		res.send(result);
 	})
 	.done();
+
 });
 
-router.get('/api/sharelink/:drive',function(req,res){
+router.get('/api/sharelink/:driveId',function(req,res){
 	var result = {
 		success: false,
 		logined: true,
@@ -212,7 +240,7 @@ router.get('/api/sharelink/:drive',function(req,res){
 	res.send(result);
 });
 
-router.get('/api/move/:drive',function(req,res){
+router.get('/api/move/:driveId',function(req,res){
 	var result = {
 		success: false,
 		logined: true,
@@ -222,7 +250,7 @@ router.get('/api/move/:drive',function(req,res){
 });
 
 //! function not implemented
-router.get('/api/across/:drive',function(req,res){
+router.get('/api/across/:driveId',function(req,res){
 	res.writeHead(200, {
 		'Content-Type': 'text/event-stream',
 		'Cache-Control': 'no-cache',

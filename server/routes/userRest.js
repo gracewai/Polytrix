@@ -47,10 +47,11 @@ router.get('/api/account/info/', function(req, res) {
 		
 		for(var i in user.drives){
 			var drive = user.drives[i];
-			result.drives.push({
-				id: drive.id,
-				type: drive._type
-			});
+			if(drive.id && drive._type)
+				result.drives.push({
+					id: drive.id,
+					type: drive._type
+				});
 		}
 
 		switch(passport._type){

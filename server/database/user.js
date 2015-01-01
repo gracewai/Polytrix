@@ -129,6 +129,17 @@ userSchema.methods.addDrive = function(drive){
 	});
 };
 
+userSchema.methods.getDrive = function(driveId){
+	var drives = this.drives;
+	for(var i in drives){
+		var drive = drives[i];
+		if(drive.id == driveId){
+			return drive;
+		}
+	}
+	return null;
+};
+
 userSchema.methods.validPassword = function(upw){
 	var ok = false;
 	var msg = '';

@@ -2,6 +2,23 @@
 
 var app = angular.module('polytrix',['ngMaterial']);
 
+app.factory('userInfo', ['$rootScope', function($rootScope) {
+    var userInfo = {};
+    userInfo.info = {};
+    userInfo.set = function(info) {
+    	userInfo.info = info;
+    	$rootScope.$emit('onUserInfoChange');
+    };
+    userInfo.get = function(){
+    	return userInfo.info;
+    };
+    userInfo.onchange = function(scope, func) {
+		var unbind = $rootScope.$on('onUserInfoChange', func);
+        scope.$on('$destroy', unbind);
+    };
+    return userInfo;
+}]);
+
 app.controller('allFileInfo',function($scope){
 	this.drives = [
 		{
@@ -19,7 +36,25 @@ app.controller('allFileInfo',function($scope){
 	];
 });
 
-app.controller('formPost',function($scope){
+app.controller('availableInfo',['$scope','userInfo',function($scope,info){
+	this.drives = [];
+	var _this = this;
+	info.onchange($scope,function(){
+		var userInfo = info.get();
+		var drives = userInfo.drives;
+		_this.drives = [];
+		for(var i in drives){
+			var drive = drives[i];
+			_this.drives.push({
+				id: drive.id,
+				name: drive.type + ' ' + drive.id,
+				val: drive.type
+			});
+		}
+	});
+}]);
+
+app.controller('formPost',['$scope','userInfo',function($scope,info){
 	$scope.postTarget = '/login';
 	$scope.resBody = '';
 	$scope.postData = JSON.stringify({
@@ -36,10 +71,11 @@ app.controller('formPost',function($scope){
 			data: JSON.parse($scope.postData)
 		}).done(function(res){
 			$scope.resBody = res;
+			info.set(res);
 			$scope.$apply();
 		});
 	}
-});
+}]);
 
 app.controller('addDrive',function($scope){
 	$scope.status = 'ready';
@@ -62,7 +98,7 @@ app.controller('addDrive',function($scope){
 	};
 });
 
-app.controller('autoLogin',function($scope){
+app.controller('autoLogin',['$scope','userInfo',function($scope,info){
 	$scope.status = 'ready';
 	$scope.autologin = function(){
 		$scope.status = 'loging in...';
@@ -70,24 +106,25 @@ app.controller('autoLogin',function($scope){
 			type: 'GET',
 			url: '/test/logined'
 		}).done(function(res){
-			if(res.success){
+			if(res.logined){
 				$scope.status = 'logined, checking status';
 				$scope.$apply();
 				$.ajax({
 					type: 'GET',
-					url: '/api/account/status/',
+					url: '/api/account/info/',
 				}).done(function(res){
 					if(res.logined){
 						$scope.status = 'logined with user ' + res.name;
+						info.set(res);
 						$scope.$apply();
 					}
 				});
 			}
 		});
 	}
-});
+}]);
 
-app.controller('login',function($scope){
+app.controller('login',['$scope','userInfo',function($scope,info){
 	$scope.uid = 'test';
 	$scope.upw = '';
 	$scope.name = 'test';
@@ -101,6 +138,7 @@ app.controller('login',function($scope){
 		}).done(function(res){
 			if(res){
 				$scope.result = res;
+				info.set(res);
 				$scope.$apply();
 			}
 		});
@@ -136,7 +174,7 @@ app.controller('login',function($scope){
 			}
 		});
 	};
-});
+}]);
 
 app.controller('fileInfo',function($scope){
 
@@ -144,8 +182,9 @@ app.controller('fileInfo',function($scope){
 	$scope.status = 'ready';
 	$scope.i = '/';
 	$scope.using = 'dropbox';
+	$scope.usingType = 'dropbox';
 	$scope.redirectUrl = null;
-	
+
 	$scope.fileIndex = function(){
 		$scope.status = 'loading...';
 		//$scope.data = [];
@@ -169,7 +208,7 @@ app.controller('fileInfo',function($scope){
 		$scope.fileIndex();
 	};
 	$scope.toRoot = function(){
-		$scope.i = $scope.using == 'dropbox' ? '/' : $scope.using == 'onedrive' ? 'me/skydrive' : 'root';
+		$scope.i = $scope.usingType == 'dropbox' ? '/' : $scope.usingType == 'onedrive' ? 'me/skydrive' : 'root';
 		$scope.fileIndex();
 	};
 	$scope.download = function(i){

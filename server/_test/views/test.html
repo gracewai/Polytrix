@@ -17,7 +17,8 @@
 
     <script src="/test/js/test.js"></script>
 </head>
-<body>
+<body ng-controller="availableInfo as availables">
+
 	<div layout="row">
 
 		<md-whiteframe class="md-whiteframe-z1" flex="40" ng-controller="formPost">
@@ -71,7 +72,7 @@
 
 	<div layout="row">
 
-		<md-whiteframe class="md-whiteframe-z1" flex="30">
+		<md-whiteframe class="md-whiteframe-z1" flex="40">
 			<md-toolbar>
 				<h2 class="md-toolbar-tools">Login</h2>
 			</md-toolbar>
@@ -109,15 +110,15 @@
 			</md-tabs>
 		</md-whiteframe>
 
-		<md-whiteframe class="md-whiteframe-z1" flex="55" ng-controller="allFileInfo as all">
+		<md-whiteframe class="md-whiteframe-z1" flex="55">
 			<md-toolbar>
 				<h2 class="md-toolbar-tools">Browse files</h2>
 			</md-toolbar>
 			<md-tabs md-selected="0">
-				<md-tab ng-repeat="drive in all.drives" label="{{drive.name}}">
+				<md-tab ng-repeat="drive in availables.drives" label="{{drive.name}}">
 					<md-content class="md-padding" >
 					<div ng-controller="fileInfo as f">
-					Search your folder <input type="hidden" value="{{using = drive.val}}" />
+					Search your folder <input type="hidden" value="{{'';usingType = drive.val;using = drive.id}}" />
 						<form onsubmit="return false;" ng-submit="fileIndex();">
 							<input ng-model="i" type="text" />
 							<input type="submit" value="submit" />
@@ -127,7 +128,7 @@
 							<li>
 								go to 
 								<a href="javascript:void(0);" ng-click="toRoot();">
-									{{using == 'dropbox' ? '/' : using == 'onedrive' ? 'me/skydrive' : 'root'}}
+									{{usingType == 'dropbox' ? '/' : usingType == 'onedrive' ? 'me/skydrive' : 'root'}}
 								</a>
 							</li>
 							<li ng-repeat="item in data">
@@ -142,6 +143,19 @@
 					</md-content>
 				</md-tab>
 			</md-tabs>
+		</md-whiteframe>
+	</div>
+
+	<div layout="row">
+		<md-whiteframe class="md-whiteframe-z1" flex="25" ng-controller="formPost">
+			<md-toolbar>
+				<h2 class="md-toolbar-tools">User Info</h2>
+			</md-toolbar>
+			<md-content class="md-padding">
+				<div ng-repeat="drive in availables.drives">
+					id:{{drive.id}},name:{{drive.name}}
+				</div>
+			</md-content>
 		</md-whiteframe>
 	</div>
 </body>
