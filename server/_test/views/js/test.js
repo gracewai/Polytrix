@@ -1,6 +1,23 @@
 'use strict';
 
-var app = angular.module('dropbox',[]);
+var app = angular.module('polytrix',['ngMaterial']);
+
+app.controller('allFileInfo',function($scope){
+	this.drives = [
+		{
+			name: 'Dropbox',
+			val: 'dropbox'
+		},
+		{
+			name: 'One Drive',
+			val: 'onedrive'
+		},
+		{
+			name: 'Google Drive',
+			val: 'googledrive'
+		},
+	];
+});
 
 app.controller('formPost',function($scope){
 	$scope.postTarget = '/login';
@@ -24,6 +41,103 @@ app.controller('formPost',function($scope){
 	}
 });
 
+app.controller('addDrive',function($scope){
+	$scope.status = 'ready';
+	$scope.using = 'dropbox';
+	$scope.redirectUrl = null;
+
+	$scope.getAuthUrl = function(){
+		$.ajax({
+			type: 'GET',
+			url: '/api/auth/'+ $scope.using
+		}).done(function(res){
+			if(res.success){
+				$scope.redirectUrl = res.redirectUrl;
+			}else{
+				$scope.status = res.msg;
+				console.log(res.msg);
+			}
+			$scope.$apply();
+		});
+	};
+});
+
+app.controller('autoLogin',function($scope){
+	$scope.status = 'ready';
+	$scope.autologin = function(){
+		$scope.status = 'loging in...';
+		$.ajax({
+			type: 'GET',
+			url: '/test/logined'
+		}).done(function(res){
+			if(res.success){
+				$scope.status = 'logined, checking status';
+				$scope.$apply();
+				$.ajax({
+					type: 'GET',
+					url: '/api/account/status/',
+				}).done(function(res){
+					if(res.logined){
+						$scope.status = 'logined with user ' + res.name;
+						$scope.$apply();
+					}
+				});
+			}
+		});
+	}
+});
+
+app.controller('login',function($scope){
+	$scope.uid = 'test';
+	$scope.upw = '';
+	$scope.name = 'test';
+	$scope.email = 'test@te.st';
+	$scope.result = '';
+
+	function loginStatus(){
+		$.ajax({
+			type: 'GET',
+			url: '/api/account/info/',
+		}).done(function(res){
+			if(res){
+				$scope.result = res;
+				$scope.$apply();
+			}
+		});
+	}
+
+	$scope.login = function(){
+		$.ajax({
+			type: 'POST',
+			url: '/login',
+			data: {
+				uid : $scope.uid,
+				upw : $scope.upw
+			}
+		}).done(function(res){
+			if(res){
+				loginStatus();
+			}
+		});
+	};
+	$scope.register = function(){
+		$.ajax({
+			type: 'POST',
+			url: '/register',
+			data: {
+				uid : $scope.uid,
+				upw : $scope.upw,
+				name : $scope.name,
+				email : $scope.email
+			}
+		}).done(function(res){
+			if(res){
+				loginStatus();
+			}
+		});
+	};
+});
+
 app.controller('fileInfo',function($scope){
 
 	$scope.data = [];
@@ -32,31 +146,6 @@ app.controller('fileInfo',function($scope){
 	$scope.using = 'dropbox';
 	$scope.redirectUrl = null;
 	
-	$scope.autologin = function(){
-		$scope.status = 'loging in...';
-		$.ajax({
-			type: 'GET',
-			url: '/test/logined'
-		}).done(function(res){
-			if(res.success){
-				$scope.status = 'login successful';
-				$scope.$apply();
-			}
-		});
-	}
-
-	$scope.getAuthUrl = function(){
-		$.ajax({
-			type: 'GET',
-			url: '/api/auth/'+ $scope.using
-		}).done(function(res){
-			res.content;
-			$scope.redirectUrl = res.redirectUrl;
-			$scope.$apply();
-			console.log(res.redirectUrl);
-		});
-	};
-
 	$scope.fileIndex = function(){
 		$scope.status = 'loading...';
 		//$scope.data = [];
@@ -94,5 +183,4 @@ app.controller('fileInfo',function($scope){
 			console.log(res);
 		});
 	};
-	$scope.autologin();
 });

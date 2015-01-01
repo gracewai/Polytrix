@@ -1,0 +1,19 @@
+html{
+	background: #EFF;
+}
+
+body{
+	background: #EFF;
+	padding:.5em;
+}
+
+md-whiteframe{
+	background: #fff;
+	/*background: #EFF;*/
+	margin:.5em;
+}
+
+input,textarea{
+	max-width: 100%;
+}
+

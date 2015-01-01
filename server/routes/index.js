@@ -10,5 +10,4 @@ router.get('/account/addDrive/:drive', requireLogined, function(req, res) {
 	res.redirect('/api/auth/' + req.params.drive);
 });
 
-
 module.exports = router;

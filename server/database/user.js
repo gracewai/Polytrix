@@ -14,14 +14,17 @@ var userSchema = new Schema({
 	//	//for _type=local
 	//	upw: String,
 	//	email: String,
+	//	photos: [
+	//		value: String
+	//	]
 	//
 	//	//for _type=facebook,twitter & others
-	//	profile: Mixed
+	//		reference to http://passportjs.org/guide/profile/
 	// }
 
 
 	registerDate	: { type: Date, default: Date.now },
-	dirves		: [
+	drives		: [
 		{
 			id: String, // normally user id
 			_type: String,
@@ -29,7 +32,8 @@ var userSchema = new Schema({
 			refresh_token: String
 			//expire on: store in session
 		}
-	]
+	],
+	nextDriveId: {type: Number, default: 1}
 });
 
 userSchema.statics.register = function(uid,name,passport,skipCheck){
@@ -41,7 +45,7 @@ userSchema.statics.register = function(uid,name,passport,skipCheck){
 			uid: uid,
 			name: name,
 			passport: passport,
-			dirves: []
+			drives: []
 		});
 		newUser.save();
 		console.log('new user created:');
@@ -95,11 +99,15 @@ userSchema.methods.addDrive = function(drive){
 	var _this = this;
 	return Q.Promise(function(resolve,reject){
 		//validate drive
-		if(drive._type){
+		if(drive && drive._type){
 			switch(drive._type){
 			case 'googledrive':
 			case 'onedrive':
 			case 'dropbox':
+				_this.nextDriveId = _this.nextDriveId || 1;
+				drive.id = drive.id || _this.nextDriveId++ ;
+				console.log(_this);
+				console.log(_this.drives);
 				_this.drives.push(drive);
 				_this.save();
 				resolve(_this);

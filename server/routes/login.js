@@ -74,7 +74,7 @@ router.post('/register', function(req, res, next) {
 		.then(function(user){
 			if(user)
 				req.login(user, function(err) {
-					console.log(err);
+					if (err) console.log(err);
 					if (err) { return next(err); }
 					return res.redirect('/app');
 				});
@@ -110,7 +110,6 @@ router.get('/login/redirect/facebook',passport.authenticate('facebook',
 		failureRedirect: '/login?failure=true&strategy=facebook'
 	}
 ));
-
 
 
 function requireLogined(req, res, next){

@@ -1,57 +1,148 @@
-<html ng-app="dropbox" ng-controller="fileInfo as f">
+<html ng-app="polytrix">
 <head>
-	<title>test - using</title>
+	<title>Test</title>
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.6.1/angular-material.min.css">
+	<link rel="stylesheet" href="/test/css/test.css">
+
 	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
-	<script src="/test/js/test.js"></script>
+	<!-- Angular Material Dependencies -->
+    <script src="//cdn.jsdelivr.net/hammerjs/2.0.4/hammer.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
+
+    <!-- Angular Material Javascript now available via Google CDN; version 0.6 used here -->
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.6.1/angular-material.min.js"></script>
+
+    <script src="/test/js/test.js"></script>
 </head>
 <body>
-	
-	<h2>post</h2>
-	<div ng-controller="formPost">
-		<form onsubmit="return false;" ng-submit="post();">
-			<input type="text" ng-model="postTarget">
-			<textarea ng-model="postData"></textarea>
-			<input type="submit">
-		</form>
-		<div class="output" ng-model="resBody">
-		</div>
-	</div>
-	
-	<h2>Auth</h2>
-	<select ng-model="using">
-		<option value="dropbox">Dropbox</option>
-		<option value="onedrive">One Drive</option>
-		<option value="googledrive">Google Drive</option>
-	</select>
-	<a href="#" ng-click="getAuthUrl();">get auth link {{using}}</a><br>
-	<a ng-show="redirectUrl" href="{{redirectUrl}}" target="_blank">go to auth</a>
-	<h2>Auto Login</h2>
-	<a href="#" ng-click="autologin();">click here to login</a>
-	<h2>Browse files</h2>
-	<div>
-	Search your folder
-		<form onsubmit="return false;" ng-submit="fileIndex();">
-			<input ng-model="i" type="text" />
-			<input type="submit" value="submit" />
-		</form>
-		<div> {{ status }} </div>
-		<ul>
-			<li>
-				go to 
-				<a href="javascript:void(0);" ng-click="toRoot();">
-					{{using == 'dropbox' ? '/' : using == 'onedrive' ? 'me/skydrive' : 'root'}}
-				</a>
-			</li>
-			<li ng-repeat="item in data">
-				<a ng-show="item.is_folder" href="javascript:void(0);" ng-click="toFolder(item.identifier);"> {{ item.name }} </a>
-				<a ng-show="item.is_file">{{ item.name }}</a>
-				<a href="javascript:void(0);" ng-show="item.is_file" ng-click="download(item.identifier);"> download (ajax)</a>
-				<a href="/api/download/{{using}}/?i={{item.identifier}}"> download</a>
-			</li>
+	<div layout="row">
+
+		<md-whiteframe class="md-whiteframe-z1" flex="40" ng-controller="formPost">
+			<md-toolbar>
+				<h2 class="md-toolbar-tools">Post</h2>
+			</md-toolbar>
+			<md-content class="md-padding">
+				<div >
+					<form onsubmit="return false;" ng-submit="post();">
+						<input type="text" ng-model="postTarget"><br>
+						<textarea style="height:100px" ng-model="postData"></textarea><br>
+						<input type="submit">
+					</form>
+					<div class="output" ng-model="resBody">
+					</div>
+				</div>
+			</md-content>
+		</md-whiteframe>
+
+
+		<md-whiteframe class="md-whiteframe-z1" flex="35" ng-controller="allFileInfo as all">
+			<md-toolbar>
+				<h2 class="md-toolbar-tools">Add Drive</h2>
+			</md-toolbar>
+			<md-content class="md-padding" ng-controller="addDrive">
+				<select ng-model="using">
+					<option ng-repeat="drive in all.drives" value="{{drive.val}}">{{drive.name}}</option>
+				</select><br>
+				{{status}}<br>
+				<md-button class="md-raised md-primary" ng-click="getAuthUrl()">
+					get {{using}} auth link
+				</md-button><br>
 			
-		</ul>
+				<a ng-show="redirectUrl" href="{{redirectUrl}}" target="_blank">go to auth</a>
+			</md-content>
+		</md-whiteframe>
+
+
+		<md-whiteframe class="md-whiteframe-z1" flex="20" ng-controller="autoLogin">
+			<md-toolbar>
+				<h2 class="md-toolbar-tools">Auto Login</h2>
+			</md-toolbar>
+			<md-content class="md-padding">
+				<a href="#" ng-click="autologin();">click here to login</a>
+				<div> {{ status }} </div>
+			</md-content>
+		</md-whiteframe>
+
+		
+	</div>
+
+	<div layout="row">
+
+		<md-whiteframe class="md-whiteframe-z1" flex="30">
+			<md-toolbar>
+				<h2 class="md-toolbar-tools">Login</h2>
+			</md-toolbar>
+			<md-tabs md-selected="0">
+				<md-tab label="login">
+					<md-content class="md-padding" ng-controller="login">
+						<md-text-float label="User ID" type="text" ng-model="uid"></md-text-float>
+						<md-text-float label="Password" type="password" ng-model="upw"></md-text-float>
+						<!-- User ID <br><input type="text" ng-model="uid"><br>
+						Password<br><input type="password" ng-model="upw"><br> -->
+						<br>
+						<md-button class="md-raised md-primary" ng-click="login()">
+							Login
+						</md-button>
+						{{result}}
+					</md-content>
+				</md-tab>
+				<md-tab label="register">
+					<md-content class="md-padding" ng-controller="login">
+						<md-text-float label="User ID" type="text" ng-model="uid"></md-text-float>
+						<md-text-float label="Password" type="password" ng-model="upw"></md-text-float>
+						<md-text-float label="User Name" type="text" ng-model="name"></md-text-float>
+						<md-text-float label="Email" type="email" ng-model="email"></md-text-float>
+						<!-- User ID <br><input type="text" ng-model="uid"><br>
+						Password<br><input type="password" ng-model="upw"><br>
+						User Name<br><input type="text" ng-model="name"><br>
+						Email <br><input type="email" ng-model="email"><br> -->
+						<br>
+						<md-button class="md-raised md-primary" ng-click="register()">
+							Register
+						</md-button>
+						{{result}}
+					</md-content>
+				</md-tab>
+			</md-tabs>
+		</md-whiteframe>
+
+		<md-whiteframe class="md-whiteframe-z1" flex="55" ng-controller="allFileInfo as all">
+			<md-toolbar>
+				<h2 class="md-toolbar-tools">Browse files</h2>
+			</md-toolbar>
+			<md-tabs md-selected="0">
+				<md-tab ng-repeat="drive in all.drives" label="{{drive.name}}">
+					<md-content class="md-padding" >
+					<div ng-controller="fileInfo as f">
+					Search your folder <input type="hidden" value="{{using = drive.val}}" />
+						<form onsubmit="return false;" ng-submit="fileIndex();">
+							<input ng-model="i" type="text" />
+							<input type="submit" value="submit" />
+						</form>
+						<div> {{ status }} </div>
+						<ul>
+							<li>
+								go to 
+								<a href="javascript:void(0);" ng-click="toRoot();">
+									{{using == 'dropbox' ? '/' : using == 'onedrive' ? 'me/skydrive' : 'root'}}
+								</a>
+							</li>
+							<li ng-repeat="item in data">
+								<a ng-show="item.is_folder" href="javascript:void(0);" ng-click="toFolder(item.identifier);"> {{ item.name }} </a>
+								<a ng-show="item.is_file">{{ item.name }}</a>
+								<a href="javascript:void(0);" ng-show="item.is_file" ng-click="download(item.identifier);"> download (ajax)</a>
+								<a href="/api/download/{{using}}/?i={{item.identifier}}"> download</a>
+							</li>
+							
+						</ul>
+					</div>
+					</md-content>
+				</md-tab>
+			</md-tabs>
+		</md-whiteframe>
 	</div>
 </body>
 

@@ -11,8 +11,9 @@ var dbconnect = require('./database/dbconnect');
 var passportStrategies = require('./controllers/passport');
 
 var index = require('./routes/index');
-var rest = require('./routes/rest');
 var login = require('./routes/login');
+var rest = require('./routes/rest');
+var userRest = require('./routes/userRest');
 var test = require('./_test/routes');
 
 var app = express();
@@ -39,9 +40,12 @@ var app = express();
 })();
 
 //routers
+app.use(userRest);
 app.use(index);
-app.use(rest);
 app.use(login);
+
+app.use(rest);
+
 
 /**
  * Development Settings

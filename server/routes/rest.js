@@ -4,9 +4,9 @@
 //	date:	2014-12-27
 //
 //	REST link format:
-//		/api/[action]/[the drive name]/[the drive resources identifier]?other_arguments
+//		/api/[action]/[drive id]/[the drive resources identifier]?other_arguments
 //	example:
-//		/api/download/googledrive/study%20files/year1%20sem%20A/ast20401/lecture/lec1.pptx
+//		/api/download/1/study%20files/year1%20sem%20A/ast20401/lecture/lec1.pptx
 //
 //	actions:
 //		info GET
@@ -63,18 +63,44 @@ router.get('/api/redirect/:drive', function(req, res) {
 	service.getToken(req.query.code)
 	.then(function(tokens){
 		//set token to session
-		req.session[req.params.drive] = tokens;
-
-		//TODO
-		// save refresh token to database
-
-		var result = {
-			success : true,
-			logined : true,
-			drive	: req.params.drive
+		var drive = {
+			_type: req.params.drive,
+			access_token: tokens.access_token,
+			refresh_token: tokens.refresh_token
 		};
 
-		res.send(result);
+		if(req.params.drive != 'dropbox' && !tokens.refresh_token){
+			console.log('rest.js /api/redirect/:drive');
+			console.log('no refresh token get');
+			console.log(tokens);
+			return;
+		}
+
+		return req.user.addDrive(drive)
+		.then(function(user){
+			console.log(drive);
+
+			var result = {
+				success : true,
+				logined : true,
+				drive	: req.params.drive
+			};
+
+			res.send(result);
+		})
+		.catch(function(err){
+
+			console.log(err);
+
+			var result = {
+				success : false,
+				logined : true,
+				drive	: req.params.drive,
+				msg		: err
+			};
+
+			res.send(result);
+		});
 	})
 	.done();
 });

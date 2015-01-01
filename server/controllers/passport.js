@@ -37,8 +37,9 @@ passport.use('local',new LocalStrategy(
 				var valid = user.validPassword(upw);
 
 				if(valid.ok){
-					done(null,user);
+					console.log('user ' + user.name + ' found:');
 					console.log(user);
+					done(null,user);
 				}else{
 					done(null,false,valid.msg);
 				}
@@ -66,6 +67,7 @@ passport.use('facebook',new FacebookStrategy(
 		.then(function(user){
 			if(!user){
 				//create one
+				profile._type='facebook';
 				profile.access_token = accessToken;
 				profile.refresh_token = refreshToken;
 
