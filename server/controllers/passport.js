@@ -30,7 +30,7 @@ passport.use('local',new LocalStrategy(
 		passwordField: 'upw'
 	},
 	function(uid,upw,done){
-		User.findUser('test')
+		User.findUser(uid)
 		.then(function(user){
 
 			if(user){
@@ -41,6 +41,7 @@ passport.use('local',new LocalStrategy(
 					console.log(user);
 					done(null,user);
 				}else{
+					console.log(valid.msg);
 					done(null,false,valid.msg);
 				}
 			}else{

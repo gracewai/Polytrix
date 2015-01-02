@@ -29,8 +29,8 @@ var userSchema = new Schema({
 			id: String, // normally user id
 			_type: String,
 			access_token: String,
-			refresh_token: String
-			//expire on: store in session
+			refresh_token: String,
+			expires_on: Date
 		}
 	],
 	nextDriveId: {type: Number, default: 1}

@@ -40,10 +40,10 @@ var app = express();
 })();
 
 //routers
-app.use(userRest);
+
 app.use(index);
 app.use(login);
-
+app.use(userRest);
 app.use(rest);
 
 

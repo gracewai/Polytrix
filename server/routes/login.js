@@ -30,13 +30,14 @@ router.post('/login', function(req, res, next) {
 	switch(req.body.strategy){
 
 	case 'facebook':
+		console.log('using facebook strategy');
 		passport.authenticate('facebook')(req,res);
 		break;
 
 
 	default:
 	case 'local':
-
+		console.log('using local strategy');
 		passport.authenticate('local')(req,res,function(err){
 			if(err)
 				console.log(err);

@@ -46,7 +46,27 @@ router.param('driveId', function(req, res, next, val){
 		var client = api[drive._type];
 		if(client){
 			req.drive = drive;
-			next();
+			var now = new Date();
+			if(drive._type == 'dropbox' || now < drive.expires_on ){
+				next();
+			}else{
+				client.renewToken(drive.refresh_token)
+				.then(function(data){
+					if(data.access_token){
+						drive.access_token = data.access_token;
+					} 
+					if(data.expires_on){
+						drive.expires_on = new Date(data.expires_on);
+					} 
+					console.log('===drive');
+					console.log(drive);
+					console.log('===user');
+					console.log(req.user);
+					req.user.save();
+					next();
+				})
+				.done();
+			}
 			return;
 		}
 	}
@@ -81,6 +101,7 @@ router.get('/api/redirect/:drive', function(req, res) {
 		//set token to session
 		var drive = {
 			_type: req.params.drive,
+			expires_on: tokens.expires_on || new Date(),
 			access_token: tokens.access_token,
 			refresh_token: tokens.refresh_token
 		};
