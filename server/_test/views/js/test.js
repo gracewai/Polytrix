@@ -1,22 +1,49 @@
 'use strict';
 
+
+
 var app = angular.module('polytrix',['ngMaterial']);
 
 app.factory('userInfo', ['$rootScope', function($rootScope) {
-    var userInfo = {};
-    userInfo.info = {};
-    userInfo.set = function(info) {
-    	userInfo.info = info;
-    	$rootScope.$emit('onUserInfoChange');
-    };
-    userInfo.get = function(){
-    	return userInfo.info;
-    };
-    userInfo.onchange = function(scope, func) {
+	var userInfo = {};
+	userInfo.info = {};
+	userInfo.set = function(info) {
+		userInfo.info = info;
+		$rootScope.$emit('onUserInfoChange');
+	};
+	userInfo.get = function(){
+		return userInfo.info;
+	};
+	userInfo.onchange = function(scope, func) {
 		var unbind = $rootScope.$on('onUserInfoChange', func);
-        scope.$on('$destroy', unbind);
-    };
-    return userInfo;
+		scope.$on('$destroy', unbind);
+	};
+	return userInfo;
+}]);
+
+app.factory('appStatus', ['$rootScope', function($rootScope) {
+	var appStatus = {};
+	appStatus.status = {};
+	appStatus.set = function(status) {
+		appStatus.status = status;
+		$rootScope.$emit('onAppStatusChange');
+	};
+	appStatus.get = function(){
+		return appStatus.status;
+	};
+	appStatus.onchange = function(scope, func) {
+		var unbind = $rootScope.$on('onAppStatusChange', func);
+		scope.$on('$destroy', unbind);
+	};
+	return appStatus;
+}]);
+
+app.controller('appStatus',['$scope','appStatus',function($scope,status){
+	this.status = '';
+	var _this = this;
+	status.onchange($scope,function(){
+		_this.status = status.get();
+	});
 }]);
 
 app.controller('allFileInfo',function($scope){
@@ -54,7 +81,7 @@ app.controller('availableInfo',['$scope','userInfo',function($scope,info){
 	});
 }]);
 
-app.controller('formPost',['$scope','userInfo',function($scope,info){
+app.controller('formPost',['$scope','userInfo','appStatus',function($scope,info,status){
 	$scope.postTarget = '/login';
 	$scope.resBody = '';
 	$scope.postData = JSON.stringify({
@@ -71,10 +98,10 @@ app.controller('formPost',['$scope','userInfo',function($scope,info){
 			data: JSON.parse($scope.postData)
 		}).done(function(res){
 			$scope.resBody = res;
-			info.set(res);
+			status.set(res);
 			$scope.$apply();
 		});
-	}
+	};
 }]);
 
 app.controller('addDrive',function($scope){
@@ -121,7 +148,27 @@ app.controller('autoLogin',['$scope','userInfo',function($scope,info){
 				});
 			}
 		});
-	}
+	};
+}]);
+
+app.controller('updateLogin',['$scope','userInfo',function($scope,info){
+	$scope.status = 'ready';
+	$scope.update = function(){
+		$scope.status = 'getting information';
+		$.ajax({
+			type: 'GET',
+			url: '/api/account/info/',
+		}).done(function(res){
+			if(res.logined){
+				$scope.status = 'logined with user ' + res.name;
+				info.set(res);
+			}else{
+				$scope.status = res
+			}
+			$scope.$apply();
+		});
+	};
+	$scope.update();
 }]);
 
 app.controller('login',['$scope','userInfo',function($scope,info){
@@ -143,7 +190,9 @@ app.controller('login',['$scope','userInfo',function($scope,info){
 			}
 		});
 	}
-
+	$scope.facebook = function(){
+		window.open('/passport/facebook','_blank');
+	};
 	$scope.login = function(){
 		$.ajax({
 			type: 'POST',
@@ -169,6 +218,17 @@ app.controller('login',['$scope','userInfo',function($scope,info){
 				email : $scope.email
 			}
 		}).done(function(res){
+			if(res){
+				loginStatus();
+			}
+		});
+	};
+	$scope.logout = function(){
+		$.ajax({
+			type: 'POST',
+			url: '/logout',
+		})
+		.done(function(res){
 			if(res){
 				loginStatus();
 			}
@@ -222,4 +282,9 @@ app.controller('fileInfo',function($scope){
 			console.log(res);
 		});
 	};
+	setTimeout(function(){
+		$scope.i = $scope.usingType == 'dropbox' ? '/' : $scope.usingType == 'onedrive' ? 'me/skydrive' : 'root';
+		$scpoe.$apply();
+	},100)
+	
 });

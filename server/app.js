@@ -43,8 +43,9 @@ var app = express();
 
 app.use(index);
 app.use(login);
-app.use(userRest);
 app.use(rest);
+app.use(userRest);
+
 
 
 /**

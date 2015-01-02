@@ -17,6 +17,25 @@ var passport = require('passport');
 //	}
 //
 
+
+//	POST /passport
+//
+//	@method login
+//	@para{string} strategy	!important indicate using which platform to log in. Accept local, facebook currently
+//	@return redirect /login?failure=trur&strategy=String[&msg=String]
+//
+router.get('/passport/:strategy',function(req,res,next){
+	console.log('routing login.js /passport/:strategy');
+	switch(req.params.strategy){
+	case 'facebook':
+		passport.authenticate('facebook')(req,res,next);
+		break;
+	default:
+		//response 404
+		break;
+	}
+});
+
 //	POST /logon
 //
 //	@method login
@@ -31,7 +50,7 @@ router.post('/login', function(req, res, next) {
 
 	case 'facebook':
 		console.log('using facebook strategy');
-		passport.authenticate('facebook')(req,res);
+		passport.authenticate('facebook')(req,res,next);
 		break;
 
 
@@ -99,8 +118,27 @@ router.post('/register', function(req, res, next) {
 //
 router.post('/logout', function(req, res, next) {
 	console.log('routing login.js /logout');
-	res.logout();
-	res.redirect('/logout');	//redirect to GET request
+	try{
+		req.logout();
+
+		var result = {
+			success:true,
+			logined:false
+		};
+
+		res.send(result);
+	}catch(err){
+
+		var result = {
+			success: false,
+			logined: !!req.user,
+			msg: 'unknown error'
+		};
+		console.log('login.js /logout error:');
+		console.log(err);
+		res.send(result);
+	}
+	//res.redirect('/logout');	//redirect to GET request
 });
 
 

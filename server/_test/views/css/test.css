@@ -1,9 +1,8 @@
-html{
+html,body{
 	background: #EFF;
 }
 
-body{
-	background: #EFF;
+.content{
 	padding:.5em;
 }
 
@@ -17,3 +16,6 @@ input,textarea{
 	max-width: 100%;
 }
 
+.md-button{
+	margin-top: .2em;
+}
