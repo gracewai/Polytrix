@@ -12,7 +12,7 @@ Polytrix is a web application for managing your files lives across all your clou
 - To each individual files it also serve as an version control manager and many great sharing feature are combined
 
 ## Quickstart
-Run `git clone https://github.com/nexvisync/Polytrix.git`
+Run `git clone https://github.com/nexvisync/Polytrix.git` then go the /path/to/Polytrix/client/ and run `npm install && bower install` for obtaining dependencies source files.
 Under server directory, type this in cli `npm test` to deploy development / unit testing server
 Also, for production build use `npm start`
 
