@@ -1,6 +1,10 @@
 dist
 .tmp
 .sass-cache
-bower_componenets
-node_modules
-!polytrix-core-api
+bower_components
+client/node_modules/
+server/node_modules/*
+npm-debug.log
+.DS_Store
+!server/node_modules/polytrix-core-api
+!server/node_modules/polytrix-core-api/**
