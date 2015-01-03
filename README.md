@@ -12,18 +12,22 @@ Polytrix is a web application for managing your files lives across all your clou
 - To each individual files it also serve as an version control manager and many great sharing feature are combined
 
 ## Quickstart
-Run `git clone https://github.com/nexvisync/Polytrix.git` then go the /path/to/Polytrix/client/ and run `npm install && bower install` for obtaining dependencies source files.
-Under server directory, type this in cli `npm test` to deploy development / unit testing server
-Also, for production build use `npm start`
+1. Run `git clone https://github.com/nexvisync/Polytrix.git`
+2. `cd Polytrix/client` and then `npm install && bower install` for obtaining dependencies source files.
+3. `cd ../server` and then `npm install` for obtaining server side dependencies source files.
+4. Finally, run `npm test` in /server to deploy development server
+5. Run `npm start` instead to deploy production server
 
+\* Please install nodemon globally first if you have not installed nodemon yet<br />
+  Installation command: `sudo npm install -g nodemon`
 
 ## Requirement
 - git
 - nodeJS
 - npm
-- grunt-cli
 - bower
-- AngularJS
+- mongodb
+- nodemon
 
 
 ## Deployment description
