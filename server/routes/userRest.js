@@ -14,8 +14,9 @@
 'use strict';
 
 var router = require('express').Router();
+var requireLogined = require('./login').requireLogined;
 
-router.get('/api/account/status',function(req,res){
+router.get('/api/account/status', requireLogined, function(req,res){
 	console.log('routing userRest.js /api/account/status');
 	if(req.user){
 		var user = req.user;
@@ -31,7 +32,7 @@ router.get('/api/account/status',function(req,res){
 	}
 });
 
-router.get('/api/account/info/', function(req, res) {
+router.get('/api/account/info/', requireLogined, function(req, res) {
 	console.log('routing userRest.js /api/account/info');
 	if(req.user){
 		var user = req.user;

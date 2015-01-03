@@ -31,6 +31,7 @@ router.get('/passport/:strategy',function(req,res,next){
 		passport.authenticate('facebook')(req,res,next);
 		break;
 	default:
+		_404.send(res);
 		//response 404
 		break;
 	}

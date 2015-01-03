@@ -1,0 +1,6 @@
+dist
+.tmp
+.sass-cache
+bower_componenets
+node_modules
+!polytrix-core-api

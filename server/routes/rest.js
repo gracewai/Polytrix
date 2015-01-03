@@ -22,19 +22,19 @@
 'use strict';
 
 var router = require('express').Router();
-
+var _404 = require('./404');
 var api = require('polytrix-core-api');
 
 var requireLogined = require('./login').requireLogined;
 
-router.use('/api',requireLogined);
+//router.use('/api',requireLogined);
 
 router.param('drive', function(req, res, next, val){
 	console.log('routing rest.js :drive');
 	if(api[val]){
 		next();
 	}else{
-		res.status(404).send('<h1>404 not found</h1>');// send 404
+		_404.send(res);// send 404
 	}
 });
 
@@ -71,17 +71,26 @@ router.param('driveId', function(req, res, next, val){
 		}
 	}
 
-	res.status(404).send('<h1>404 not found</h1>');// send 404
+	_404.send(res);// send 404
 });
 
 
 ////////////////////////////////////////////////	
 
-router.get('/api/auth/:drive', function(req, res) {
+//	GET /api/auth/[drive name]
+//	@method drive
+//	@param reurl (optional) the redirect link after authorization
+//	@return /redirect to auth link/ & finally redirect to reurl
+//
+router.get('/api/auth/:drive', requireLogined, function(req, res) {
 	console.log('routing rest.js /api/auth/:drive');
 	var service = api[req.params.drive];
 	var url = service.getAuthURL();
 	console.log('redirect to ' + url);
+
+	if(req.query.reurl){
+		req.session.driveRedirectUrl = req.query.reurl;
+	}
 
 	var result = {
 		success : true,
@@ -92,7 +101,12 @@ router.get('/api/auth/:drive', function(req, res) {
 	res.send(result);
 });
 
-router.get('/api/redirect/:drive', function(req, res) {
+//
+// GET /api/redirect/:drive
+//
+//
+// @return  successful msg |Or| /redirect to reurl/
+router.get('/api/redirect/:drive', requireLogined, function(req, res) {
 	console.log('routing rest.js /api/redirect/:drive');
 	var service = api[req.params.drive];
 
@@ -144,7 +158,7 @@ router.get('/api/redirect/:drive', function(req, res) {
 
 /////////////////////////////
 
-router.get('/api/info/:driveId',function(req,res){
+router.get('/api/info/:driveId', requireLogined, function(req,res){
 	var result = {
 		success: false,
 		logined: true,
@@ -187,7 +201,7 @@ router.get('/api/download/onedrive', function(req, res) {
 	);
 });
 
-router.get('/api/download/:driveId', function(req, res) {
+router.get('/api/download/:driveId', requireLogined, function(req, res) {
 	var drive = req.drive;
 	var client = api[drive._type];
 
@@ -218,7 +232,7 @@ router.get('/api/download/:driveId', function(req, res) {
 	}
 });
 
-router.get('/api/upload/:driveId',function(req,res){
+router.get('/api/upload/:driveId', requireLogined, function(req,res){
 	var result = {
 		success: false,
 		logined: true,
@@ -227,7 +241,7 @@ router.get('/api/upload/:driveId',function(req,res){
 	res.send(result);
 });
 
-router.get('/api/delete/:driveId',function(req,res){
+router.get('/api/delete/:driveId', requireLogined, function(req,res){
 	var result = {
 		success: false,
 		logined: true,
@@ -252,7 +266,7 @@ router.get('/api/fileIndex/:driveId', function(req, res) {
 
 });
 
-router.get('/api/sharelink/:driveId',function(req,res){
+router.get('/api/sharelink/:driveId', requireLogined, function(req,res){
 	var result = {
 		success: false,
 		logined: true,
@@ -261,7 +275,7 @@ router.get('/api/sharelink/:driveId',function(req,res){
 	res.send(result);
 });
 
-router.get('/api/move/:driveId',function(req,res){
+router.get('/api/move/:driveId', requireLogined, function(req,res){
 	var result = {
 		success: false,
 		logined: true,

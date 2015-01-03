@@ -10,6 +10,8 @@ var passport = require('passport');
 var dbconnect = require('./database/dbconnect');
 var passportStrategies = require('./controllers/passport');
 
+var _404 = require('./routes/404');
+
 var index = require('./routes/index');
 var login = require('./routes/login');
 var rest = require('./routes/rest');
@@ -89,5 +91,8 @@ if (app.get('env') === 'production') {
 
 app.use(test);
 
+app.use(function(req,res){
+    _404.send(res);
+});
 
 module.exports = app;
