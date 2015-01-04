@@ -8,6 +8,7 @@ app.factory('userInfo', ['$rootScope', function($rootScope) {
 	var userInfo = {};
 	userInfo.info = {};
 	userInfo.set = function(info) {
+		console.log(info);
 		userInfo.info = info;
 		$rootScope.$emit('onUserInfoChange');
 	};
@@ -141,8 +142,8 @@ app.controller('autoLogin',['$scope','userInfo',function($scope,info){
 					url: '/api/account/info/',
 				}).done(function(res){
 					if(res.logined){
-						$scope.status = 'logined with user ' + res.name;
-						info.set(res);
+						$scope.status = 'logined with user ' + res.userInfo.name;
+						info.set(res.userInfo);
 						$scope.$apply();
 					}
 				});
@@ -160,8 +161,8 @@ app.controller('updateLogin',['$scope','userInfo',function($scope,info){
 			url: '/api/account/info/',
 		}).done(function(res){
 			if(res.logined){
-				$scope.status = 'logined with user ' + res.name;
-				info.set(res);
+				$scope.status = 'logined with user ' + res.userInfo.name;
+				info.set(res.userInfo);
 			}else{
 				$scope.status = res
 			}
@@ -185,7 +186,7 @@ app.controller('login',['$scope','userInfo',function($scope,info){
 		}).done(function(res){
 			if(res){
 				$scope.result = res;
-				info.set(res);
+				info.set(res.userInfo);
 				$scope.$apply();
 			}
 		});
@@ -284,7 +285,7 @@ app.controller('fileInfo',function($scope){
 	};
 	setTimeout(function(){
 		$scope.i = $scope.usingType == 'dropbox' ? '/' : $scope.usingType == 'onedrive' ? 'me/skydrive' : 'root';
-		$scpoe.$apply();
+		//$scope.$apply();
 	},100)
 	
 });

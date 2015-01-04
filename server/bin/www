@@ -5,19 +5,40 @@ var https = require('https');
 var fs = require('fs');
 
 app.set('port', process.env.PORT || 3000);
+app.set('sslport', 8000);
 
-var server = app.listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + server.address().port);
-});
+try{
+	var server = app.listen(app.get('port'), function() {
+		console.log('Express server listening on port ' + server.address().port);
+	});
+}catch(err){
+	console.log('launch http server fail, dose port ' + app.get('port') + ' using?');
+	console.log(err);
+}
+
 
 
 //setting up https server
+var options;
+try{
+	var options = {
+		key: fs.readFileSync(__dirname + '/ssl/key.pem'),
+		cert: fs.readFileSync(__dirname + '/ssl/cert.pem')
+	};
+}catch(err){
 
-var options = {
-    key: fs.readFileSync(__dirname + '/ssl/key.pem'),
-    cert: fs.readFileSync(__dirname + '/ssl/cert.pem')
-};
+	console.log('launch https server fail, error when reading ssl certificate files');
+	console.log(err);
+}
 
-var httpsServer = https.createServer(options, app).listen(8000, function() {
-  console.log('https server listening on port ' + httpsServer.address().port);
-});
+if(options){
+	try{
+		var httpsServer = https.createServer(options, app).listen(8000, function() {
+			console.log('https server listening on port ' + httpsServer.address().port);
+		});
+	}catch(err){
+		console.log('launch https server fail, dose port ' + app.get('sslport') + ' using?');
+		console.log(err);
+	}
+}
+

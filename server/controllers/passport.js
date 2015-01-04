@@ -8,7 +8,6 @@ var passport = require('passport'),
 	FacebookStrategy = require('passport-facebook');
 
 var User = require('../database/user');
-
 //
 passport.serializeUser(function(user, done) {
 	done(null, user.uid);
@@ -63,31 +62,39 @@ passport.use('facebook',new FacebookStrategy(
 		callbackURL: '/login/redirect/facebook'
 	},
 	function(accessToken, refreshToken, profile, done){
-
-		User.findUser(profile.id)
+		
+		User.findUser('fb' + profile.id)
 		.then(function(user){
 			if(!user){
 				//create one
-				profile._type='facebook';
-				profile.access_token = accessToken;
-				profile.refresh_token = refreshToken;
-
-				User.register(profile.id,profile.displayName,profile, true)
-				.then(function(newUser){
-					done(null, newUser);
-				})
-				.catch(function(err){
+				try{
+					User.registerFacebook(accessToken, refreshToken, profile)
+					.then(function(newUser){
+						done(null, newUser);
+					})
+					.catch(function(err){
+						console.log('error#3');
+						console.log(err);
+						done(err);
+					})
+					.done();
+				}catch(err){
+					console.log('error#2');
+					console.log(err);
 					done(err);
-				})
-				.done();
+				}
 			}else{
 				done(null, user);
 			}
 		})
 		.catch(function(err){
+			console.log('error#1');
+			console.log(err);
 			done(err);
 		})
 		.done();
+
+		
 	}
 ));
 

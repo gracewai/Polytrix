@@ -6,7 +6,7 @@
 'use strict';
 
 var router = require('express').Router();
-var userLogin = require('../controllers/login');
+var User = require('../database/user');
 var passport = require('passport');
 
 //	format of loginStatus:
@@ -91,7 +91,7 @@ router.post('/register', function(req, res, next) {
 
 	default:
 	case 'local':
-		userLogin.registerLocal(req.body.uid,req.body.upw,req.body.name,req.body.email)
+		User.registerLocal(req.body.uid,req.body.upw,req.body.name,req.body.email)
 		.then(function(user){
 			if(user)
 				req.login(user, function(err) {

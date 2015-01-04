@@ -112,13 +112,13 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res) {
 
 	service.getToken(req.query.code)
 	.then(function(tokens){
-		//set token to session
 		var drive = {
 			_type: req.params.drive,
 			expires_on: tokens.expires_on || new Date(),
 			access_token: tokens.access_token,
 			refresh_token: tokens.refresh_token
 		};
+		if(tokens.driveid) drive.id = tokens.driveid;
 
 		if(req.params.drive != 'dropbox' && !tokens.refresh_token){
 			console.log('rest.js /api/redirect/:drive');
@@ -202,10 +202,27 @@ router.get('/api/download/onedrive', function(req, res) {
 });
 
 router.get('/api/download/:driveId', requireLogined, function(req, res) {
+	try{
+
+
+
 	var drive = req.drive;
 	var client = api[drive._type];
-
-	if(client.downloadFilePipe){
+	if(client.downloadFileLink){
+		client.downloadFileLink(
+			req.query.i,
+			drive.access_token,
+			drive.refresh_token)
+		.then(function(link){
+			console.log('donwload link gotten: ' + link);
+			res.redirect(link);
+		})
+		.catch(function(err){
+			console.log(err);
+			res.send('unsuccess getting file link');
+		});
+	}
+	else if(client.downloadFilePipe){
 		client.downloadFilePipe(
 			req.query.i,
 			drive.access_token,
@@ -229,6 +246,9 @@ router.get('/api/download/:driveId', requireLogined, function(req, res) {
 			}
 		})
 		.done();
+	}
+	}catch(err){
+		console.log(err);
 	}
 });
 
