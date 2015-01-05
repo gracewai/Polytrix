@@ -1,5 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,100,300);
 
+html,body{
+    background: #f7f7f7;
+}
+
 .header md-toolbar{
     background-color: #495A6F;
 }
@@ -7,7 +11,7 @@
 .main-content {
     position: absolute;
     top:20%;
-    right: 70%;
+    right: 20%;
 }
 
 .sidebar-menu {

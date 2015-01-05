@@ -54,7 +54,6 @@ angular.module('clientApp')
             case 'rmvb':
               return 'fa fa-file-video';
               break;
-            case 'pdf':
             case 'doc':
             case 'docx':
             case 'gdoc':
@@ -93,6 +92,18 @@ angular.module('clientApp')
             case 'rb':
             case 'c':
               return 'fa fa-file-code-o';
+              break;
+            case 'pdf':
+              return 'fa fa-file-pdf-o';
+              break;
+            case 'ppt':
+            case 'pptx':
+            case 'keynote':
+              return 'fa fa-file-powerpoint-o';
+              break;
+            case 'xls':
+            case 'xlsx':
+              return 'fa fa-file-excel-o';
               break;
           }
           break;
