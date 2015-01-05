@@ -1,0 +1,24 @@
+<style>
+	.regform{
+		width:1400px;
+		height:700px;
+	}
+</style>
+<md-dialog>
+	<md-content>
+		<form class="regform">
+			<md-text-float label="Email address" ng-model="user.email"></md-text-float>
+			<md-text-float label="Username" ng-model="user.uid"></md-text-float> 
+			<div class="row">
+				<md-text-float label="First Name" ng-model="user.fname"></md-text-float>
+				<md-text-float label="Last Name" ng-model="user.lname"></md-text-float>
+			</div>
+			<md-text-float label="Password" type="password"></md-text-float>
+			<md-text-float label="Confirm Password" type="password"></md-text-float>
+			<div class="row">
+			<md-button class="md-raised md-primary" type="submit" ng-click="onRegister()" style="margin: 1em;line-height: 25px;min-width: 10em;">Register</md-button>
+			<md-button class="md-raised md-warn" ng-click="onCollapse()" style="margin: 1em; line-height: 25px;min-width: 10em;">Cancel</md-button>
+			</div>
+		</form>
+	</md-content>
+</md-dialog>

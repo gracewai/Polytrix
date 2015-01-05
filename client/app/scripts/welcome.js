@@ -22,15 +22,11 @@ angular
   ])
   .config(function ($routeProvider) {
     $routeProvider
-    .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
-      })
-      .when('/browse', {
-        templateUrl: 'views/browse.html',
-        controller: 'BrowseCtrl'
+      .when('/landing', {
+        templateUrl: 'views/landing.html',
+        controller: 'LandingCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/landing'
       });
   });
