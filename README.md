@@ -2,7 +2,7 @@ Polytrix
 ========
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](http://code.polytrix.me)
 [![Platform](https://img.shields.io/badge/platform-web-lightgrey.svg)](http://code.polytrix.me)
-[![Build Version](https://img.shields.io/badge/version-0.1.1-brightgreen.svg)](http://code.polytrix.me)
+[![Build Version](https://img.shields.io/badge/build-0.1.3-brightgreen.svg)](http://code.polytrix.me)
 [![License](https://img.shields.io/badge/license-MIT-orange.svg)](http://code.polytrix.me)
 
 
