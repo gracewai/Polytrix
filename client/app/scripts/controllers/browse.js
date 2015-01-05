@@ -24,7 +24,7 @@ angular.module('clientApp')
     	$scope.tabs = [];
     	var result = usrRes.get({}, function(){
     		if(result.success){
-    			$scope.tabs = result.drives;
+    			$scope.tabs = result.userInfo.drives;
     		}
     	});
     };
