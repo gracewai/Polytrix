@@ -53,6 +53,8 @@ angular.module('clientApp')
             case 'mov':
             case 'rmvb':
               return 'fa fa-video';
+            case 'pdf':
+            case ''
           }
           break;
       }
