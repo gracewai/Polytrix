@@ -52,7 +52,7 @@ angular.module('clientApp')
             case 'wmv':
             case 'mov':
             case 'rmvb':
-              return 'fa fa-video';
+              return 'fa fa-file-video';
               break;
             case 'pdf':
             case 'doc':
@@ -60,7 +60,7 @@ angular.module('clientApp')
             case 'gdoc':
             case 'txt':
             case 'md':
-              return 'fa fa-text-o';
+              return 'fa fa-file-text-o';
               break;
             case 'mp3':
             case 'flac':
@@ -70,14 +70,14 @@ angular.module('clientApp')
             case 'mid':
             case 'wma':
             case 'midi':
-              return 'fa fa-audio-o';
+              return 'fa fa-file-audio-o';
               break;
             case 'zip':
             case 'rar':
             case 'tar':
             case 'gz':
             case '7z':
-              return 'fa fa-archive-o';
+              return 'fa fa-file-archive-o';
               break;
             case 'jpg':
             case 'png':
@@ -85,14 +85,14 @@ angular.module('clientApp')
             case 'gif':
             case 'psd':
             case 'tiff':
-              return 'fa fa-image-o';
+              return 'fa fa-file-image-o';
               break;
             case 'cpp':
             case 'java':
             case 'py':
             case 'rb':
             case 'c':
-              return 'fa fa-code-o';
+              return 'fa fa-file-code-o';
               break;
           }
           break;
