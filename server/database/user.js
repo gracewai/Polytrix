@@ -58,7 +58,7 @@ function createNewUser(uid,name,email,passport,options){
 
 userSchema.statics.register = function(uid,name,email,passport,options){
 	var User = this;
-	var check;
+	options = options || {};
 	if(!passport)
 		throw new Error('missing argument passport');
 

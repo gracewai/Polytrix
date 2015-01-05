@@ -54,11 +54,24 @@ app.use(userRest);
  * Development Settings
  */
 if (app.get('env') === 'development') {
+    app.get('/',function(req,res){
+        res.sendFile(path.join(__dirname, '../client/app/welcome.html'));
+    });
+
+    app.get('/console/',function(req,res){
+        res.sendFile(path.join(__dirname, '../client/app/index.html'));
+    });
+
+    app.use('/console/',express.static(path.join(__dirname, '../client')));
+    app.use('/console/',express.static(path.join(__dirname, '../client/app')));
+
     // This will change in production since we'll be using the dist folder
     app.use(express.static(path.join(__dirname, '../client')));
     // This covers serving up the index page
     app.use(express.static(path.join(__dirname, '../client/.tmp')));
     app.use(express.static(path.join(__dirname, '../client/app')));
+
+
 
     // Error Handling
     app.use(function(err, req, res, next) {

@@ -120,6 +120,13 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res) {
 		};
 		if(tokens.driveid) drive.id = tokens.driveid;
 
+		if(!tokens.access_token){
+			console.log('rest.js /api/redirect/:drive');
+			console.log('no access token get');
+			console.log(tokens);
+			return;
+		}
+
 		if(req.params.drive != 'dropbox' && !tokens.refresh_token){
 			console.log('rest.js /api/redirect/:drive');
 			console.log('no refresh token get');

@@ -21,6 +21,7 @@ passport.deserializeUser(function(uid, done) {
 	});
 });
 
+var validateEmailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 // local
 passport.use('local',new LocalStrategy(
@@ -29,8 +30,19 @@ passport.use('local',new LocalStrategy(
 		passwordField: 'upw'
 	},
 	function(uid,upw,done){
-		User.findUser(uid)
-		.then(function(user){
+
+		function validateEmail(email) {
+			return validateEmailRegex.test(email);
+		};
+
+		var userPromise;
+		if(validateEmail(uid)){
+			userPromise = User.findUserByEmail(uid);
+		}else{
+			userPromise = User.findUser(uid);
+		}
+
+		userPromise.then(function(user){
 
 			if(user){
 				var valid = user.validPassword(upw);

@@ -20,7 +20,7 @@ angular.module('clientApp')
       'Karma'
     ];
     var getContainer = function(){
-    	var usrRes = $resource('api/account/info');
+    	var usrRes = $resource('/api/account/info');
     	$scope.tabs = [];
     	var result = usrRes.get({}, function(){
     		if(result.success){
@@ -53,14 +53,12 @@ angular.module('clientApp')
             case 'mov':
             case 'rmvb':
               return 'fa fa-file-video';
-              break;
             case 'doc':
             case 'docx':
             case 'gdoc':
             case 'txt':
             case 'md':
               return 'fa fa-file-text-o';
-              break;
             case 'mp3':
             case 'flac':
             case 'm4v':
@@ -70,14 +68,12 @@ angular.module('clientApp')
             case 'wma':
             case 'midi':
               return 'fa fa-file-audio-o';
-              break;
             case 'zip':
             case 'rar':
             case 'tar':
             case 'gz':
             case '7z':
               return 'fa fa-file-archive-o';
-              break;
             case 'jpg':
             case 'png':
             case 'jpeg':
@@ -85,26 +81,23 @@ angular.module('clientApp')
             case 'psd':
             case 'tiff':
               return 'fa fa-file-image-o';
-              break;
             case 'cpp':
             case 'java':
             case 'py':
             case 'rb':
             case 'c':
               return 'fa fa-file-code-o';
-              break;
             case 'pdf':
               return 'fa fa-file-pdf-o';
-              break;
             case 'ppt':
             case 'pptx':
             case 'keynote':
               return 'fa fa-file-powerpoint-o';
-              break;
             case 'xls':
             case 'xlsx':
               return 'fa fa-file-excel-o';
-              break;
+            default:
+              return 'fa fa-file-o';
           }
           break;
       }
@@ -119,7 +112,7 @@ angular.module('clientApp')
   	};
 
   	$scope.init = function(){
-  		res = $resource('api/fileIndex/' + $scope.driveID);
+  		res = $resource('/api/fileIndex/' + $scope.driveID);
   		if($scope.driveType === 'googledrive'){
   			$scope.rootPath = 'root';
   		}

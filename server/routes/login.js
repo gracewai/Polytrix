@@ -62,13 +62,22 @@ router.post('/login', function(req, res, next) {
 			if(err)
 				console.log(err);
 			if(!req.user){
-				res.redirect('/login?failure=true&strategy=local');
+				res.send({
+					success: false,
+					logined: false,
+					msg: 'not implemented error message'
+				});
 			}else{
-				res.redirect('/app');
+				res.send({
+					success: true,
+					logined: true
+				});
 			}
 		});
 		break;
 	}
+}, function(req,res){
+	//callback of passport
 });
 
 //	POST /register
@@ -97,18 +106,28 @@ router.post('/register', function(req, res, next) {
 				req.login(user, function(err) {
 					if (err) console.log(err);
 					if (err) { return next(err); }
-					return res.redirect('/app');
+					res.send({
+						success: true,
+						logined: true
+					});
 				});
 			else{
 				console.log("logical error login.js /register case local");
-				res.redirect('/login?failure=true&strategy=local');
+				res.send({
+					success: false,
+					logined: false,
+					msg: 'not implemented error message'
+				});
 			}
 		})
 		.catch(function(err){
 			console.log(err);
-			res.redirect('/login?failure=true&strategy=local&msg='+err);
+			res.send({
+				success: false,
+				logined: false,
+				msg: 'not implemented error message'
+			});
 		});
-		break;
 	}
 });
 
@@ -146,7 +165,7 @@ router.post('/logout', function(req, res, next) {
 //passport redirects
 router.get('/login/redirect/facebook',passport.authenticate('facebook',
 	{
-		successRedirect: '/app/',
+		successRedirect: '/console/',
 		failureRedirect: '/login?failure=true&strategy=facebook'
 	}
 ));

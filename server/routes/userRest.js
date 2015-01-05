@@ -51,12 +51,23 @@ router.get('/api/account/info/', function(req, res) {
 			user = User.findUserByEmail(req.query.email);
 		}
 
-		res.send({
-			success:true,
-			logined:!!req.user,
-			userInfo: user.getPublicInfo()
-		});
-
+		user
+		.then(function(user){
+			res.send({
+				success:true,
+				logined:!!req.user,
+				userInfo: user.getPublicInfo()
+			});
+		})
+		.catch(function(err){
+			res.send({
+				success:false,
+				logined:!!req.user,
+				msg: err
+			});
+		})
+		.done();
+		
 	}else if(req.user){
 		
 		res.send({
