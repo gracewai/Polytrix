@@ -27,7 +27,7 @@
 
     <!-- Add your site or application content here -->
         <div class="container">
-          <div class="header">
+          <div class="header" ng-controller="UserCtrl">
             <md-toolbar>
               <h2 style="font-family: 'Roboto', sans-serif; font-weight:100; letter-spacing:10px; margin-left:30px;">POLYTRIX</h2>
               <md-button style="position:absolute;right: 285px; top: 20px;"><i class="fa fa-bookmark"></i></md-button>
@@ -50,7 +50,7 @@
               <div class="ui dropdown" style="position:absolute; right:110px; top:14px;">
                 <md-button class="md-fab" style="width:40px; height:40px; background: url(http://www.scumlabs.com/wp-content/uploads/2011/04/Nyan-Cat.jpg)"></md-button>
                 <div class="menu" style="margin-top:10px;">
-                  <div class="item">Log out</div>
+                  <div class="item" ng-click="showLogoutConfirm($event)">Log out</div>
                 </div>
               </div>
             </md-toolbar>             
@@ -188,6 +188,8 @@
         <script src="scripts/controllers/landing.js"></script>
         <script src="scripts/controllers/browse.js"></script>
         <script src="scripts/services/userinfo.js"></script>
+        <script src="scripts/services/upload.js"></script>
+        <script src="scripts/controllers/user.js"></script>
         <!-- endbuild -->
 </body>
 </html>
