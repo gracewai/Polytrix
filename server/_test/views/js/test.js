@@ -285,7 +285,7 @@ app.controller('fileInfo',function($scope){
 	};
 	setTimeout(function(){
 		$scope.i = $scope.usingType == 'dropbox' ? '/' : $scope.usingType == 'onedrive' ? 'me/skydrive' : 'root';
-		//$scope.$apply();
+		$scope.fileIndex();
+		//$scpoe.$apply();
 	},100)
-	
 });
