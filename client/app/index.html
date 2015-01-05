@@ -33,10 +33,15 @@
               <md-button style="position:absolute;right: 285px; top: 20px;"><i class="fa fa-bookmark"></i></md-button>
               <md-button style="position:absolute;right: 235px; top: 20px;"><i class="fa fa-gear"></i></md-button>
               <md-button style="position:absolute;right: 185px; top: 20px;"><i class="fa fa-inbox"></i></md-button>
-              <md-button class="md-fab" style="width:40px; height:40px; position:absolute; right:110px; top:14px; background: url(http://www.scumlabs.com/wp-content/uploads/2011/04/Nyan-Cat.jpg)"></md-button>
+              <div class="ui dropdown" style="position:absolute; right:110px; top:14px;">
+                <md-button class="md-fab" style="width:40px; height:40px; background: url(http://www.scumlabs.com/wp-content/uploads/2011/04/Nyan-Cat.jpg)"></md-button>
+                <div class="menu" style="margin-top:10px;">
+                  <div class="item">Log out</div>
+                </div>
+              </div>
             </md-toolbar>             
           </div>
-          <nav id="menu" class="menu">
+          <nav id="menu" class="sidebar-menu">
             <button class="menu__handle"><span>Menu</span></button>
             <div class="menu__inner">
               <ul>
@@ -153,12 +158,14 @@
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script>$('.ui.dropdown').dropdown();</script>
         <script src="scripts/app.js"></script>
         <script src="https://s3-ap-northeast-1.amazonaws.com/molecular/classie.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
         <script src="scripts/controllers/landing.js"></script>
         <script src="scripts/controllers/browse.js"></script>
+        <script src="scripts/services/userinfo.js"></script>
         <!-- endbuild -->
 </body>
 </html>
