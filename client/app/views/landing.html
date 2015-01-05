@@ -1,4 +1,25 @@
 <style>
+	@import url(http://fonts.googleapis.com/css?family=Raleway:300);
+	#title {
+		position: absolute;
+		right: 10%;
+		top:5%;
+	}
+	#title > h1 {
+		font-family: 'Raleway', sans-serif;
+		font-size: 92px;
+		font-weight: 300;
+		padding: 80px 50px;
+		text-align: center;
+		text-transform: uppercase;
+		text-rendering: optimizeLegibility;
+	}
+	#title > h1.retroshadow {
+		color: #2c2c2c;
+		background-color: #f7f7f7;
+		letter-spacing: .05em;
+		text-shadow: 4px 4px 0px #f7f7f7, 7px 7px 0px rgba(0, 0, 0, 0.2);
+	}
 	#intro,
 	#functionality,
 	#fedility,
@@ -7,16 +28,16 @@
 	}
 
 	#intro{
-		background-image: url();
+		background-image: url(https://s3-ap-northeast-1.amazonaws.com/molecular/networked_files.png);
 	}
 	#functionality{
 		background-image: url();
 	}
 	#fedility{
-		background-image: url();
+		background-image: url(https://s3-ap-northeast-1.amazonaws.com/molecular/cloud-sharing.jpg);
 	}
 	#clarity{
-		background-image: url();
+		background:#3DC9B3;
 	}
 	.sign-up {
 		position: relative;
@@ -154,14 +175,40 @@
 </style>
 <div id="fullpage">
 	<div class="section" id="intro">
+		<div id="title">
+			<h1 class="retroshadow">Polytrix</h1>
+		</div>
 		<form class="sign-up">
 			<h1 class="sign-up-title">Start using Polytrix</h1>
 			<input type="text" class="sign-up-input" ng-model="email" placeholder="e.g alice@polytrix.io" autofocus>
 			<button class="sign-up-button" ng-click="retrieveAccount($event)">Deploy <i class="fa fa-chevron-circle-right"></i></button>
 		</form>
+		<div class="huge ui inverted button" style="background:#18BD9B; position:absolute; right:20%; top: 26%;">LEARN MORE <i class="chevron down icon" style="padding-left:15px; padding-bottom:5px;"></i></div>
 	</div>
 	<div class="section" id="functionality">
-		Slide 2
+		<div class="ui page grid">
+			<div class="four wide column">
+				<i class="huge home icon"></i>
+			</div>
+			<div class="four wide column">
+				<i class="huge home icon"></i>
+			</div>
+			<div class="four wide column">
+				<i class="huge home icon"></i>
+			</div>
+			<div class="four wide column">
+				<i class="huge home icon"></i>
+			</div>
+			<div class="five wide column">
+				<i class="huge home icon"></i>
+			</div>
+			<div class="five wide column">
+				<i class="huge home icon"></i>
+			</div>
+			<div class="five wide column">
+				<i class="huge home icon"></i>
+			</div>
+		</div>
 	</div>
 	<div class="section" id="fedility">
 		Slide 3
