@@ -82,6 +82,7 @@ angular.module('clientApp')
 					form.uid = '';
 				}
 				$scope.buttonText = 'Login';
+				$('.sign-up-input.password')[0].focus();
 
 				break;
 			case 'register':
