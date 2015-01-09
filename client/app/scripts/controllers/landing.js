@@ -8,13 +8,10 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-	.controller('LandingCtrl',['$scope', '$resource', '$mdDialog', function ($scope, $resource, $mdDialog) {
+	.controller('LandingCtrl',['$scope', '$resource', function ($scope, $resource) {
 		var occupiedID = [];
 		var occupiedEmail = [];
 
-		$scope.loading = false;
-		$scope.selection = 'depoly';
-		$scope.buttonText = 'Deploy';
 		var form = $scope.form = {
 			uid:'',
 			name:'',
@@ -24,9 +21,36 @@ angular.module('clientApp')
 			width: '280px',
 			identifier: 'Email'
 		};
-		$scope.usingIdentifier = 'Email';
+
+		var ID = {
+			EMAIL : 'Email',
+			USER_ID: 'User ID',
+		};
+
+		var Selection = {
+			DEPLOY: 'deploy',
+			LOGIN: 'login',
+			REGISTER: 'register'
+		};
+
+		$scope.loading = false;
+		$scope.selection = Selection.DEPLOY;
+		$scope.buttonText = 'Deploy';
+		$scope.usingIdentifier = ID.EMAIL;
 
 		var UserInfo = $resource('/api/account/info');
+
+		var Error = $scope.Error = {
+			errors: [],
+			add:function(error){
+				this.errors.push(error);
+				$('#errmsg').removeClass('hidden');
+			},
+			clear:function(){
+				this.errors = [];
+				$('#errmsg').addClass('hidden');
+			},
+		};
 
 		var validateEmailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		function validateEmail(email) {
@@ -34,8 +58,8 @@ angular.module('clientApp')
 		};
 
 		$scope.formChange = function(event,field){
-			if($scope.selection == 'register'){
-				$scope.usingIdentifier = 'Email';
+			if($scope.selection == Selection.REGISTER){
+				$scope.usingIdentifier = ID.EMAIL;
 
 				if(field && field == 'uid'){
 					console.log(event);
@@ -46,14 +70,14 @@ angular.module('clientApp')
 		};
 
 		$scope.idChange = function(){
-			if($scope.selection == 'login'){
-				$scope.select('depoly');
+			if($scope.selection == Selection.LOGIN){
+				$scope.select('deploy');
 			}
-			if($scope.selection != 'register'){
+			if($scope.selection != Selection.REGISTER){
 				if(validateEmail(form.email)){
-					$scope.usingIdentifier = 'Email';
+					$scope.usingIdentifier = ID.EMAIL;
 				}else{
-					$scope.usingIdentifier = 'User ID';
+					$scope.usingIdentifier = ID.USER_ID;
 				}
 				//form.identifier = $scope.usingIdentifier;
 			}
@@ -62,14 +86,14 @@ angular.module('clientApp')
 		$scope.select = function(selection){
 			$scope.selection = selection;
 			switch(selection){
-			case 'login':
-				$('.depoly.tab').removeClass('select');
-				$('.depoly.tab.login').addClass('select');
+			case Selection.LOGIN:
+				$('.deploy.tab').removeClass('select');
+				$('.deploy.tab.login').addClass('select');
 				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
 				$('button.sign-up-button > i').addClass('fa-sign-in');
 				form.width='280px';
 				form.identifier = $scope.usingIdentifier;
-				if($scope.usingIdentifier == 'User ID' && form.uid){
+				if($scope.usingIdentifier == ID.USER_ID && form.uid){
 					form.email = form.uid;
 					form.uid = '';
 				}
@@ -77,15 +101,15 @@ angular.module('clientApp')
 				$('.sign-up-input.password')[0].focus();
 
 				break;
-			case 'register':
-				$('.depoly.tab').removeClass('select');
-				$('.depoly.tab.register').addClass('select');
+			case Selection.REGISTER:
+				$('.deploy.tab').removeClass('select');
+				$('.deploy.tab.register').addClass('select');
 				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
 				$('button.sign-up-button > i').addClass('fa-pencil-square-o');
 				form.width='400px';
 				form.identifier = 'Email';
 
-				if($scope.usingIdentifier == 'User ID' && form.email){
+				if($scope.usingIdentifier == ID.USER_ID && form.email){
 					form.uid = form.email;
 					form.email = '';
 				}
@@ -93,8 +117,8 @@ angular.module('clientApp')
 				$scope.buttonText = 'Register';
 
 				break;
-			case 'depoly':
-				$('.depoly.tab').removeClass('select');
+			case Selection.DEPLOY:
+				$('.deploy.tab').removeClass('select');
 				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
 				$('button.sign-up-button > i').addClass('fa-sign-in');
 				form.width='280px';
@@ -105,20 +129,20 @@ angular.module('clientApp')
 			}
 		};
 
-		$scope.depoly = function(){
+		$scope.deploy = function(){
 			//show loading icon
 			$scope.loading = true;
 
 
 			//check user input uid or email
 			if(validateEmail(form.email)){
-				$scope.usingIdentifier = 'Email';
+				$scope.usingIdentifier = ID.EMAIL;
 			}else{
-				$scope.usingIdentifier = 'User ID';
+				$scope.usingIdentifier = ID.USER_ID;
 			}
 
 			var para = {};
-			if($scope.usingIdentifier == 'Email'){
+			if($scope.usingIdentifier == ID.EMAIL){
 				para.email = form.email;
 			}else{
 				para.uid = form.email;
@@ -181,32 +205,23 @@ angular.module('clientApp')
 
 		$scope.buttonClick = function(){
 			switch($scope.selection){
-			case 'depoly':
-				if(angular.isDefined($scope.form.email)){
-					$scope.depoly();
-				}
-				else {
-					$scope.err_msg = 'Your email address cannot be empty';
-					$('#errmsg').removeClass('hidden');
+			case Selection.DEPLOY:
+				if(form.email){
+					$scope.deploy();
+				} else {
+					Error.add('Your email address cannot be empty');
 				}
 				break;
-			case 'login':
+			case Selection.LOGIN:
 				$scope.login();
 				break;
-			case 'register':
-				if(angular.isDefined($scope.form.email)){
+			case Selection.REGISTER:
+				if(form.email){
 					$scope.register();
-				}
-				else {
-					$scope.err_msg = 'Your email address cannot be empty';
-					$('#errmsg').removeClass('hidden');
+				} else {
+					Error.add('Your email address cannot be empty');
 				}
 				break;
 			}
 		};
-		// $mdDialog.show({
-		// 	controller: dialogController,
-		// 	templateUrl:'/views/register.html',
-		// 	targetEvent: event
-		// });
 	}]);
