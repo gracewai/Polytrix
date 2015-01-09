@@ -1,15 +1,5 @@
 'use strict';
 
-function dialogController($scope, $mdDialog){
-	$scope.onRegister = function(){
-
-	};
-	$scope.onCollapse = function(){
-		$mdDialog.hide();
-	};
-}
-
-
 /**
  * @ngdoc function
  * @name clientApp.controller:LandingCtrl
@@ -24,7 +14,7 @@ angular.module('clientApp')
 
 		$scope.loading = false;
 		$scope.selection = 'depoly';
-		$scope.buttonText = 'Depoly';
+		$scope.buttonText = 'Deploy';
 		var form = $scope.form = {
 			uid:'',
 			name:'',
@@ -75,6 +65,8 @@ angular.module('clientApp')
 			case 'login':
 				$('.depoly.tab').removeClass('select');
 				$('.depoly.tab.login').addClass('select');
+				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
+				$('button.sign-up-button > i').addClass('fa-sign-in');
 				form.width='280px';
 				form.identifier = $scope.usingIdentifier;
 				if($scope.usingIdentifier == 'User ID' && form.uid){
@@ -88,6 +80,8 @@ angular.module('clientApp')
 			case 'register':
 				$('.depoly.tab').removeClass('select');
 				$('.depoly.tab.register').addClass('select');
+				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
+				$('button.sign-up-button > i').addClass('fa-pencil-square-o');
 				form.width='400px';
 				form.identifier = 'Email';
 
@@ -101,10 +95,12 @@ angular.module('clientApp')
 				break;
 			case 'depoly':
 				$('.depoly.tab').removeClass('select');
+				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
+				$('button.sign-up-button > i').addClass('fa-sign-in');
 				form.width='280px';
 				form.identifier = 'Email';
 
-				$scope.buttonText = 'Depoly';
+				$scope.buttonText = 'Deploy';
 				break;
 			}
 		};
@@ -186,13 +182,25 @@ angular.module('clientApp')
 		$scope.buttonClick = function(){
 			switch($scope.selection){
 			case 'depoly':
-				$scope.depoly();
+				if(angular.isDefined($scope.form.email)){
+					$scope.depoly();
+				}
+				else {
+					$scope.err_msg = 'Your email address cannot be empty';
+					$('#errmsg').removeClass('hidden');
+				}
 				break;
 			case 'login':
 				$scope.login();
 				break;
 			case 'register':
-				$scope.register();
+				if(angular.isDefined($scope.form.email)){
+					$scope.register();
+				}
+				else {
+					$scope.err_msg = 'Your email address cannot be empty';
+					$('#errmsg').removeClass('hidden');
+				}
 				break;
 			}
 		};

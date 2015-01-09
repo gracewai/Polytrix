@@ -1,4 +1,5 @@
 <style>
+	@import url(http://fonts.googleapis.com/css?family=Montserrat);
 	@import url(http://fonts.googleapis.com/css?family=Raleway:300);
 	#title {
 		position: absolute;
@@ -9,16 +10,19 @@
 		font-family: 'Raleway', sans-serif;
 		font-size: 92px;
 		font-weight: 300;
-		padding: 80px 50px;
+		padding: 10px 50px;
 		text-align: center;
 		text-transform: uppercase;
 		text-rendering: optimizeLegibility;
 	}
 	#title > h1.retroshadow {
 		color: #2c2c2c;
-		background-color: #f7f7f7;
 		letter-spacing: .05em;
 		text-shadow: 4px 4px 0px #f7f7f7, 7px 7px 0px rgba(0, 0, 0, 0.2);
+	}
+
+	#title > .rounded-rec-btn {
+		left: 28%
 	}
 	#intro,
 	#functionality,
@@ -38,6 +42,37 @@
 	}
 	#clarity{
 		background:#3DC9B3;
+	}
+	.rounded-rec-btn {
+		position: relative;
+		display: inline-block;
+		text-align: center;
+	}
+
+	.rounded-rec-btn button {
+		display: block;
+		margin: 0 auto;
+		padding: 0;
+		width: 250px;
+		height: 70px;
+		border:2px solid #1ECD97;
+		border-radius: 40px;
+		background: transparent;
+		color: #1ECD97;
+		letter-spacing: 1px;
+		font-size: 18px;
+		font-family: 'Montserrat', sans-serif;
+		-webkit-transition: background-color 0.3s, color 0.3s, width 0.3s, border-width 0.3s, border-color 0.3s;
+		transition: background-color 0.3s, color 0.3s, width 0.3s, border-width 0.3s, border-color 0.3s;
+	}
+
+	.rounded-rec-btn button:hover{
+		background-color: #1ECD97;
+		color: #fff;
+	}
+
+	.rounded-rec-btn button:focus {
+		outline: none;
 	}
 	.sign-up-container{
 		position: relative;
@@ -242,6 +277,9 @@
 	<div class="section" id="intro">
 		<div id="title">
 			<h1 class="retroshadow">Polytrix</h1>
+			<div class="rounded-rec-btn">
+				<button><span>LEARN MORE</span><i class="fa fa-chevron-down" style="margin-left:10px;"></i></button>
+			</div>
 		</div>
 		<div class="sign-up-container" style="width:{{form.width}};">
 			<div class="depoly tab login ctrl" ng-click="select('register')">
@@ -286,16 +324,24 @@
 					</label>
 				</div>
 
-				
-
 				<button class="sign-up-button" ng-click="buttonClick($event)">
 					{{ buttonText }}
 	    			<div ng-show="loading" class="ui mini active inline loader"></div>
 					<i ng-hide="loading" class="fa fa-chevron-circle-right"></i>
 				</button>
+
+				<div class="ui hidden floating negative message" id="errmsg">
+					<i class="close icon"></i>
+					<div class="header">
+						<i class="fa fa-exclamation-triangle"></i>
+						There was some errors with your submission
+					</div>
+					<ul class="list">
+						<li>{{err_msg}}</li>
+					</ul>
+				</div>	
 			</form>
 		</div>
-		<div class="huge ui inverted button" style="background:#18BD9B; position:absolute; right:20%; top: 26%;">LEARN MORE <i class="chevron down icon" style="padding-left:15px; padding-bottom:5px;"></i></div>
 	</div>
 	<div class="section" id="functionality">
 		<div class="ui page grid">
