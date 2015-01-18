@@ -42,14 +42,44 @@ angular.module('clientApp')
 
 		var Error = $scope.Error = {
 			errors: [],
+			needUpdate: false,
 			add:function(error){
+				this.needUpdate = true;
 				this.errors.push(error);
-				$('#errmsg').removeClass('hidden');
+			},
+			hideThenClear:function(){
+				var _this = this;
+				this.updateView(false,function(){
+					_this.needUpdate = false;
+					_this.errors = [];
+					$scope.$apply();
+				});
 			},
 			clear:function(){
+				if(this.errors.length == 0)
+					return;
+				this.needUpdate = true;
 				this.errors = [];
-				$('#errmsg').addClass('hidden');
 			},
+			updateView:function(show,cb){
+				if(typeof show == "undefined" && this.needUpdate == false)
+					return;
+
+				if(typeof show == "undefined")
+					show = this.needUpdate;
+
+
+				if(show){
+					//$('#errmsg').removeClass('hidden');
+					$('#errmsg').transition({animation:'fade down in',onComplete:cb});
+				}
+				else{
+					$('#errmsg').transition({animation:'fade up out',onComplete:function(){
+						//$('#errmsg').addClass('hidden');
+						if(typeof cb == "function")cb();
+					}});
+				}
+			}
 		};
 
 		var validateEmailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -91,7 +121,7 @@ angular.module('clientApp')
 				$('.deploy.tab.login').addClass('select');
 				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
 				$('button.sign-up-button > i').addClass('fa-sign-in');
-				form.width='280px';
+				form.width='300px';
 				form.identifier = $scope.usingIdentifier;
 				if($scope.usingIdentifier == ID.USER_ID && form.uid){
 					form.email = form.uid;
@@ -121,7 +151,7 @@ angular.module('clientApp')
 				$('.deploy.tab').removeClass('select');
 				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
 				$('button.sign-up-button > i').addClass('fa-sign-in');
-				form.width='280px';
+				form.width='300px';
 				form.identifier = 'Email';
 
 				$scope.buttonText = 'Deploy';
@@ -178,8 +208,19 @@ angular.module('clientApp')
 				}
 			});
 			result.$promise.catch(function(response) {
-				if(response.status == 401)
-					alert('wrong user id or password');
+				$scope.loading = false;
+				switch(response.status){
+					case 400:
+						Error.add('400 Bad Request');	
+					break;
+					case 401:
+						Error.add('Incorrect password or invalid account credentials');
+					break;
+					default:
+						Error.add('Unknown Error, Status code:' + response.status);
+					break;
+				}
+				Error.updateView();
 			});
 		};
 
@@ -204,12 +245,14 @@ angular.module('clientApp')
 		};
 
 		$scope.buttonClick = function(){
+			Error.clear();
 			switch($scope.selection){
 			case Selection.DEPLOY:
 				if(form.email){
 					$scope.deploy();
 				} else {
 					Error.add('Your email address cannot be empty');
+					Error.updateView();
 				}
 				break;
 			case Selection.LOGIN:
@@ -220,6 +263,7 @@ angular.module('clientApp')
 					$scope.register();
 				} else {
 					Error.add('Your email address cannot be empty');
+					Error.updateView();
 				}
 				break;
 			}

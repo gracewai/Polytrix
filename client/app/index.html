@@ -36,21 +36,19 @@
                <md-button ><i class="fa fa-inbox"></i></md-button>
               </div>
              <div class="ui special popup" style="max-width:600px;">
-               <div class="content" style="font-size:14px;">
-                 <i class="fa fa-trash-o"></i> 
-                 A file has been deleted from your Dropbox 
-               </div>
-               <div class="divider"></div>
-               <div class="content" style="font-size:14px;">
-                 <i class="fa fa-file-image-o"></i> 
+                  <div class="ui vertical segment" style="font-size:14px;">
+                     <i class="fa fa-trash-o icon"></i> 
+                     A file has been deleted from your Dropbox 
+                  </div>
+                  <div class="ui vertical segment" style="font-size:14px;">
+                    <i class="fa fa-file-image-o icon"></i> 
                  5 pictures have been added to your storage
-               </div>
-             </div>
-
-              <div class="ui dropdown" style="position:absolute; right:110px; top:14px;">
+                  </div>
+                </div>
+              <div class="ui floating labeled icon dropdown" style="position:absolute; right:110px; top:14px;">
                 <md-button class="md-fab" style="width:40px; height:40px; background: url(http://www.scumlabs.com/wp-content/uploads/2011/04/Nyan-Cat.jpg)"></md-button>
                 <div class="menu" style="margin-top:10px;">
-                  <div class="item" ng-click="showLogoutConfirm($event)">Log out</div>
+                  <div class="item" ng-click="showLogoutConfirm($event)"><i class="fa fa-sign-out icon"></i>Log out</div>
                 </div>
               </div>
             </md-toolbar>             
@@ -173,7 +171,7 @@
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script>
-          $('.ui.dropdown').dropdown();
+          $('.ui.floating.labeled.icon.dropdown').dropdown();
           $('#displayNotification').popup({
            lnline : true,
            on: 'click',
@@ -184,12 +182,13 @@
         <script src="scripts/app.js"></script>
         <script src="https://s3-ap-northeast-1.amazonaws.com/molecular/classie.js"></script>
         <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/about.js"></script>
         <script src="scripts/controllers/landing.js"></script>
         <script src="scripts/controllers/browse.js"></script>
         <script src="scripts/services/userinfo.js"></script>
         <script src="scripts/services/upload.js"></script>
         <script src="scripts/controllers/user.js"></script>
+        <script src="scripts/controllers/dashboard.js"></script>
+        <script src="scripts/controllers/settings.js"></script>
         <!-- endbuild -->
 </body>
 </html>

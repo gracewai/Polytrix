@@ -219,8 +219,8 @@
 	.deploy.tab{
 		overflow: hidden;
 		opacity: 0;
-		-webkit-transition: all .7s; /* For Safari 3.1 to 6.0 */
-   		transition: all .7s;
+		-webkit-transition: all .7s ease-in-out; /* For Safari 3.1 to 6.0 */
+   		transition: all .7s ease-in-out;
 	}
 	.deploy.tab.select{
 		opacity: 1;
@@ -327,46 +327,31 @@
 				<button class="sign-up-button" ng-click="buttonClick($event)">
 					{{ buttonText }}
 	    			<div ng-show="loading" class="ui mini active inline loader"></div>
-					<i ng-hide="loading" class="fa fa-chevron-circle-right"></i>
+					<i ng-hide="loading" class="fa fa-chevron-circle-right icon"></i>
 				</button>
 
 				<div class="ui hidden floating negative message" id="errmsg">
-					<i class="close icon"></i>
+					<i class="close icon" ng-click="Error.hideThenClear();"></i>
 					<div class="header">
 						<i class="fa fa-exclamation-triangle"></i>
 						There was some errors with your submission
 					</div>
 					<ul class="list">
-						<li ng-repeat="err_msg in Error.errors">{{err_msg}}</li>
+						<li class="error_item" ng-repeat="err_msg in Error.errors">{{err_msg}}</li>
 					</ul>
 				</div>	
 			</form>
 		</div>
 	</div>
 	<div class="section" id="functionality">
-		<div class="ui page grid">
-			<div class="four wide column">
-				<i class="huge home icon"></i>
-			</div>
-			<div class="four wide column">
-				<i class="huge home icon"></i>
-			</div>
-			<div class="four wide column">
-				<i class="huge home icon"></i>
-			</div>
-			<div class="four wide column">
-				<i class="huge home icon"></i>
-			</div>
-			<div class="five wide column">
-				<i class="huge home icon"></i>
-			</div>
-			<div class="five wide column">
-				<i class="huge home icon"></i>
-			</div>
-			<div class="five wide column">
-				<i class="huge home icon"></i>
-			</div>
-		</div>
+		<section>
+			<figure>
+				
+			</figure>
+			<article>
+				
+			</article>
+		</section>
 	</div>
 	<div class="section" id="fedility">
 		Slide 3
