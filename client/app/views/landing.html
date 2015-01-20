@@ -76,10 +76,10 @@
 	}
 	.sign-up-container{
 		position: relative;
-		margin: 50px auto;
+		margin: 5px auto;
 		width: 280px;
-		-webkit-transition: width .7s; /* For Safari 3.1 to 6.0 */
-   		transition: width .7s;
+		-webkit-transition: width .3s; /* For Safari 3.1 to 6.0 */
+   		transition: width .3s;
 	}
 	.sign-up {
 		position: relative;
@@ -219,8 +219,8 @@
 	.deploy.tab{
 		overflow: hidden;
 		opacity: 0;
-		-webkit-transition: all .7s ease-in-out; /* For Safari 3.1 to 6.0 */
-   		transition: all .7s ease-in-out;
+		-webkit-transition: all .3s ease-in-out; /* For Safari 3.1 to 6.0 */
+   		transition: all .3s ease-in-out;
 	}
 	.deploy.tab.select{
 		opacity: 1;
@@ -326,8 +326,13 @@
 
 				<button class="sign-up-button" ng-click="buttonClick($event)">
 					{{ buttonText }}
-	    			<div ng-show="loading" class="ui mini active inline loader"></div>
-					<i ng-hide="loading" class="fa fa-chevron-circle-right icon"></i>
+
+					<div ng-show="loading" class="ui mini active inline loader"></div>
+					<span ng-hide="loading">
+						<i ng-show="selection==Selection.DEPOLY" class="fa fa-chevron-circle-right icon"></i>
+						<i ng-show="selection==Selection.LOGIN" class="fa fa-sign-in icon"></i>
+						<i ng-show="selection==Selection.REGISTER" class="fa fa-pencil-square-o icon"></i>
+					</span>
 				</button>
 
 				<div class="ui hidden floating negative message" id="errmsg">

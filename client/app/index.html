@@ -26,57 +26,22 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-        <div class="container">
-          <div class="header" ng-controller="UserCtrl">
-            <md-toolbar>
-              <h2 style="font-family: 'Roboto', sans-serif; font-weight:100; letter-spacing:10px; margin-left:30px;">POLYTRIX</h2>
-              <md-button style="position:absolute;right: 285px; top: 20px;"><i class="fa fa-bookmark"></i></md-button>
-              <md-button style="position:absolute;right: 235px; top: 20px;"><i class="fa fa-gear"></i></md-button>
-              <div id="displayNotification" style="position:absolute;right: 185px; top: 20px;">
-               <md-button ><i class="fa fa-inbox"></i></md-button>
-              </div>
-             <div class="ui special popup" style="max-width:600px;">
-                  <div class="ui vertical segment" style="font-size:14px;">
-                     <i class="fa fa-trash-o icon"></i> 
-                     A file has been deleted from your Dropbox 
-                  </div>
-                  <div class="ui vertical segment" style="font-size:14px;">
-                    <i class="fa fa-file-image-o icon"></i> 
-                 5 pictures have been added to your storage
-                  </div>
-                </div>
-              <div class="ui floating labeled icon dropdown" style="position:absolute; right:110px; top:14px;">
-                <md-button class="md-fab" style="width:40px; height:40px; background: url(http://www.scumlabs.com/wp-content/uploads/2011/04/Nyan-Cat.jpg)"></md-button>
-                <div class="menu" style="margin-top:10px;">
-                  <div class="item" ng-click="showLogoutConfirm($event)"><i class="fa fa-sign-out icon"></i>Log out</div>
-                </div>
-              </div>
-            </md-toolbar>             
-          </div>
-          <nav id="menu" class="sidebar-menu">
-            <button class="menu__handle"><span>Menu</span></button>
-            <div class="menu__inner">
-              <ul>
-                <li><a href="#"><i class="fa fa-fw fa-home"></i><span>Home<span></a></li>
-                <li><a href="#"><i class="fa fa-fw fa-heart"></i><span>Favs<span></a></li>
-                <li><a href="#/browse"><i class="fa fa-fw fa-folder"></i><span>Files<span></a></li>
-                <li><a href="#"><i class="fa fa-fw fa-tachometer"></i><span>Stats<span></a></li>
-              </ul>
-            </div>
-            <div class="morph-shape" data-morph-open="M300-10c0,0,295,164,295,410c0,232-295,410-295,410" data-morph-close="M300-10C300-10,5,154,5,400c0,232,295,410,295,410">
-              <svg width="100%" height="100%" viewBox="0 0 600 800" preserveAspectRatio="none">
-                <path fill="none" d="M300-10c0,0,0,164,0,410c0,232,0,410,0,410"/>
-              </svg>
-            </div>
-          </nav> 
+      <div class="app-global-user-info-scope" ng-controller="UserCtrl">
+        <div class="container" ng-controller="Menu">
+          <div ng-include="'views/menu.html'"></div>
+          <div class="content-wrap'" ng-click="closeMenuIfOpened($event);">
+            <div class="content" style="min-height: 100%;">
+              <div class="header" ng-include="'views/topbar.html'" ng-controller="Topbar"></div>
 
-          <div ng-view="" class="main-content">
-          </div>
+              <div ng-view="" class="main-content">
+              </div>
 
-          <div class="footer">
+              <div class="footer">
+              </div>
+            </div>
           </div>
         </div>
-
+      </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -87,58 +52,6 @@
 
        ga('create', 'UA-XXXXX-X');
        ga('send', 'pageview');
-    </script>
-
-    <script>
-    (function() {
-
-      function SVGMenu( el, options ) {
-        this.el = el;
-        this.init();
-      }
-
-      SVGMenu.prototype.init = function() {
-        this.trigger = this.el.querySelector( 'button.menu__handle' );
-        this.shapeEl = this.el.querySelector( 'div.morph-shape' );
-
-        var s = Snap( this.shapeEl.querySelector( 'svg' ) );
-        this.pathEl = s.select( 'path' );
-        this.paths = {
-          reset : this.pathEl.attr( 'd' ),
-          open : this.shapeEl.getAttribute( 'data-morph-open' ),
-          close : this.shapeEl.getAttribute( 'data-morph-close' )
-        };
-
-        this.isOpen = false;
-
-        this.initEvents();
-      };
-
-      SVGMenu.prototype.initEvents = function() {
-        this.trigger.addEventListener( 'click', this.toggle.bind(this) );
-      };
-
-      SVGMenu.prototype.toggle = function() {
-        var self = this;
-
-        if( this.isOpen ) {
-          classie.remove( self.el, 'menu--anim' );
-          setTimeout( function() { classie.remove( self.el, 'menu--open' );   }, 250 );
-        }
-        else {
-          classie.add( self.el, 'menu--anim' );
-          setTimeout( function() { classie.add( self.el, 'menu--open' );  }, 250 );
-        }
-        this.pathEl.stop().animate( { 'path' : this.isOpen ? this.paths.close : this.paths.open }, 350, mina.easeout, function() {
-          self.pathEl.stop().animate( { 'path' : self.paths.reset }, 800, mina.elastic );
-        } );
-
-        this.isOpen = !this.isOpen;
-      };
-
-      new SVGMenu( document.getElementById( 'menu' ) );
-
-    })();
     </script>
 
     <!-- build:js(.) scripts/oldieshim.js -->
@@ -170,15 +83,6 @@
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script>
-          $('.ui.floating.labeled.icon.dropdown').dropdown();
-          $('#displayNotification').popup({
-           lnline : true,
-           on: 'click',
-           position: 'bottom right',
-           setFluidWidth: 'true'
-         });
-        </script>
         <script src="scripts/app.js"></script>
         <script src="https://s3-ap-northeast-1.amazonaws.com/molecular/classie.js"></script>
         <script src="scripts/controllers/main.js"></script>
@@ -189,6 +93,8 @@
         <script src="scripts/controllers/user.js"></script>
         <script src="scripts/controllers/dashboard.js"></script>
         <script src="scripts/controllers/settings.js"></script>
+        <script src="scripts/controllers/menu.js"></script>
+        <script src="scripts/controllers/topbar.js"></script>
         <!-- endbuild -->
 </body>
 </html>

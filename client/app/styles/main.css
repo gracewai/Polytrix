@@ -3,18 +3,25 @@
 html,body{
     background: #f7f7f7;
 }
+.main-content{
+    width: 90%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 
-.header md-toolbar{
-    background-color: #495A6F;
 }
-
-.main-content {
-    position: absolute;
-    top:20%;
-    right: 20%;
+.main-content>.frame{
+    margin: 20px auto;
+    padding:10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #888888;
+    background: #fff;
+    min-height: 600px
 }
-
-.sidebar-menu {
+.main-content>.frame.center{
+    text-align: center;
+}
+/*.sidebar-menu {
     position: fixed;
     width: 300px;
     top: 7em;
@@ -31,13 +38,13 @@ html,body{
 .sidebar-menu.menu--open {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
-}
+}*/
 
 .main {
     -webkit-transition: opacity 0.6s;
     transition: opacity 0.6s;
 }
-
+/*
 .sidebar-menu.menu--open + .main {
     opacity: 0.3;
     pointer-events: none;
@@ -184,7 +191,7 @@ html,body{
     stroke: #5f656f;
     stroke-width: 5px;
 }
-
+*/
 @media screen and (max-width: 63em) {
     .main {
         padding: 0 2em;

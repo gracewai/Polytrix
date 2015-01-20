@@ -27,7 +27,7 @@ angular.module('clientApp')
 			USER_ID: 'User ID',
 		};
 
-		var Selection = {
+		var Selection = $scope.Selection = {
 			DEPLOY: 'deploy',
 			LOGIN: 'login',
 			REGISTER: 'register'
@@ -119,8 +119,6 @@ angular.module('clientApp')
 			case Selection.LOGIN:
 				$('.deploy.tab').removeClass('select');
 				$('.deploy.tab.login').addClass('select');
-				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
-				$('button.sign-up-button > i').addClass('fa-sign-in');
 				form.width='300px';
 				form.identifier = $scope.usingIdentifier;
 				if($scope.usingIdentifier == ID.USER_ID && form.uid){
@@ -134,8 +132,6 @@ angular.module('clientApp')
 			case Selection.REGISTER:
 				$('.deploy.tab').removeClass('select');
 				$('.deploy.tab.register').addClass('select');
-				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
-				$('button.sign-up-button > i').addClass('fa-pencil-square-o');
 				form.width='400px';
 				form.identifier = 'Email';
 
@@ -149,8 +145,6 @@ angular.module('clientApp')
 				break;
 			case Selection.DEPLOY:
 				$('.deploy.tab').removeClass('select');
-				$('button.sign-up-button > i').removeClass('fa-chevron-circle-right');
-				$('button.sign-up-button > i').addClass('fa-sign-in');
 				form.width='300px';
 				form.identifier = 'Email';
 
