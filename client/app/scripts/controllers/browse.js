@@ -7,122 +7,174 @@
  * # BrowseCtrl
  * Controller of the clientApp
  */
-
-function getFileType(filename){
-  return filename.split('.').pop();
-};
-
 angular.module('clientApp')
-  .controller('BrowseCtrl',['$scope', '$resource', function ($scope, $resource) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-    var getContainer = function(){
-    	var usrRes = $resource('/api/account/info');
-    	$scope.tabs = [];
-    	var result = usrRes.get({}, function(){
-    		if(result.success){
-    			$scope.tabs = result.userInfo.drives;
-    		}
-    	});
-    };
-    $scope.getContainer = getContainer;
-    $scope.getContainer();
-  }])
-  .controller('containers', ['$scope', '$resource' ,function ($scope, $resource) {
-  	$scope.driveType = null;
-  	$scope.driveID = null;
-  	var res = null;
-  	$scope.targetPath = '';
-  	$scope.rootPath = '';
-  	$scope.container = [];
+  .controller('BrowseCtrl',['$scope','UserInfo','Tools','Drive', function ($scope, UserInfo, Tools, Drive) {
+    $scope.drivelist = [];
 
-    $scope.getClass = function(file){
-      switch(file.is_folder){
-        case true:
-          return 'fa fa-folder-o';
-          break;
-        case false:
-          switch(getFileType(file.name)){
-            case 'mkv':
-            case 'mp4':
-            case 'avi':
-            case 'wmv':
-            case 'mov':
-            case 'rmvb':
-              return 'fa fa-file-video';
-            case 'doc':
-            case 'docx':
-            case 'gdoc':
-            case 'txt':
-            case 'md':
-              return 'fa fa-file-text-o';
-            case 'mp3':
-            case 'flac':
-            case 'm4v':
-            case 'wav':
-            case 'aiff':
-            case 'mid':
-            case 'wma':
-            case 'midi':
-              return 'fa fa-file-audio-o';
-            case 'zip':
-            case 'rar':
-            case 'tar':
-            case 'gz':
-            case '7z':
-              return 'fa fa-file-archive-o';
-            case 'jpg':
-            case 'png':
-            case 'jpeg':
-            case 'gif':
-            case 'psd':
-            case 'tiff':
-              return 'fa fa-file-image-o';
-            case 'cpp':
-            case 'java':
-            case 'py':
-            case 'rb':
-            case 'c':
-              return 'fa fa-file-code-o';
-            case 'pdf':
-              return 'fa fa-file-pdf-o';
-            case 'ppt':
-            case 'pptx':
-            case 'keynote':
-              return 'fa fa-file-powerpoint-o';
-            case 'xls':
-            case 'xlsx':
-              return 'fa fa-file-excel-o';
-            default:
-              return 'fa fa-file-o';
-          }
-          break;
+    UserInfo.onchange($scope,function(){
+      var info = UserInfo.get();
+      $scope.drivelist = info.drives;
+
+      Tools.selectElement('#driveTabs>.item', function(elements){
+        elements.tab();
+      },$scope.drivelist.length+1,50);
+
+      for(var i in $scope.drivelist){
+        var drive = $scope.drivelist[i];
+        drive.drive = new Drive(drive.type, drive.id);
+      }
+    });
+
+    UserInfo.update();
+
+    $scope.select = function(index){
+      console.log(index);
+    };
+
+    $scope.getDriveName = function(driveType){
+      switch(driveType){
+        case 'dropbox':     return 'Dropbox';
+        case 'googledrive': return 'Google Drive';
+        case 'onedrive':    return 'One Drive';
+        default: return 'Unknown';
+      }
+    };
+  }])
+  .controller('CombinedView',['$scope', 'UserInfo', 'Drive',function($scope, UserInfo, Drive){
+    var userInfo = null;
+    var drivelist = [];
+    $scope.files = [];
+    var drive = $scope.drive = {
+      id:null,
+      type:'all',
+      drive_list: drivelist
+    };
+    
+
+    $scope.getFileIndex = function(path,drive){
+      $scope.files = [];
+
+      function get(i){
+        if(i < drivelist.length)
+          return drivelist[i].list(path)
+          .then(function(result){
+            if(result.success){
+              var prased = result.content.map(function(element){
+                element.drive = drivelist[i];
+                return element;
+              });
+              $scope.files.push.apply($scope.files,prased);
+              console.log($scope.files);
+            }
+            return ++i;
+          })
+          .then(get);
+      }
+      get(0);
+    };
+
+    function init(){
+      userInfo = UserInfo.get();
+
+      for(var i in userInfo.drives){
+        var driveI = userInfo.drives[i];
+        drivelist.push(new Drive(driveI.type, driveI.id));
       }
     };
 
+
+    $scope.getClass = _browse_getClass_;
+    UserInfo.onchange($scope,init);
+
+    init();
+    setTimeout($scope.getFileIndex,100);
+  }])
+  .controller('SingleDriveCtrl', ['$scope', '$resource', function ($scope, $resource) {
+    var drive = $scope.drive = null;
+
+  	$scope.files = [];
+
   	$scope.getFileIndex = function(path){
-  		var result = res.get({i: path},function(){
-  			if(result.success){
-  				$scope.container = result.content;
-  			}
-  		});
+  		drive.list(path)
+      .then(function(result){
+        if(result.success){
+          $scope.files = result.content;
+        }
+      });
   	};
 
-  	$scope.init = function(){
-  		res = $resource('/api/fileIndex/' + $scope.driveID);
-  		if($scope.driveType === 'googledrive'){
-  			$scope.rootPath = 'root';
-  		}
-  		else if($scope.driveType === 'dropbox'){
-  			$scope.rootPath = '/';
-  		}
-  		else if($scope.driveType === 'onedrive'){
-  			$scope.rootPath = 'me/skydrive';
-  		}
-  		$scope.getFileIndex($scope.rootPath);
+  	$scope.init = function(_drive){
+      drive = $scope.drive = _drive;
+
+  		$scope.getFileIndex();
   	};
-    setTimeout($scope.init,1);
+
+    $scope.getClass = _browse_getClass_;
   }]);
+
+function _browse_getFileType_(filename){
+  return filename.split('.').pop();
+};
+function _browse_getClass_(file){
+  switch(file.is_folder){
+    case true:
+      return 'fa fa-folder-o';
+      break;
+    case false:
+      switch(_browse_getFileType_(file.name)){
+        case 'mkv':
+        case 'mp4':
+        case 'avi':
+        case 'wmv':
+        case 'mov':
+        case 'rmvb':
+          return 'fa fa-file-video';
+        case 'doc':
+        case 'docx':
+        case 'gdoc':
+        case 'txt':
+        case 'md':
+          return 'fa fa-file-text-o';
+        case 'mp3':
+        case 'flac':
+        case 'm4v':
+        case 'wav':
+        case 'aiff':
+        case 'mid':
+        case 'wma':
+        case 'midi':
+          return 'fa fa-file-audio-o';
+        case 'zip':
+        case 'rar':
+        case 'tar':
+        case 'gz':
+        case '7z':
+          return 'fa fa-file-archive-o';
+        case 'jpg':
+        case 'png':
+        case 'jpeg':
+        case 'gif':
+        case 'psd':
+        case 'tiff':
+          return 'fa fa-file-image-o';
+        case 'cpp':
+        case 'java':
+        case 'py':
+        case 'rb':
+        case 'c':
+          return 'fa fa-file-code-o';
+        case 'pdf':
+          return 'fa fa-file-pdf-o';
+        case 'ppt':
+        case 'pptx':
+        case 'keynote':
+          return 'fa fa-file-powerpoint-o';
+        case 'xls':
+        case 'xlsx':
+          return 'fa fa-file-excel-o';
+        default:
+          return 'fa fa-file-o';
+      }
+      break;
+  }
+};

@@ -8,7 +8,7 @@
  * Menu controller
  */
 angular.module('clientApp')
-	.controller('Menu',['$scope', function ($scope){
+	.controller('Menu',['$scope','Tools', function ($scope,Tools){
 		var isOpen = false;
 
 		$scope.options = [
@@ -20,9 +20,11 @@ angular.module('clientApp')
 
 		var bodyEl = $(document.body);
 		var openbtn;
-		setTimeout(function(){openbtn = document.getElementById( 'sm-open-button' );},100);
-		setTimeout(function(){openbtn = document.getElementById( 'sm-open-button' );},1000);
-		setTimeout(function(){openbtn = document.getElementById( 'sm-open-button' );},3000);
+
+		Tools.selectElement('#sm-open-button',function(element){
+			openbtn = element[0];
+		},1,50);
+		
 
 		$scope.toggleMenu = function() {
 			if( isOpen ) {
@@ -38,9 +40,7 @@ angular.module('clientApp')
 			var target = ev.target;
 			if( isOpen && target !== openbtn ) {
 				$scope.toggleMenu();
-				console.log('toggleMenu');
 			}
-			console.log('clicked');
 		};
 
 	}]);

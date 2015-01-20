@@ -1,42 +1,72 @@
+<div class="frame">
+  <div id="browse">
+    <div class="menu">
+      <div id="driveTabs" class="ui pointing secondary menu">
+        <a class="active item" data-tab="all">Combined View</a>
+        <a ng-repeat="driveMeta in drivelist" class="item" data-tab="{{driveMeta.id}}">{{getDriveName(driveMeta.type)}}</a>
+      </div>
+      <div class="ui active tab" data-tab="all">
+        <div ng-controller="CombinedView" class="ui divided list">
+
+          <div ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
+            <a href="{{file.drive.downloadLink(file.identifier)}}"><div class="right floated compact ui labeled icon button" style="margin-right:5px;">
+              <i class="fa fa-cloud-download icon"></i>
+              Download
+            </div></a>
+            <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">
+              <i class="{{getClass(file)}}"></i>
+              <div style="display:inline;cursor: pointer;">{{file.name}} @ {{getDriveName(file.drive.type)}}</div>
+              <span ng-show="file.is_file">
+              {{
+                file.file_size/(1024*1024)
+              }} MB
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="ui tab" ng-repeat="driveMeta in drivelist"  data-tab="{{driveMeta.id}}">
+        <div ng-controller="SingleDriveCtrl" ng-init="init(driveMeta.drive)" class="ui divided list">
+
+          <div ng-hide="false" class="item">
+            <div class="content" ng-click="getFileIndex(drive.rootPath)" style="padding-bottom:10px;">
+              <i class="fa fa-file-o"></i>
+              <div style="display:inline;cursor: pointer;">root</div>
+            </div>
+          </div>
+
+          <div ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
+            <a href="{{drive.downloadLink(file.identifier)}}"><div class="right floated compact ui labeled icon button" style="margin-right:5px;">
+              <i class="fa fa-cloud-download icon"></i>
+              Download
+            </div></a>
+            <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">
+              <i class="{{getClass(file)}}"></i>
+              <div style="display:inline;cursor: pointer;">{{file.name}}</div>
+              <span ng-show="file.is_file">
+              {{
+                file.file_size/(1024*1024)
+              }} MB
+              </span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
-	#browse {
-		width: 800px;
-		height: 600px;
-	}
-	md-tabs, md-tab {
-		border: none;
-	}
+  #browse {
+  }
+  #browse .ui.tab{
+    overflow-y: auto;
+  }
+  md-tabs, md-tab {
+    border: none;
+  }
 
 </style>
-<div class="frame center">
-	<div id="browse">
-		<md-whiteframe class="md-whiteframe-z1">
-			<md-content>
-				<md-tabs md-selected="selectedIndex">
-					<md-tab ng-repeat="tab in tabs" md-on-select="currentContainer(tab)" label="{{tab.type}}">
-						<div>
-							<div ng-controller="containers as c" class="ui divided list">
-								<input type="hidden" value="{{'';driveID = tab.id;driveType = tab.type}}" />
-								<div ng-repeat="files in container | orderBy:'name'" class="item">
-									<div class="right floated compact ui labeled icon button" style="margin-right:5px;">
-										<i class="fa fa-cloud-download icon"></i>
-										Download
-									</div>
-									<div class="content" ng-click="files.is_folder && getFileIndex(files.identifier)">
-										<i class="{{getClass(files)}}"></i>
-										<div class="header" style="display:inline;cursor: pointer;">{{files.name}}</div>
-										<span ng-show="files.is_file">
-										{{
-											files.file_size/(1024*1024)
-										}} MB
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</md-tab>
-				</md-tabs>
-			</md-content>
-		</md-whiteframe>
-	</div>
-</div>
