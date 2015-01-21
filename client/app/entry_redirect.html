@@ -1,0 +1,16 @@
+<polymer-element name="entry-redirect" attributes="">
+  <link rel="import" href="bower_components/core-ajax/core-ajax.html">
+  <template>
+    <core-ajax auto url="/api/account/status"
+      handleAs="json"
+      on-core-response="{{handleResponse}}"></core-ajax>
+  </template>
+  <script>
+    Polymer('entry-redirect',{
+      handleResponse: function(ev,res){
+        if(res.response.logined)
+          window.location='/console';
+      }
+    });
+  </script>
+</polymer-element>
