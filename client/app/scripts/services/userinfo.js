@@ -10,7 +10,7 @@
  *
  */
 angular.module('clientApp')
-  .factory('userInfo', ['$rootScope','$resource', function($rootScope) {
+  .factory('UserInfo', ['$rootScope','$resource', function($rootScope,$resource) {
 	var User = $resource('/api/account/info');
 
 	var userInfo = {};
@@ -23,7 +23,7 @@ angular.module('clientApp')
 	 * @param{String} info
 	 */
 	userInfo.set = function(info) {
-		console.log(info);
+		// console.log(info);
 		userInfo.info = info;
 		$rootScope.$emit('onUserInfoChange');
 	};
@@ -82,6 +82,11 @@ angular.module('clientApp')
 	 * @param{function} func
 	 */
 	userInfo.onchange = function(scope, func) {
+		if (typeof scope === 'function'){
+			console.log(new Error('you should pass scope to onchange for unbind uses - Factory:userInfo.onchange()'));
+			$rootScope.$on('onUserInfoChange', scope);
+			return;
+		}
 		var unbind = $rootScope.$on('onUserInfoChange', func);
 		scope.$on('$destroy', unbind);
 	};

@@ -10,7 +10,6 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/semantic-ui/dist/semantic.css" />
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-    <link rel="stylesheet" href="bower_components/fullpage.js/jquery.fullPage.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -25,19 +24,25 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
       <div class="app-global-user-info-scope" ng-controller="UserCtrl">
         <div class="container" ng-controller="Menu">
+
+          <!-- Menu -->
           <div ng-include="'views/menu.html'"></div>
+
           <div class="content-wrap'" ng-click="closeMenuIfOpened($event);">
-            <div class="content" style="min-height: 100%;">
+            <div class="content menu-layer" style="min-height: 100%;">
+
+              <!-- Header -->
               <div class="header" ng-include="'views/topbar.html'" ng-controller="Topbar"></div>
 
+              <!-- Main Content -->
               <div ng-view="" class="main-content">
               </div>
 
-              <div class="footer">
-              </div>
+              <!-- Footer -->
+              <div class="footer"></div>
+
             </div>
           </div>
         </div>
@@ -88,8 +93,10 @@
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/landing.js"></script>
         <script src="scripts/controllers/browse.js"></script>
+        <script src="scripts/services/tools.js"></script>
         <script src="scripts/services/userinfo.js"></script>
         <script src="scripts/services/upload.js"></script>
+        <script src="scripts/services/drive.js"></script>
         <script src="scripts/controllers/user.js"></script>
         <script src="scripts/controllers/dashboard.js"></script>
         <script src="scripts/controllers/settings.js"></script>

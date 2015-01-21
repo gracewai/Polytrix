@@ -2,14 +2,14 @@
   <button class="menu-button menuToggle" id="sm-open-button" ng-click="toggleMenu();">Menu</button>
   <h2 class="logo-text">POLYTRIX</h2>
   <div class="right side items">
-    <md-button class="item" style="right: 285px;"><i class="fa fa-bookmark"></i></md-button>
-    <md-button class="item" style="right: 235px;"><i class="fa fa-gear"></i></md-button>
+    <md-button class="item" style="right: 285px;" aria-label="bookmark"><i class="fa fa-bookmark"></i></md-button>
+    <md-button class="item" style="right: 235px;" aria-label="setting"><i class="fa fa-gear"></i></md-button>
     <div class="item" id="displayNotification" style="right: 185px;">
-     <md-button ><i class="fa fa-inbox"></i></md-button>
+     <md-button aria-label="notification"><i class="fa fa-inbox"></i></md-button>
     </div>
     <div class="ui special popup" id="notification-popup" ng-include="'views/notification.html'"></div>
     <div class="ui floating labeled icon dropdown" style="position:absolute; right:110px; top:14px;">
-      <md-button class="md-fab" style="width:40px; height:40px; background: url(http://www.scumlabs.com/wp-content/uploads/2011/04/Nyan-Cat.jpg)"></md-button>
+      <md-button class="md-fab" aria-label="account" style="width:40px; height:40px; background: url(http://www.scumlabs.com/wp-content/uploads/2011/04/Nyan-Cat.jpg)"></md-button>
       <div class="menu" style="margin-top:10px;">
         <div class="item" ng-click="showLogoutConfirm($event)"><i class="fa fa-sign-out icon"></i>Log out</div>
       </div>
