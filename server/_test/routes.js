@@ -30,6 +30,9 @@ router.post('/test/uploadtask',/* requireLogined ,*/function(req,res){
 		});
 
 		multipartHandler.process(req);
+		multipartHandler.onend(function(file, status){
+			res.send('file created');
+		})
 	});
 
 });
@@ -37,10 +40,10 @@ router.post('/test/uploadtask',/* requireLogined ,*/function(req,res){
 router.post('/test/upload/:type',function(req,res){
 	switch(req.params.type){
 	case 'multipart':
-		uploadHandler.multipartUpload(req,res);
+		uploadHandlers.multipartUpload(req,res);
 		break;
 	case 'chunk':
-		uploadHandler.chunkUpload(req,res);
+		uploadHandlers.chunkUpload(req,res);
 		break;
 	default:
 		_404.send(res);

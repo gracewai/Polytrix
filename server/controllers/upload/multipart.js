@@ -7,6 +7,7 @@ var Q = require('q');
 var Handler = function(cb){
 	if(cb) this.start = cb;
 	this.deferred = Q.defer();
+	this.promise = this.deferred.promise;
 };
 
 // main logic of handling
@@ -46,7 +47,7 @@ Handler.prototype.process = function(req){
 
 		file.on('end', function() {
 			if(_this.cbEnd)
-				cbEnd(file,status);
+				_this.cbEnd(file,status);
 			//console.log(status.path + filename + ' Finished');
 		});
 	});

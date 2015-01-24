@@ -2,26 +2,40 @@
 
 /**
  * @ngdoc service
- * @name clientApp.Drive
+ * @name clientApp.Task
  * @description
- * # Drive
- * Drive API for accessing drives
+ * # Task
+ * Task
  */
 angular.module('clientApp')
 	.service('Task', ['$q',function ($q) {
 
-	var Task = function(id,executeFunc){
+	//
+	//	Class Task
+	//	id : String
+	//	subTask : Task[]
+	//	status : String
+	//	progress : Number (range: 0-1)
+	//	subTaskFaild : Boolean
+	//
+	//	@constructor Task(id, executeFunc)
+	//	@param{String} id
+	//	@param{Function} executeFunc	(the overriding function of Task.execute)
+	//
+	var Task = function(id,expectTimeUses,executeFunc){
 		this.id = id || 'AnonymousTask';
 		this.subTask = [];
 		this.status = 'pending';
 		this.progress = 0;
-		
-		//to determine is there any sub task is failed.
+		this.expectTimeUses = expectTimeUses;
+		this.timesLeft = expectTimeUses;
 		this.subTaskFailed = false;
-
+		this.totalItems = 1;
 
 		if(typeof executeFunc === 'function')
 			this.execute = executeFunc;
+
+		//--------
 	};
 
 	// override your task here
@@ -37,8 +51,8 @@ angular.module('clientApp')
 	//	when your task being failed, call fail(msg),
 	//		pass your error message to be the argument 'msg' of fail()
 	//
-	//	when your task being success, call success(), 
-	//		no argument needed for this function.
+	//	when your task being success, call success(progress), 
+	//		it is optional to pass the argument 'progress'
 	//
 	//	example of a task that will be success after 10 seconds:
 	//
@@ -49,7 +63,7 @@ angular.module('clientApp')
 	//			progress(seconds/10);
 	//			if(seconds >= 10){
 	//				clearInterval(timer);
-	//				success();
+	//				success(1);
 	//			}else if(seconds < 0){
 	//				fail('memory error');
 	//			}
@@ -63,6 +77,7 @@ angular.module('clientApp')
 
 	Task.prototype.addSubTask = function(subTask){
 		this.subTask.push(subTask);
+		this.totalItems += subTask.totalItems;
 	};
 
 	//Overrideing event
@@ -71,26 +86,14 @@ angular.module('clientApp')
 
 
 
-	// MoniterTask is a task that own a lot of subTask;
+	// MonitorTask is a task that own a lot of subTask;
 	// And its own progress is equal to the progress of all subTask
-	Task.MoniterTask = function(id,executeFunc){
-		Task.call(this,id,executeFunc);
+	Task.MonitorTask = function(id){
+		Task.call(this,id,0);
+		this.totalItems = 0;
 	};
-	Task.MoniterTask.prototype = Object.create(Task.prototype);
-	Task.MoniterTask.prototype.constructor = Task.MoniterTask;
-	Task.MoniterTask.prototype.onSubTaskProgress = function(task,progress){
-		if(this.subTask.length){
-			var sum = 0;
-			for(var i in this.subTask){
-				var subTask = this.subTask[i];
-				if(subTask.status != 'fail'){
-					sum += subTask.progress;
-				}
-			}
-			sum /= this.subTask.length;
-			this.progress = sum;
-		}
-	};
+	Task.MonitorTask.prototype = Object.create(Task.prototype);
+	Task.MonitorTask.prototype.constructor = Task.MonitorTask;
 
 
 
@@ -112,10 +115,12 @@ angular.module('clientApp')
 		return $q(function(resolve){resolve();})
 		.then(function(){
 			_this.status = 'processing';
-
+			_this.lastUpdate = new Date();
+			_this.lastProgress = 0;
 			var deffered = $q.defer();
 
-			function onsuccess(){
+			function onsuccess(progress){
+				if(progress)deffered.notify(progress);
 				deffered.resolve('finished');
 			}
 			function onfail(msg){
@@ -123,7 +128,16 @@ angular.module('clientApp')
 				deffered.resolve(msg);
 			}
 			function onprogress(progress){
+				var now = new Date();
+				var deltaProgress = progress - _this.lastProgress;
+				var deltaTime = (now - _this.lastUpdate)/1000;
+				var timesLeft = (1-progress)/deltaProgress*deltaTime;
+				_this.timesLeft = timesLeft;
+
 				deffered.notify(progress);
+
+				_this.lastUpdate = now;
+				_this.lastProgress = progress;
 			}
 
 			setTimeout(function(){_this.execute(onsuccess,onfail,onprogress);},0);
@@ -195,4 +209,99 @@ angular.module('clientApp')
 			});
 		}
 	};
+
+
+	//
+	//	Task.MonitorTask
+	//
+	Task.MonitorTask.prototype.onSubTaskProgress = function(task,progress){
+		if(this.subTask.length){
+			var sum = 0;
+			var timesLeft = 0;
+			for(var i in this.subTask){
+				var subTask = this.subTask[i];
+				if(subTask.status != 'fail'){
+					sum += subTask.progress;
+					timesLeft += subTask.timesLeft;
+				}
+			}
+			sum /= this.subTask.length;
+			this.progress = sum;
+			this.timesLeft = timesLeft;
+		}
+	};
+	Task.MonitorTask.prototype.addSubTask = function(subTask){
+		this.subTask.push(subTask);
+		this.expectTimeUses += subTask.expectTimeUses;
+		this.timesLeft = this.expectTimeUses;
+		this.totalItems += subTask.totalItems;
+	};
+	Task.MonitorTask.prototype.execute = function(success, fail, progress){
+		if(this.subTask.length == 0){
+			progress(1);
+		}
+		success();
+	};
+	return Task;
 }]);
+
+
+
+//
+//	this controller just for test
+//	
+//
+// angular.module('clientApp').controller('taskCtrl', ['$scope','UploadTask', function($scope, UploadTask){
+	
+// 	var task = new UploadTask.Task.MonitorTask('MultipleTask');
+
+// 	var rejectTask = new UploadTask.Task('rejectTask',4,function(success,fail,progress){
+// 		var seconds = 0;
+// 		var timer = setInterval(function(){
+// 			seconds+=0.05;
+// 			progress(seconds/4);
+// 			if(seconds >= 3){
+// 				clearInterval(timer);
+// 				fail('my error msg');
+// 			}
+// 		},50);
+// 	});
+// 	var okTask = new UploadTask.Task('okTask',3,function(success,fail,progress){
+// 		var seconds = 0;
+// 		var timer = setInterval(function(){
+// 			seconds+=0.05;
+// 			progress(seconds/3);
+// 			if(seconds >= 3){
+// 				clearInterval(timer);
+// 				success();
+// 			}
+// 		},50);
+// 	});
+// 	task.addSubTask(rejectTask);
+// 	task.addSubTask(okTask);
+// 	$scope.task = new UploadTask.Task.MonitorTask();
+// 	$scope.task.addSubTask(task);
+
+// 	var five = new UploadTask.Task('5s',5,function(success, fail, progress){
+// 		var seconds = 0;
+// 		var timer = setInterval(function(){
+// 			seconds+=0.05;
+// 			progress(seconds/5);
+// 			if(seconds >= 5){
+// 				clearInterval(timer);
+// 				success();
+// 			}else if(seconds < 0){
+// 				fail('memory error');
+// 			}
+// 		},50);
+// 	});
+
+// 	$scope.task.addSubTask(five);
+
+// 	$scope.onclick = function(){
+// 		$scope.task.executeAll()
+// 		.then(function(){
+// 			alert('finished');
+// 		});
+// 	};
+// }]);
