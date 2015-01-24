@@ -81,6 +81,8 @@ if (app.get('env') === 'development') {
             error: err
         });
     });
+
+    app.use(test);
 }
 
 /**
@@ -101,8 +103,6 @@ if (app.get('env') === 'production') {
         });
     });
 }
-
-app.use(test);
 
 app.use(function(req,res){
     _404.send(res);

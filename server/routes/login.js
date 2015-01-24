@@ -8,6 +8,7 @@
 var router = require('express').Router();
 var User = require('../database/user');
 var passport = require('passport');
+var Log = require('../controllers/log');
 
 //	format of loginStatus:
 //	{
@@ -68,6 +69,7 @@ router.post('/login', function(req, res, next) {
 					msg: 'not implemented error message'
 				});
 			}else{
+				Log.login(req);
 				res.send({
 					success: true,
 					logined: true
@@ -106,6 +108,8 @@ router.post('/register', function(req, res, next) {
 				req.login(user, function(err) {
 					if (err) console.log(err);
 					if (err) { return next(err); }
+					Log.createAccount(req);
+					Log.login(req);
 					res.send({
 						success: true,
 						logined: true

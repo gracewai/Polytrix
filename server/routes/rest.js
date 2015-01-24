@@ -24,6 +24,7 @@
 var router = require('express').Router();
 var _404 = require('./404');
 var api = require('polytrix-core-api');
+var UploadHandler = require('../controllers/upload');
 
 var requireLogined = require('./login').requireLogined;
 
@@ -174,39 +175,39 @@ router.get('/api/info/:driveId', requireLogined, function(req,res){
 	res.send(result);
 });
 
-router.get('/api/download/dropbox', function(req, res) {
-	var client = api.dropbox;
-	var driveConfig = req.session.dropbox;
+// router.get('/api/download/dropbox', function(req, res) {
+// 	var client = api.dropbox;
+// 	var driveConfig = req.session.dropbox;
 
-	client.downloadFilePipe(
-		req.query.i,
-		driveConfig.access_token,
-		driveConfig.refresh_token,
-		res
-	)
-	.progress(function(progress){
-		console.log("download progress:" + progress.progress);
-	})
-	.catch(function(err){
-		console.log('ERROR when rest.js GET /api/download/dropbox');
-		console.log(err);
-	})
-	.then(function(){
-		console.log('finish download');
-	}).done();
-});
+// 	client.downloadFilePipe(
+// 		req.query.i,
+// 		driveConfig.access_token,
+// 		driveConfig.refresh_token,
+// 		res
+// 	)
+// 	.progress(function(progress){
+// 		console.log("download progress:" + progress.progress);
+// 	})
+// 	.catch(function(err){
+// 		console.log('ERROR when rest.js GET /api/download/dropbox');
+// 		console.log(err);
+// 	})
+// 	.then(function(){
+// 		console.log('finish download');
+// 	}).done();
+// });
 
-router.get('/api/download/onedrive', function(req, res) {
-	var client = api.onedrive;
-	var driveConfig = req.session.onedrive;
+// router.get('/api/download/onedrive', function(req, res) {
+// 	var client = api.onedrive;
+// 	var driveConfig = req.session.onedrive;
 
-	client.downloadFilePipe(
-		req.query.i,
-		driveConfig.access_token,
-		driveConfig.refresh_token,
-		res
-	);
-});
+// 	client.downloadFilePipe(
+// 		req.query.i,
+// 		driveConfig.access_token,
+// 		driveConfig.refresh_token,
+// 		res
+// 	);
+// });
 
 router.get('/api/download/:driveId', requireLogined, function(req, res) {
 	try{
@@ -259,13 +260,26 @@ router.get('/api/download/:driveId', requireLogined, function(req, res) {
 	}
 });
 
-router.get('/api/upload/:driveId', requireLogined, function(req,res){
-	var result = {
-		success: false,
-		logined: true,
-		msg: 'function not implemented'
-	};
-	res.send(result);
+router.post('/api/upload/', function(req,res,next){
+	console.log('routing rest.js /api/upload/:driveId');
+
+	// multer({ dest: '../data/fs/uploads/',
+	// rename: function (fieldname, filename) {
+	// 	return filename+Date.now();
+	// },
+	// onFileUploadStart: function (file) {
+	// 	console.log(file.originalname + ' is starting ...');
+	// },
+	// onFileUploadComplete: function (file) {
+	// 	console.log(file.fieldname + ' uploaded to  ' + file.path);
+	// 	var result = {
+	// 		success: false,
+	// 		logined: true,
+	// 		msg: file.fieldname + ' uploaded to  ' + file.path
+	// 	};
+	// 	res.send(result);
+	// }
+	// })(req,res,next);
 });
 
 router.get('/api/delete/:driveId', requireLogined, function(req,res){
