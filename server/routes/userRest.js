@@ -9,12 +9,15 @@
 //	actions:
 //		status GET		return login status
 //		info GET		return infomation of user and drives id
+//		activity		return recent activity of current user
 //
 
 'use strict';
 
 var router = require('express').Router();
 var User  = require('../database/user');
+var Log  = require('../controllers/log');
+var requireLogined = require('./login').requireLogined;
 
 // Check whether the user is logined
 //
@@ -81,6 +84,49 @@ router.get('/api/account/info/', function(req, res) {
 			success: false, logined: false, msg: 'no user sepicified, please give uid'
 		});
 	}
+});
+
+// Get current user's recent activity
+//
+//	GET /api/account/activity
+//	@return {
+//		success: Boolean
+//		logined: Boolean
+//		activities: [{
+//			beginTime: { type: Date, default: Date.now },
+//			type: String,
+//			status: String,
+//			uid: String,
+//			undoable: Boolean,
+//			cancelable: Boolean,
+//			content: Schema.Types.Mixed
+//		}]
+//	}
+//
+router.get('/api/account/activity/', requireLogined, function(req, res) {
+	console.log('routing userRest.js /api/account/activity');
+
+	res.send({
+		success:false,
+		logined: true,
+		msg: 'unimplemented route'
+	})
+
+});
+
+router.get('/api/account/log/', requireLogined, function(req, res) {
+	console.log('routing userRest.js /api/account/log');
+
+	Log.findLogsByUser(req.user.uid)
+	.then(function(docs){
+
+		res.send({
+			success: true,
+			logined: true,
+			logs: docs,
+		})
+	})
+	.done();
 });
 
 module.exports = router;

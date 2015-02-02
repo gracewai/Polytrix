@@ -1,12 +1,14 @@
-<div class="frame center">
-	<div id="search">
-	    <div class="ui search wrapper">
-	      <div id="homeSearchBar"class="home search-bar ui large icon input">
-	        <input class="prompt" type="text" placeholder="Search for your files here...">
-	        <i class="search icon"></i>
-	    </div>
-	    <div class="results"></div>
-	</div>
+<div class="frame" id="entrance">
+	<center>
+		<div id="search">
+		    <div class="ui search wrapper">
+		      <div id="homeSearchBar"class="home search-bar ui large icon input">
+		        <input class="prompt" type="text" placeholder="Search for your files here...">
+		        <i class="search icon"></i>
+		    </div>
+		    <div class="results"></div>
+		</div>
+	</center>
 	<div class="ui divider">
 	</div>
 	<h2>
@@ -21,9 +23,25 @@
 		</div>
 	</h2>
 	<div class="ui segment">
+		This is a string of text
 		<div class="ui top right attached label"></div>
-		<a class="ui tag label"></a>
+		<a class="ui tag label">Test</a>
 	</div>
+	<div class="ui segment">
+		This is a string of text 1
+		<div class="ui top right attached label"></div>
+		<a class="ui tag label">Test</a>
+	</div>
+	<div class="ui segment">
+		This is a string of text 2
+		<div class="ui top right attached label"></div>
+		<a class="ui tag label">Test</a>
+	</div>
+	<div class="ui segment">
+		This is a string of text 3
+		<div class="ui top right attached label"></div>
+		<a class="ui tag label">Test</a>
+	</div>	
 </div>
 <style type="text/css">
 #homeSearchBar,
@@ -33,3 +51,7 @@
 	margin-right: auto;
 }
 </style>
+
+<script>
+	$('#entrance').addClass('animated zoomInUp');
+</script>

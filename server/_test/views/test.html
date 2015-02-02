@@ -25,25 +25,26 @@
 			<div layout="row">
 
 
-				<md-whiteframe class="md-whiteframe-z1" flex="40" ng-controller="allFileInfo as all">
+				<md-whiteframe class="md-whiteframe-z1" flex="30" ng-controller="allFileInfo as all">
 					<md-toolbar>
 						<h2 class="md-toolbar-tools">Add Drive</h2>
 					</md-toolbar>
 					<md-content class="md-padding" ng-controller="addDrive">
-						<select ng-model="using">
+						<select ng-model="using" ng-change="getAuthUrl()">
+							<option value="none">Select</option>
 							<option ng-repeat="drive in all.drives" value="{{drive.val}}">{{drive.name}}</option>
 						</select><br>
 						{{status}}<br>
-						<md-button class="md-raised md-primary" ng-click="getAuthUrl()">
-							get {{using}} auth link
-						</md-button><br>
-					
-						<a ng-show="redirectUrl" href="{{redirectUrl}}" target="_blank">go to auth</a>
+						<a ng-show="redirectUrl" href="{{redirectUrl}}" target="_blank">
+							<md-button ng-hide="using=='none'" class="md-raised md-primary">
+								auth {{using}}
+							</md-button><br>
+						</a>
 					</md-content>
 				</md-whiteframe>
 
 
-				<md-whiteframe class="md-whiteframe-z1" flex="25">
+				<md-whiteframe class="md-whiteframe-z1" flex="30">
 					<md-toolbar>
 						<h2 class="md-toolbar-tools">Login Status</h2>
 					</md-toolbar>
@@ -60,18 +61,23 @@
 					</md-content>
 				</md-whiteframe>
 
-				<md-whiteframe class="md-whiteframe-z1" flex="25" ng-controller="formPost">
+				<md-whiteframe class="md-whiteframe-z1" flex="30" ng-controller="uploadCtrl">
 					<md-toolbar>
-						<h2 class="md-toolbar-tools">User Info</h2>
+						<h2 class="md-toolbar-tools">File Upload</h2>
 					</md-toolbar>
 					<md-content class="md-padding">
-						<div ng-repeat="drive in availables.drives">
-							id:{{drive.id}}<br>name:{{drive.name}}
-							<md-divider ng-if="!$last"></md-divider>
+						<div id="bgdiv"></div>
+						<div id="upload_grid">
 						</div>
+						<div id="ani"></div>
+
+						<input id="ajaxfile" type="file" multiple><br>
+
+						<div id="msg">no msg</div>
+						<progress></progress>
 					</md-content>
 				</md-whiteframe>
-				
+
 			</div>
 			<div layout="row">
 
@@ -157,10 +163,43 @@
 					</md-tabs>
 				</md-whiteframe>
 			</div>
+
+			<div layout="row">
+				<md-whiteframe class="md-whiteframe-z1" flex="60" ng-controller="userLog as log">
+					<md-toolbar>
+						<h2 class="md-toolbar-tools">User's Log</h2>
+					</md-toolbar>
+					<md-content class="md-padding">
+						<md-button class="md-raised md-primary" ng-click="getLogs()">
+							get user's log
+						</md-button><br>
+						Logs:
+						<ul>
+							<li ng-repeat="log in logs">
+								Time: {{log.time}} | Type: {{log.type}} | Msg: {{log.message}}
+							</li>
+						</ul>
+					</md-content>
+				</md-whiteframe>
+			</div>
 		</div>
 		<!--  -->
 
 		<div flex="25" layout="column">
+			<md-whiteframe class="md-whiteframe-z1" ng-controller="taskCtrl">
+				<md-toolbar>
+					<h2 class="md-toolbar-tools">Task</h2>
+				</md-toolbar>
+				<md-content class="md-padding">
+					<md-button ng-click="task.executeAll();" class="md-raised md-primary" type="submit">Start Tasks</md-button>
+
+					<task val="task"></task>
+					
+
+
+				</md-content>
+			</md-whiteframe>
+
 			<md-whiteframe class="md-whiteframe-z1" ng-controller="formPost">
 				<md-toolbar>
 					<h2 class="md-toolbar-tools">Post</h2>
@@ -185,6 +224,18 @@
 				<md-content class="md-padding">
 					<div >
 						<span ng-bind="status.status"></span>
+					</div>
+				</md-content>
+			</md-whiteframe>
+
+			<md-whiteframe class="md-whiteframe-z1" ng-controller="formPost">
+				<md-toolbar>
+					<h2 class="md-toolbar-tools">User Info</h2>
+				</md-toolbar>
+				<md-content class="md-padding">
+					<div ng-repeat="drive in availables.drives">
+						id:{{drive.id}}<br>name:{{drive.name}}
+						<md-divider ng-if="!$last"></md-divider>
 					</div>
 				</md-content>
 			</md-whiteframe>

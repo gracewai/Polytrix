@@ -42,7 +42,7 @@ angular.module('clientApp')
 	 * @return-callback-value:
 	 *		@param{userInfo}
 	 */
-	userInfo.get = function(uid, callback){
+	userInfo.get = function(uid, callback,error_callback){
 		if(!uid){
 			// @method get()
 			return userInfo.info;
@@ -53,6 +53,9 @@ angular.module('clientApp')
 			var result = User.get({uid:uid}, function(){
 				if(result.success){
 					callback(result.userInfo);
+				}
+				else{
+					error_callback(result);
 				}
 			});
 		}

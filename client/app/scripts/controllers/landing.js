@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-	.controller('LandingCtrl',['$scope', '$resource', function ($scope, $resource) {
+	.controller('LandingCtrl',['$scope', '$resource', 'formValidateService', 'connectService', function ($scope, $resource, formValidateService, connectService) {
 		var occupiedID = [];
 		var occupiedEmail = [];
 
@@ -82,11 +82,6 @@ angular.module('clientApp')
 			}
 		};
 
-		var validateEmailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		function validateEmail(email) {
-			return validateEmailRegex.test(email);
-		};
-
 		$scope.formChange = function(event,field){
 			if($scope.selection == Selection.REGISTER){
 				$scope.usingIdentifier = ID.EMAIL;
@@ -104,7 +99,7 @@ angular.module('clientApp')
 				$scope.select('deploy');
 			}
 			if($scope.selection != Selection.REGISTER){
-				if(validateEmail(form.email)){
+				if(formValidateService.validateEmail(form.email)){
 					$scope.usingIdentifier = ID.EMAIL;
 				}else{
 					$scope.usingIdentifier = ID.USER_ID;
@@ -159,7 +154,7 @@ angular.module('clientApp')
 
 
 			//check user input uid or email
-			if(validateEmail(form.email)){
+			if(formValidateService.validateEmail(form.email)){
 				$scope.usingIdentifier = ID.EMAIL;
 			}else{
 				$scope.usingIdentifier = ID.USER_ID;
@@ -191,17 +186,9 @@ angular.module('clientApp')
 
 		$scope.login = function(){
 			$scope.loading = true;
-			var Login = $resource('/login');
-			//we use form.email field no matter user is using uid or email
-			var result = Login.save({uid:form.email,upw:form.upw,strategy: 'local'},function(){
-				$scope.loading = false;
-				if(result.success){
-					window.location = '/console/';
-				}else{
-					alert('cannot login because' + result.msg);
-				}
-			});
-			result.$promise.catch(function(response) {
+			connectService.login(form.email,form.upw,function(result){
+				window.location = '/console/';
+			}, function(response){
 				$scope.loading = false;
 				switch(response.status){
 					case 400:
@@ -215,27 +202,18 @@ angular.module('clientApp')
 					break;
 				}
 				Error.updateView();
-			});
+			})
 		};
 
 		$scope.register = function(){
 			$scope.loading = true;
-
-			var Login = $resource('/register');
-			var result = Login.save({
-				uid: form.uid,
-				name: form.name,
-				email: form.email,
-				upw: form.upw,
-				strategy: 'local'
-			},function(){
-				$scope.loading = false;
-				if(result.success){
-					window.location = '/console/';
-				}else{
-					alert('cannot register because' + result.msg);
+			loginService.register(form.email,form.name,form.email,form.upw,
+				function(result){
+					window.location = '/console/'
+				},function(response){
+					
 				}
-			});
+			);
 		};
 
 		$scope.buttonClick = function(){

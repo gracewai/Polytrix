@@ -3,18 +3,64 @@ var express = require('express');
 var router = express.Router();
 var api = require('polytrix-core-api');
 var passport = require('passport');
+var _404 = require('../routes/404');
+var uploadHandlers = require('../controllers/upload');
 
 router.use('/test/js',express.static(__dirname + '/views/js'));
 router.use('/test/css',express.static(__dirname + '/views/css'));
+
+//	POST /api/upload/task
+//	@param{string} type 	(chunked / others)
+//	@header{Number} X-Upload-Content-Length
+//	@header{string} X-Upload-Content-Type
+//
+router.post('/test/uploadtask',/* requireLogined ,*/function(req,res){
+	function dump(func){
+		try{
+			func();
+		}catch(err){
+			console.log(err);
+		}
+	}
+
+	dump(function(){
+		var multipartHandler = new uploadHandlers();
+		multipartHandler.onprogress(function(progress,file,status){
+			console.log(progress);
+		});
+
+		multipartHandler.process(req);
+		multipartHandler.onend(function(file, status){
+			res.send('file created');
+		})
+	});
+
+});
+
+router.post('/test/upload/:type',function(req,res){
+	switch(req.params.type){
+	case 'multipart':
+		uploadHandlers.multipartUpload(req,res);
+		break;
+	case 'chunk':
+		uploadHandlers.chunkUpload(req,res);
+		break;
+	default:
+		_404.send(res);
+		break;
+	}
+});
+
+
+
+
 
 router.get('/test/refresh',function(req,res){
 	var sess = req.session;
 	api.googledrive.renewToken(sess.googledrive.refresh_token);
 });
 
-router.get('/app',function(req,res){
-	res.send('ok');
-});
+router.use('/test/',express.static(__dirname + '/views/'));
 
 router.get('/test/',function(req,res){
 	res.sendFile(__dirname + '/views/test.html');
