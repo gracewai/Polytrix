@@ -4,6 +4,8 @@ dist
 bower_components
 client/node_modules/
 server/node_modules/*
+server/data/
+server/data/*
 npm-debug.log
 .DS_Store
 !server/node_modules/polytrix-core-api

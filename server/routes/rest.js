@@ -260,26 +260,15 @@ router.get('/api/download/:driveId', requireLogined, function(req, res) {
 	}
 });
 
-router.post('/api/upload/', function(req,res,next){
+router.post('/api/upload/:driveId', function(req,res,next){
 	console.log('routing rest.js /api/upload/:driveId');
 
-	// multer({ dest: '../data/fs/uploads/',
-	// rename: function (fieldname, filename) {
-	// 	return filename+Date.now();
-	// },
-	// onFileUploadStart: function (file) {
-	// 	console.log(file.originalname + ' is starting ...');
-	// },
-	// onFileUploadComplete: function (file) {
-	// 	console.log(file.fieldname + ' uploaded to  ' + file.path);
-	// 	var result = {
-	// 		success: false,
-	// 		logined: true,
-	// 		msg: file.fieldname + ' uploaded to  ' + file.path
-	// 	};
-	// 	res.send(result);
-	// }
-	// })(req,res,next);
+	var handler = new UploadHandler();
+
+	
+
+
+	handler.process(req);
 });
 
 router.get('/api/delete/:driveId', requireLogined, function(req,res){
