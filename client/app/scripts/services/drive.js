@@ -36,7 +36,7 @@ angular.module('clientApp')
 	};
 
 	Drive.prototype.downloadLink = function(identifier){
-		return "/api/download/" + identifier;
+		return "/api/download/" + this.id + "?i=" + identifier;
 	};
 
 	//
