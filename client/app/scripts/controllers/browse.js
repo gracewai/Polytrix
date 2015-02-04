@@ -110,9 +110,12 @@ angular.module('clientApp')
   	};
 
     $scope.getClass = _browse_getClass_;
+
+    $scope.getFileTypeName = _browse_getFileType_;
   }]);
 
 function _browse_getFileType_(filename){
+  console.log(filename);
   return filename.split('.').pop();
 };
 function _browse_getClass_(file){
