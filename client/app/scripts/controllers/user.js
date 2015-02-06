@@ -9,12 +9,7 @@
  */
 angular.module('clientApp')
 	.controller('UserCtrl',['$mdDialog', '$scope', '$resource', function ($mdDialog, $scope, $resource) {
-		$scope.user = $scope.user || {};
-		$scope.user.notification = [
-			{icon:'fa-trash-o', msg:'A file has been deleted from your Dropbox'},
-			{icon:'fa-file-image-o', msg:'5 pictures have been added to your storage'}
-		];
-
+		
 		$scope.showLogoutConfirm = function(ev) {
 			var usrReq = $resource('/logout');
 
@@ -34,5 +29,6 @@ angular.module('clientApp')
 				$mdDialog.cancel();
 			});
 		};
+
 
 	}]);

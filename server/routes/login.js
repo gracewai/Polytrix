@@ -21,7 +21,7 @@ var Log = require('../controllers/log');
 
 //	POST /passport
 //
-//	@method login
+//	@method passport
 //	@para{string} strategy	!important indicate using which platform to log in. Accept local, facebook currently
 //	@return redirect /login?failure=trur&strategy=String[&msg=String]
 //
@@ -38,7 +38,7 @@ router.get('/passport/:strategy',function(req,res,next){
 	}
 });
 
-//	POST /logon
+//	POST /login
 //
 //	@method login
 //	@para{string} strategy	!important indicate using which platform to log in. Accept local, facebook currently
@@ -84,7 +84,7 @@ router.post('/login', function(req, res, next) {
 
 //	POST /register
 //
-//	@method login
+//	@method register
 //	@para{string} strategy	!important indicate using which platform to log in. Accept local, facebook currently
 //	@para{string} uid		used when using local strategy
 //	@para{string} upw		used when using local strategy

@@ -15,7 +15,7 @@ angular.module('clientApp')
 
 	var userInfo = {};
 	userInfo.info = {};
-
+	userInfo.error = {code:0,msg:'unknown error'};
 
 	/**
 	 * Set the user's info
@@ -74,6 +74,11 @@ angular.module('clientApp')
 		var result = User.get({}, function(){
 			if(result.success){
 				userInfo.set(result.userInfo);
+			}else{
+				if(!userInfo.logined)
+					userInfo.error = result;
+				$rootScope.$emit('onUserInfoError');
+				console.log(result);
 			}
 		});
 	};
@@ -87,11 +92,33 @@ angular.module('clientApp')
 	userInfo.onchange = function(scope, func) {
 		if (typeof scope === 'function'){
 			console.log(new Error('you should pass scope to onchange for unbind uses - Factory:userInfo.onchange()'));
-			$rootScope.$on('onUserInfoChange', scope);
+			$rootScope.$on('onUserInfoChange', func);
 			return;
 		}
-		var unbind = $rootScope.$on('onUserInfoChange', func);
+		var unbind = $rootScope.$on('onUserInfoChange', function(){
+			func(userInfo.get());
+		});
 		scope.$on('$destroy', unbind);
 	};
+
+	/**
+	 * Register the user's info onerror event. Event emit when the update occurs error
+	 * @method onerror
+	 * @param{$scope} scope
+	 * @param{function} func
+	 */
+	userInfo.onerror = function(scope, func) {
+		if (typeof scope === 'function'){
+			console.log(new Error('you should pass scope to onchange for unbind uses - Factory:userInfo.onchange()'));
+			$rootScope.$on('onUserInfoError', func);
+			return;
+		}
+		var unbind = $rootScope.$on('onUserInfoError', function(){
+			func(userInfo.error);
+		});
+		scope.$on('$destroy', unbind);
+	};
+
+	userInfo.update();
 	return userInfo;
 }]);

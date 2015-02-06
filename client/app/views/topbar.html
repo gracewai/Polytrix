@@ -9,8 +9,9 @@
     </div>
     <div class="ui special popup" id="notification-popup" ng-include="'views/notification.html'"></div>
     <div class="ui floating labeled icon dropdown" style="position:absolute; right:110px; top:14px;">
-      <md-button class="md-fab" aria-label="account" style="width:40px; height:40px; background: url(http://www.scumlabs.com/wp-content/uploads/2011/04/Nyan-Cat.jpg)"></md-button>
+      <md-button class="md-fab" aria-label="account" style="width:40px; height:40px; background: url({{user.photo||defaultPhoto}})"></md-button>
       <div class="menu" style="margin-top:10px;">
+        <div class="item" ng-click="showLogoutConfirm($event)"><i class="fa fa-user icon"></i>{{user.name}}</div>
         <div class="item" ng-click="showLogoutConfirm($event)"><i class="fa fa-sign-out icon"></i>Log out</div>
       </div>
     </div>

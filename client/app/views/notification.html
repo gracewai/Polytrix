@@ -1,4 +1,4 @@
 <div class="ui vertical segment" style="font-size:14px;" ng-repeat="row in user.notification">
-	<i class="fa icon {{row.icon}}"></i> 
-	{{row.msg}}
+	<i class="fa icon {{getIconByCode(row.code)}}"></i> 
+	{{row.message}}
 </div>

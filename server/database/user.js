@@ -244,7 +244,7 @@ userSchema.methods.getFilteredInfo = function(){
 		uid		: user.uid,
 		name : user.name,
 		email : user.email,
-		photo: this.photos[this.photoUse],
+		photo: this.photos[this.photoUse] || null,
 		passportType : passport._type,
 		drives: []
 	};

@@ -8,13 +8,15 @@ var Log;
 var logSchema = new Schema({
 	time: { type: Date, default: Date.now },
 	type: String,
+	code: Number,
 	message: String,
 	uid: String,
 	extras: Schema.Types.Mixed
 });
 
-logSchema.statics.log = function(uid,type,message,extras){
-	var log = new Log({uid:uid,type:type,message:message,extras:extras});
+logSchema.statics.log = function(uid,type,code,message,extras){
+	var log = new Log({uid:uid,type:type,message:message,code:code,extras:extras});
+	console.log(log);
 	log.save();
 };
 

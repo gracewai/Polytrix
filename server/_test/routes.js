@@ -5,6 +5,7 @@ var api = require('polytrix-core-api');
 var passport = require('passport');
 var _404 = require('../routes/404');
 var uploadHandlers = require('../controllers/upload');
+var CacheIndex = require('../database/cacheindex');
 
 router.use('/test/js',express.static(__dirname + '/views/js'));
 router.use('/test/css',express.static(__dirname + '/views/css'));
@@ -34,6 +35,83 @@ router.post('/test/uploadtask',/* requireLogined ,*/function(req,res){
 			res.send('file created');
 		})
 	});
+
+});
+
+router.post('/test/cache/:driveId',function(req,res){
+	console.log('/test/cache/:driveId');
+
+	// var drive = req.user.getDrive(req.params.driveId);
+	// var cache = CacheIndex.create(req.user.uid,drive);
+	// console.log(cache);
+	// res.send(cache);
+
+	CacheIndex.findByIDs(req.user.uid, req.params.driveId)
+	.then(function(cache){
+		console.log('stage 0.1');
+		console.log(cache);
+		return cache.update();
+	})
+	.then(function(index){
+		res.send(index);
+	});
+	
+	// var drive = req.user.getDrive(req.params.driveId);
+	// CacheIndex.findByIDs(req.user.uid,drive.id)
+	// .then(function(cache){
+	// 	cache.rootIndex.logined = true;
+	// 	cache.rootIndex.success = true;
+	// 	res.send(cache.rootIndex);
+	// });
+});
+
+router.post('/test/getFolderInformation/:driveId',function(req,res){
+	console.log('route /test/getFolderInformation/:driveId');
+	var drive = req.user.getDrive(req.params.driveId);
+	
+
+	function next(){
+		var drive = req.drive;
+		var client = api[drive._type];
+
+		client.getFolderInformation(req.query.i,drive.access_token,drive.refresh_token)
+		.then(function(result)
+		{
+			result.logined = true;
+			res.send(result);
+		})
+		.done();
+	}
+
+
+	if(drive){
+		var client = api[drive._type];
+		if(client){
+			req.drive = drive;
+			var now = new Date();
+			if(drive._type == 'dropbox' || now < drive.expires_on ){
+				next();
+			}else{
+				client.renewToken(drive.refresh_token)
+				.then(function(data){
+					if(data.access_token){
+						drive.access_token = data.access_token;
+					} 
+					if(data.expires_on){
+						drive.expires_on = new Date(data.expires_on);
+					} 
+					console.log('===drive');
+					console.log(drive);
+					console.log('===user');
+					console.log(req.user);
+					req.user.save();
+					next();
+				})
+				.done();
+			}
+			return;
+		}
+	}
 
 });
 

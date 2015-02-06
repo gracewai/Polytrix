@@ -402,7 +402,8 @@ app.controller('formPost',['$scope','userInfo','appStatus',function($scope,info,
 			data: JSON.parse($scope.postData)
 		}).done(function(res){
 			$scope.resBody = res;
-			status.set(res);
+			console.log(res);
+			status.set(JSON.stringify(res));
 			$scope.$apply();
 		});
 	};

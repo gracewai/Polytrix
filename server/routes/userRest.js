@@ -117,14 +117,16 @@ router.get('/api/account/activity/', requireLogined, function(req, res) {
 router.get('/api/account/log/', requireLogined, function(req, res) {
 	console.log('routing userRest.js /api/account/log');
 
-	Log.findLogsByUser(req.user.uid)
+	var limit = req.query.limit || 0;
+
+	Log.findLogsByUser(req.user.uid,limit)
 	.then(function(docs){
 
 		res.send({
 			success: true,
 			logined: true,
 			logs: docs,
-		})
+		});
 	})
 	.done();
 });

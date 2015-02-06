@@ -15,7 +15,33 @@ var Type = {
 	ACCOUNT_CREATION : 'Account creation'
 };
 
+var Code = {
+	//Drive Manipulation
+	NEW_FILE: 101,
+
+	//Account Setting
+	PASSWORD_CHANGE: 301,
+	UPLOAD_PHOTO: 302,
+	LINK_DRIVE:303,
+	LINK_TWITTER: 304,
+	LINK_FACEBOOK:305,
+	UNLINK_DRIVE:306,
+	UNLINK_FACEBOOK:307,
+	UNLINK_TWITTER: 308,
+
+	//Logging
+	LOGIN: 401,
+	LOGOUT: 402,
+
+
+	//Account Creation
+	ACCOUNT_CREATION: 601,
+};
+
 var logCtrl = {
+	log: function(uid,type,code,message,extras){
+		Log.log(uid,type,code,message,extras);
+	},
 	createAccount: function(req){
 		if(!req.user)
 			throw new Error('Logical error, user not logined, at log.js logCtrl.createAccount()');
@@ -27,7 +53,7 @@ var logCtrl = {
 
 		var client = ip.split(',').shift();
 
-		Log.log(user.uid,Type.ACCOUNT_CREATION,'Account was created  at ' + client,{uid: user.uid, username: user.name, proxy: ip});
+		Log.log(user.uid,Type.ACCOUNT_CREATION,Code.ACCOUNT_CREATION,'Account was created  at ' + client,{uid: user.uid, username: user.name, proxy: ip});
 	},
 	login: function(req){
 		if(!req.user)
@@ -40,7 +66,7 @@ var logCtrl = {
 
 		var client = ip.split(',').shift();
 
-		Log.log(user.uid,Type.LOGGING,'You logined at ' + client,{uid: user.uid, proxy: ip});
+		Log.log(user.uid,Type.LOGGING,Code.LOGIN,'You logged in at ' + client,{uid: user.uid, proxy: ip});
 	},
 	logout: function(req){
 		if(!req.user)
@@ -53,21 +79,24 @@ var logCtrl = {
 
 		var client = ip.split(',').shift();
 
-		Log.log(user.uid,Type.LOGGING,'You logouted at ' + client,{uid: user.uid, proxy: ip});
+		Log.log(user.uid,Type.LOGGING,Code.LOGOUT,'You logged out at ' + client,{uid: user.uid, proxy: ip});
 	},
-	addDrive: function(user,drive){
-		Log.log(user.uid,Type.ACCOUNT_SETTING,'You have linked a ' + drive._type + ' to your account ',{uid: user.uid, proxy: ip});
+	linkDrive: function(user,drive){
+		Log.log(user.uid,Type.ACCOUNT_SETTING,Code.LINK_DRIVE,'You have linked a ' + drive._type + ' to your account ',{drive_type:drive._type, drive_id: drive.id});
 	},
-	removeDrive: function(user,drive){
-		Log.log(user.uid,Type.ACCOUNT_SETTING,'You have unlinked a ' + drive._type + ' from your account ',{uid: user.uid, proxy: ip});
+	unlinkDrive: function(user,drive){
+		Log.log(user.uid,Type.ACCOUNT_SETTING,Code.UNLINK_DRIVE,'You have unlinked a ' + drive._type + ' from your account ',{drive_type:drive._type, drive_id: drive.id});
 	},
 
 
 	//
-	findLogsByUser: function(uid){
+	findLogsByUser: function(uid,limit){
 		return Q.Promise(function(reslove, reject){
-			Log.find({ uid: uid }, function (err, docs) {
-				console.log(docs);
+			var q = Log.find({uid:uid}).sort({'time':-1});
+			if(limit){
+				q.limit(limit);
+			}
+			q.exec(function (err, docs) {
 				reslove(docs);
 			});
 		});
@@ -75,5 +104,6 @@ var logCtrl = {
 };
 
 logCtrl.Type = Type;
+logCtrl.Code = Code;
 
 module.exports = logCtrl;

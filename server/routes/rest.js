@@ -24,7 +24,9 @@
 var router = require('express').Router();
 var _404 = require('./404');
 var api = require('polytrix-core-api');
+var CacheIndex = require('../database/cacheindex');
 var UploadHandler = require('../controllers/upload');
+var Log = require('../controllers/log');
 
 var requireLogined = require('./login').requireLogined;
 
@@ -139,6 +141,11 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res) {
 		.then(function(user){
 			console.log(drive);
 
+			Log.linkDrive(user,drive);
+			CacheIndex.create(user.uid,drive);
+
+			CacheIndex.update();
+
 			var result = {
 				success : true,
 				logined : true,
@@ -174,40 +181,6 @@ router.get('/api/info/:driveId', requireLogined, function(req,res){
 	};
 	res.send(result);
 });
-
-// router.get('/api/download/dropbox', function(req, res) {
-// 	var client = api.dropbox;
-// 	var driveConfig = req.session.dropbox;
-
-// 	client.downloadFilePipe(
-// 		req.query.i,
-// 		driveConfig.access_token,
-// 		driveConfig.refresh_token,
-// 		res
-// 	)
-// 	.progress(function(progress){
-// 		console.log("download progress:" + progress.progress);
-// 	})
-// 	.catch(function(err){
-// 		console.log('ERROR when rest.js GET /api/download/dropbox');
-// 		console.log(err);
-// 	})
-// 	.then(function(){
-// 		console.log('finish download');
-// 	}).done();
-// });
-
-// router.get('/api/download/onedrive', function(req, res) {
-// 	var client = api.onedrive;
-// 	var driveConfig = req.session.onedrive;
-
-// 	client.downloadFilePipe(
-// 		req.query.i,
-// 		driveConfig.access_token,
-// 		driveConfig.refresh_token,
-// 		res
-// 	);
-// });
 
 router.get('/api/download/:driveId', requireLogined, function(req, res) {
 	try{
@@ -264,7 +237,6 @@ router.post('/api/upload/:driveId', function(req,res,next){
 	console.log('routing rest.js /api/upload/:driveId');
 
 	var handler = new UploadHandler();
-
 	
 
 
@@ -280,6 +252,29 @@ router.get('/api/delete/:driveId', requireLogined, function(req,res){
 	res.send(result);
 });
 
+router.get('/api/updatefileIndex/:driveId', function(req, res){
+	CacheIndex.findByIDs(req.user.uid,req.drive.id)
+	.then(function(index){
+		return index.update();
+	})
+	.then(function(index){
+		index.success = true;
+		index.logined = true;
+		res.send(index);
+	})
+	.done();
+});
+
+router.get('/api/fullfileIndex/:driveId', function(req, res){
+	CacheIndex.findByIDs(req.user.uid,req.drive.id)
+	.then(function(index){
+		index.success = true;
+		index.logined = true;
+		res.send(index);
+	})
+	.done();
+});
+
 router.get('/api/fileIndex/:driveId', function(req, res) {
 	console.log('routing rest.js /api/fileIndex/:driveId');
 	
@@ -293,7 +288,6 @@ router.get('/api/fileIndex/:driveId', function(req, res) {
 		res.send(result);
 	})
 	.done();
-
 });
 
 router.get('/api/sharelink/:driveId', requireLogined, function(req,res){
