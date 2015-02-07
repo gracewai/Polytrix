@@ -207,11 +207,23 @@ angular.module('clientApp')
 
 		$scope.register = function(){
 			$scope.loading = true;
-			loginService.register(form.email,form.name,form.email,form.upw,
+			connectService.register(form.email,form.name,form.email,form.upw,
 				function(result){
-					window.location = '/console/'
+					window.location = '/console/';
 				},function(response){
-					
+					$scope.loading = false;
+					switch(response.status){
+						case 400:
+							Error.add('400 Bad Request');	
+						break;
+						case 401:
+							Error.add('Incorrect password or invalid account credentials');
+						break;
+						default:
+							Error.add('Unknown Error, Status code:' + response.status);
+						break;
+					}
+					Error.updateView();
 				}
 			);
 		};

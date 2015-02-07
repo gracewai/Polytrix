@@ -252,7 +252,7 @@ router.get('/api/delete/:driveId', requireLogined, function(req,res){
 	res.send(result);
 });
 
-router.get('/api/updatefileIndex/:driveId', function(req, res){
+router.get('/api/cache/update/:driveId', function(req, res){
 	CacheIndex.findByIDs(req.user.uid,req.drive.id)
 	.then(function(index){
 		return index.update();
@@ -265,7 +265,7 @@ router.get('/api/updatefileIndex/:driveId', function(req, res){
 	.done();
 });
 
-router.get('/api/fullfileIndex/:driveId', function(req, res){
+router.get('/api/cache/get/:driveId', function(req, res){
 	CacheIndex.findByIDs(req.user.uid,req.drive.id)
 	.then(function(index){
 		index.success = true;

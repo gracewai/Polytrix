@@ -1,4 +1,4 @@
-<md-toolbar class="topbar">
+<md-toolbar class="topbar animated fadeInDownBig">
   <button class="menu-button menuToggle" id="sm-open-button" ng-click="toggleMenu();">Menu</button>
   <h2 class="logo-text">POLYTRIX</h2>
   <div class="right side items">
@@ -9,7 +9,7 @@
     </div>
     <div class="ui special popup" id="notification-popup" ng-include="'views/notification.html'"></div>
     <div class="ui floating labeled icon dropdown" style="position:absolute; right:110px; top:14px;">
-      <md-button class="md-fab" aria-label="account" style="width:40px; height:40px; background: url({{user.photo||defaultPhoto}})"></md-button>
+      <md-button class="md-fab" aria-label="account" ng-style="{'background-image':'url(' + getUserPhoto() + ')'}" style="width:40px; height:40px;"></md-button>
       <div class="menu" style="margin-top:10px;">
         <div class="item" ng-click="showLogoutConfirm($event)"><i class="fa fa-user icon"></i>{{user.name}}</div>
         <div class="item" ng-click="showLogoutConfirm($event)"><i class="fa fa-sign-out icon"></i>Log out</div>
@@ -45,5 +45,15 @@ md-toolbar.topbar{
 }
 .topbar-spaceSpend{
   height:70px;
+}
+.topbar .md-button.md-default-theme:not([disabled]):focus{
+  background-color: transparent;
+}
+.topbar .md-button.md-default-theme:not([disabled]):hover{
+  background-color: rgba(158, 158, 158, 0.2);
+}
+.topbar.animated{
+  -webkit-animation-duration: .5s;
+  animation-duration: .5s;
 }
 </style>

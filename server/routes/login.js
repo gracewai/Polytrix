@@ -170,7 +170,7 @@ router.post('/logout', function(req, res, next) {
 router.get('/login/redirect/facebook',passport.authenticate('facebook',
 	{
 		successRedirect: '/console/',
-		failureRedirect: '/login?failure=true&strategy=facebook'
+		failureRedirect: '/?failure=true&strategy=facebook'
 	}
 ));
 
