@@ -1,72 +1,257 @@
-<div class="frame">
-  <div id="browse">
-    <div class="menu">
-      <div id="driveTabs" class="ui pointing secondary menu">
-        <a class="active item" data-tab="all">Combined View</a>
-        <a ng-repeat="driveMeta in drivelist" class="item" data-tab="{{driveMeta.id}}">{{getDriveName(driveMeta.type)}}</a>
-      </div>
-      <div class="ui active tab" data-tab="all">
-        <div ng-controller="CombinedView" class="ui divided list">
-
-          <div ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
-            <a href="{{file.drive.downloadLink(file.identifier)}}"><div class="right floated compact ui labeled icon button" style="margin-right:5px;">
-              <i class="fa fa-cloud-download icon"></i>
-              Download
-            </div></a>
-            <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">
-              <i class="{{getClass(file)}}"></i>
-              <div style="display:inline;cursor: pointer;">{{file.name}} @ {{getDriveName(file.drive.type)}}</div>
-              <span ng-show="file.is_file">
-              {{
-                file.file_size/(1024*1024)
-              }} MB
-              </span>
+<div class="ui grid">
+  <div class="left floated right four wide column">
+    <div class="ui vertical accordion menu" style="margin-top:60px;">
+      <div class="item">
+        <a class="active title">
+          <i class="dropdown icon"></i>
+          File Types
+        </a>
+        <div class="active content">
+          <div class="ui form">
+            <div class="grouped fields">
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="small">
+                  <label>Audio</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="small">
+                  <label>Images</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="small">
+                  <label>Documents</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="small">
+                  <label>Text</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="small">
+                  <label>Archive</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox">
+                  <label>Other</label>
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
       </div>
-      <div class="ui tab" ng-repeat="driveMeta in drivelist"  data-tab="{{driveMeta.id}}">
-        <div ng-controller="SingleDriveCtrl" ng-init="init(driveMeta.drive)" class="ui divided list">
-
-          <div ng-hide="false" class="item">
-            <div class="content" ng-click="getFileIndex(drive.rootPath)" style="padding-bottom:10px;">
-              <i class="fa fa-file-o"></i>
-              <div style="display:inline;cursor: pointer;">root</div>
+      <div class="item">
+        <a class="title">
+          <i class="dropdown icon"></i>
+          Visibility
+        </a>
+        <div class="content">
+          <div class="ui form">
+            <div class="grouped fields">
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="small">
+                  <label>Owner</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="medium">
+                  <label>Folders only</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="large">
+                  <label>Files only</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="x-large">
+                  <label>Shared only</label>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
-            <a href="{{drive.downloadLink(file.identifier)}}"><div class="right floated compact ui labeled icon button" style="margin-right:5px;">
-              <i class="fa fa-cloud-download icon"></i>
-              Download
-            </div></a>
-            <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">
-              <i class="{{getClass(file)}}"></i>
-              <div style="display:inline;cursor: pointer;">{{file.name}}</div>
-              <span ng-show="file.is_file">
-              {{
-                file.file_size/(1024*1024)
-              }} MB
-              </span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="ui labeled icon top right pointing dropdown button">
+          <i class="filter icon"></i>
+          <span class="text">Advanced Filter</span>
+          <div class="menu">
+            <div class="header">
+              <i class="marker icon"></i>
+              Filter by location
+            </div>
+            <div class="ui icon input">
+              <i class="search icon"></i>
+              <input type="text" name="search" placeholder="Search location">
+            </div>
+            <div class="divider"></div>
+            <div class="header">
+              <i class="tags icon"></i>
+              Filter by tag
+            </div>
+            <div class="item">
+              <div class="ui red empty circular label"></div>
+              Important
+            </div>
+            <div class="item">
+              <div class="ui blue empty circular label"></div>
+              Project
+            </div>
+            <div class="item">
+              <div class="ui black empty circular label"></div>
+              Work
+            </div>
+            <div class="divider"></div>
+            <div class="header">
+              <i class="calendar icon"></i>
+              Filter by date
+            </div>
+            <div class="item">
+              <i class="circle icon"></i>
+              This Week
+            </div>
+            <div class="item">
+              <i class="circle icon"></i>
+              This Month
+            </div>
+            <div class="item">
+              <i class="circle icon"></i>
+              This Year
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
   </div>
+
+
+
+  <div class="floated center eleven wide column">
+    <div class="ui search">
+      <div class="ui icon input">
+        <input type="text" class="prompt" placeholder="Quick Search" style="width:250px;">
+        <i class="search icon"></i>
+      </div>
+    </div>
+    <div class="menu" style="margin-top:5px;">
+      <div id="driveTabs" class="ui pointing secondary menu">
+        <a class="active item" data-tab="all">All</a>
+        <a ng-repeat="driveMeta in drivelist" class="item" data-tab="{{driveMeta.id}}">{{getDriveName(driveMeta.type)}}</a>
+      </div>
+
+      <div class="ui active tab" data-tab="all">
+        <table ng-controller="CombinedView" class="ui unstackable table">
+          <thead>
+            <tr>
+              <th class="left aligned">Name</th>
+              <th class="right aligned">Type</th>
+              <th class="right aligned">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
+              <td>
+                <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">
+                  <i class="{{getClass(file)}} icon"></i>
+                  <div style="display:inline;cursor: pointer;">{{file.name}} @ {{getDriveName(file.drive.type)}}</div>
+                  <!-- <span ng-show="file.is_file">
+                    {{
+                      file.file_size/(1024*1024)
+                    }} MB
+                  </span> -->
+                </div>
+              </td>
+              <td class="right aligned" ng-show="file.is_folder" >
+                <b>Folder</b>  
+              </td>
+              <td class="right aligned" ng-hide="file.is_folder">
+                <b>{{file.name.split('.').pop().toUpperCase();}}</b>
+              </td>
+              <td class="right aligned">
+                <a href="{{file.drive.downloadLink(file.identifier)}}">
+                  <div class="ui labeled icon button">
+                    <i class="info circle icon"></i>
+                    View details
+                  </div>
+                </a>
+              </td>
+            </tr>            
+          </tbody>
+        </table>
+      </div>
+
+
+      <div class="ui tab" ng-repeat="driveMeta in drivelist"  data-tab="{{driveMeta.id}}">
+        <table ng-controller="SingleDriveCtrl" ng-init="init(driveMeta.drive)" class="ui unstackable table">
+          <thead>
+            <tr>
+              <th class="left aligned">Name</th>
+              <th class="right aligned">Type</th>
+              <th class="right aligned">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+<!--             <tr ng-hide="false">
+              <span class="content" ng-click="getFileIndex(drive.rootPath)" style="padding-bottom:10px;">
+                <i class="fa fa-file-o"></i>
+                <div style="display:inline;cursor: pointer;">root</div>
+              </span>
+            </tr> -->
+            <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
+              <td>
+                <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">
+                  <i class="{{getClass(file)}}"></i>
+                  <div style="display:inline;cursor: pointer;">{{file.name}}</div>
+                </div>
+              </td>
+              <td ng-show="file.is_folder" class="right aligned">
+                <b>Folder</b>  
+              </td>
+              <td ng-hide="file.is_folder" class="right aligned">
+                <b>{{file.name.split('.').pop().toUpperCase();}}</b>
+              </td>
+              <td class="right aligned">
+                <a href="{{drive.downloadLink(file.identifier)}}">
+                  <div class="ui labeled icon button">
+                    <i class="info circle icon"></i>
+                    View details
+                  </div>
+                </a>    
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<style>
-  #browse {
-  }
-  #browse .ui.tab{
-    overflow-y: auto;
-  }
-  md-tabs, md-tab {
-    border: none;
-  }
 
-</style>
+<script>
+
+$('.ui.vertical.accordion.menu')
+.accordion();
+
+$('.ui.checkbox')
+.checkbox();
+
+$('.ui.labeled.icon.top.right.pointing.dropdown.button')
+.dropdown();
+
+
+</script>
