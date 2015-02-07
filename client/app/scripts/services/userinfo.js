@@ -91,6 +91,7 @@ angular.module('clientApp')
 	 */
 	userInfo.onchange = function(scope, func) {
 		if (typeof scope === 'function'){
+			func = scope;
 			console.log(new Error('you should pass scope to onchange for unbind uses - Factory:userInfo.onchange()'));
 			$rootScope.$on('onUserInfoChange', func);
 			return;

@@ -8,176 +8,190 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('BrowseCtrl',['$scope','UserInfo','Tools','Drive', function ($scope, UserInfo, Tools, Drive) {
-    $scope.drivelist = [];
+	.controller('BrowseCtrl',['$scope','UserInfo','Tools','Drive', function ($scope, UserInfo, Tools, Drive) {
+		$scope.drivelist = [];
 
-    UserInfo.onchange($scope,function(){
-      var info = UserInfo.get();
-      $scope.drivelist = info.drives;
+		UserInfo.onchange($scope,function(){
+			var info = UserInfo.get();
+			$scope.drivelist = info.drives;
 
-      Tools.selectElement('#driveTabs>.item', function(elements){
-        elements.tab();
-      },$scope.drivelist.length+1,50);
+			Tools.selectElement('#driveTabs>.item', function(elements){
+				elements.tab();
+			},$scope.drivelist.length+1,50);
 
-      for(var i in $scope.drivelist){
-        var drive = $scope.drivelist[i];
-        drive.drive = new Drive(drive.type, drive.id);
-      }
-    });
+			for(var i in $scope.drivelist){
+				var drive = $scope.drivelist[i];
+				drive.drive = new Drive(drive.type, drive.id);
+			}
+		});
 
-    UserInfo.update();
+		UserInfo.update();
 
-    $scope.select = function(index){
-      console.log(index);
-    };
+		$scope.select = function(index){
+			console.log(index);
+		};
 
-    $scope.getDriveName = function(driveType){
-      switch(driveType){
-        case 'dropbox':     return 'Dropbox';
-        case 'googledrive': return 'Google Drive';
-        case 'onedrive':    return 'One Drive';
-        default: return 'Unknown';
-      }
-    };
-  }])
-  .controller('CombinedView',['$scope', 'UserInfo', 'Drive',function($scope, UserInfo, Drive){
-    var userInfo = null;
-    var drivelist = [];
-    $scope.files = [];
-    var drive = $scope.drive = {
-      id:null,
-      type:'all',
-      drive_list: drivelist
-    };
-    
-
-    $scope.getFileIndex = function(path,drive){
-      $scope.files = [];
-
-      function get(i){
-        if(i < drivelist.length)
-          return drivelist[i].list(path)
-          .then(function(result){
-            if(result.success){
-              var prased = result.content.map(function(element){
-                element.drive = drivelist[i];
-                return element;
-              });
-              $scope.files.push.apply($scope.files,prased);
-              console.log($scope.files);
-            }
-            return ++i;
-          })
-          .then(get);
-      }
-      get(0);
-    };
-
-    function init(){
-      userInfo = UserInfo.get();
-
-      for(var i in userInfo.drives){
-        var driveI = userInfo.drives[i];
-        drivelist.push(new Drive(driveI.type, driveI.id));
-      }
-    };
+		$scope.switchAndView = function(id, drive){
+			$('#driveTabs>.item').tab('change tab', drive.id);
+			angular.element('#' + drive.id).scope().getFileIndex(id);
+		};
+		$scope.getDriveName = function(driveType){
+			switch(driveType){
+				case 'dropbox':     return 'Dropbox';
+				case 'googledrive': return 'Google Drive';
+				case 'onedrive':    return 'One Drive';
+				default: return 'Unknown';
+			}
+		};
+	}])
+	.controller('CombinedView',['$scope', 'UserInfo', 'Drive',function($scope, UserInfo, Drive){
+		var userInfo = null;
+		var drivelist = [];
+		$scope.files = [];
+		var drive = $scope.drive = {
+			id:null,
+			type:'all',
+			drive_list: drivelist
+		};
 
 
-    $scope.getClass = _browse_getClass_;
-    UserInfo.onchange($scope,init);
+		$scope.getFileIndex = function(path,drive){
+			$scope.files = [];
+			function get(i){
+				if(i < drivelist.length)
+					return drivelist[i].listFromServer(path)
+					.then(function(result){
+						if(result.success){
+							var prased = result.content.map(function(element){
+								element.drive = drivelist[i];
+								return element;
+							});
+							$scope.files.push.apply($scope.files,prased);
+							console.log($scope.files);
+						}
+						return ++i;
+					})
+					.then(get);
+			}
+			get(0);
+		};
 
-    init();
-    setTimeout($scope.getFileIndex,100);
-  }])
-  .controller('SingleDriveCtrl', ['$scope', '$resource', function ($scope, $resource) {
-    var drive = $scope.drive = null;
+		function init(){
+			userInfo = UserInfo.get();
 
-  	$scope.files = [];
+			for(var i in userInfo.drives){
+				var driveI = userInfo.drives[i];
+				drivelist.push(new Drive(driveI.type, driveI.id));
+			}
+		};
 
-  	$scope.getFileIndex = function(path){
-  		drive.list(path)
-      .then(function(result){
-        if(result.success){
-          $scope.files = result.content;
-        }
-      });
-  	};
 
-  	$scope.init = function(_drive){
-      drive = $scope.drive = _drive;
+		$scope.getClass = _browse_getClass_;
+		UserInfo.onchange($scope,init);
 
-  		$scope.getFileIndex();
-  	};
+		init();
+		setTimeout($scope.getFileIndex,100);
+	}])
+	.controller('SingleDriveCtrl', ['$scope', '$resource', function ($scope, $resource) {
+		var drive = $scope.drive = null;
+		var lastPath = null;
+		$scope.parentIndex = null;
+		$scope.files = [];
 
-    $scope.getClass = _browse_getClass_;
+		$scope.getFileIndex = function(path){
+			lastPath = path;
+			// drive.listFromServer(path)
+			// .then(function(result){
+			//   if(result.success){
+			//     $scope.files = result.content;
+			//   }
+			// });
+			drive.list(path,
+			function fromCache(index){
+				$scope.files = index.files;
+				$scope.parentIndex =  index.metadata.parent_identifier;
+			},
+			function fromServer(index){
+				if(lastPath == path){//view not changed
+					$scope.files = index;
+				}
+			})
+		};
 
-    $scope.getFileTypeName = _browse_getFileType_;
-  }]);
+		$scope.init = function(_drive){
+			drive = $scope.drive = _drive;
+			$scope.parentIndex = drive.rootPath;
+			$scope.getFileIndex();
+		};
+
+		$scope.getClass = _browse_getClass_;
+
+		$scope.getFileTypeName = _browse_getFileType_;
+	}]);
 
 function _browse_getFileType_(filename){
-  console.log(filename);
-  return filename.split('.').pop();
+	return filename.split('.').pop();
 };
 function _browse_getClass_(file){
-  switch(file.is_folder){
-    case true:
-      return 'fa fa-folder-o';
-      break;
-    case false:
-      switch(_browse_getFileType_(file.name)){
-        case 'mkv':
-        case 'mp4':
-        case 'avi':
-        case 'wmv':
-        case 'mov':
-        case 'rmvb':
-          return 'fa fa-file-video';
-        case 'doc':
-        case 'docx':
-        case 'gdoc':
-        case 'txt':
-        case 'md':
-          return 'fa fa-file-text-o';
-        case 'mp3':
-        case 'flac':
-        case 'm4v':
-        case 'wav':
-        case 'aiff':
-        case 'mid':
-        case 'wma':
-        case 'midi':
-          return 'fa fa-file-audio-o';
-        case 'zip':
-        case 'rar':
-        case 'tar':
-        case 'gz':
-        case '7z':
-          return 'fa fa-file-archive-o';
-        case 'jpg':
-        case 'png':
-        case 'jpeg':
-        case 'gif':
-        case 'psd':
-        case 'tiff':
-          return 'fa fa-file-image-o';
-        case 'cpp':
-        case 'java':
-        case 'py':
-        case 'rb':
-        case 'c':
-          return 'fa fa-file-code-o';
-        case 'pdf':
-          return 'fa fa-file-pdf-o';
-        case 'ppt':
-        case 'pptx':
-        case 'keynote':
-          return 'fa fa-file-powerpoint-o';
-        case 'xls':
-        case 'xlsx':
-          return 'fa fa-file-excel-o';
-        default:
-          return 'fa fa-file-o';
-      }
-      break;
-  }
+	switch(file.is_folder){
+		case true:
+			return 'fa fa-folder-o';
+			break;
+		case false:
+			switch(_browse_getFileType_(file.name)){
+				case 'mkv':
+				case 'mp4':
+				case 'avi':
+				case 'wmv':
+				case 'mov':
+				case 'rmvb':
+					return 'fa fa-file-video';
+				case 'doc':
+				case 'docx':
+				case 'gdoc':
+				case 'txt':
+				case 'md':
+					return 'fa fa-file-text-o';
+				case 'mp3':
+				case 'flac':
+				case 'm4v':
+				case 'wav':
+				case 'aiff':
+				case 'mid':
+				case 'wma':
+				case 'midi':
+					return 'fa fa-file-audio-o';
+				case 'zip':
+				case 'rar':
+				case 'tar':
+				case 'gz':
+				case '7z':
+					return 'fa fa-file-archive-o';
+				case 'jpg':
+				case 'png':
+				case 'jpeg':
+				case 'gif':
+				case 'psd':
+				case 'tiff':
+					return 'fa fa-file-image-o';
+				case 'cpp':
+				case 'java':
+				case 'py':
+				case 'rb':
+				case 'c':
+					return 'fa fa-file-code-o';
+				case 'pdf':
+					return 'fa fa-file-pdf-o';
+				case 'ppt':
+				case 'pptx':
+				case 'keynote':
+					return 'fa fa-file-powerpoint-o';
+				case 'xls':
+				case 'xlsx':
+					return 'fa fa-file-excel-o';
+				default:
+					return 'fa fa-file-o';
+			}
+			break;
+	}
 };

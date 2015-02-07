@@ -165,7 +165,7 @@
           <tbody>
             <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
               <td>
-                <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">
+                <div class="content" ng-click="file.is_folder && switchAndView(file.identifier,file.drive)">
                   <i class="{{getClass(file)}} icon"></i>
                   <div style="display:inline;cursor: pointer;">{{file.name}} @ {{getDriveName(file.drive.type)}}</div>
                   <!-- <span ng-show="file.is_file">
@@ -195,8 +195,8 @@
       </div>
 
 
-      <div class="ui tab" ng-repeat="driveMeta in drivelist"  data-tab="{{driveMeta.id}}">
-        <table ng-controller="SingleDriveCtrl" ng-init="init(driveMeta.drive)" class="ui unstackable table">
+      <div class="ui tab" ng-repeat="driveMeta in drivelist" data-tab="{{driveMeta.id}}">
+        <table ng-controller="SingleDriveCtrl" id="{{driveMeta.id}}" ng-init="init(driveMeta.drive)" class="ui unstackable table">
           <thead>
             <tr>
               <th class="left aligned">Name</th>
@@ -205,12 +205,25 @@
             </tr>
           </thead>
           <tbody>
-<!--             <tr ng-hide="false">
-              <span class="content" ng-click="getFileIndex(drive.rootPath)" style="padding-bottom:10px;">
-                <i class="fa fa-file-o"></i>
-                <div style="display:inline;cursor: pointer;">root</div>
-              </span>
-            </tr> -->
+            <!-- go to parent -->
+            <tr class="item">
+              <td colspan="2">
+                <div class="content" ng-click="getFileIndex(parentIndex)">
+                  <i class="fa fa-folder icon"></i>
+                  <div style="display:inline;cursor: pointer;">../</div>
+                </div>
+              </td>
+              <td class="right aligned">
+                <a href="{{file.drive.downloadLink(file.identifier)}}">
+                  <div class="ui labeled icon button">
+                    <i class="info circle icon"></i>
+                    View details
+                  </div>
+                </a>
+              </td>
+            </tr>
+
+            <!-- files -->
             <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
               <td>
                 <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">

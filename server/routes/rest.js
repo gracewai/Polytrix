@@ -17,7 +17,7 @@
 //		sharelink GET
 //		move GET
 //		across (SSE GET) move file/folder across drive. use Server-Sent Event to receive moving progress
-//	
+//
 
 'use strict';
 
@@ -44,7 +44,7 @@ router.param('drive', function(req, res, next, val){
 router.param('driveId', function(req, res, next, val){
 	console.log('routing rest.js :driveId');
 	var drive = req.user.getDrive(req.params.driveId);
-	
+
 	if(drive){
 		var client = api[drive._type];
 		if(client){
@@ -57,10 +57,10 @@ router.param('driveId', function(req, res, next, val){
 				.then(function(data){
 					if(data.access_token){
 						drive.access_token = data.access_token;
-					} 
+					}
 					if(data.expires_on){
 						drive.expires_on = new Date(data.expires_on);
-					} 
+					}
 					console.log('===drive');
 					console.log(drive);
 					console.log('===user');
@@ -78,7 +78,7 @@ router.param('driveId', function(req, res, next, val){
 });
 
 
-////////////////////////////////////////////////	
+////////////////////////////////////////////////
 
 //	GET /api/auth/[drive name]
 //	@method drive
@@ -237,7 +237,7 @@ router.post('/api/upload/:driveId', function(req,res,next){
 	console.log('routing rest.js /api/upload/:driveId');
 
 	var handler = new UploadHandler();
-	
+
 
 
 	handler.process(req);
@@ -250,6 +250,14 @@ router.get('/api/delete/:driveId', requireLogined, function(req,res){
 		msg: 'function not implemented'
 	};
 	res.send(result);
+});
+
+router.get('/api/cache/check/:driveId/:identifier', function(req, res){
+	//function not implemented
+
+	//check the consistency of that id
+	//if inconsist, update that index cache,
+	//finally, return the updated index.
 });
 
 router.get('/api/cache/update/:driveId', function(req, res){
@@ -268,16 +276,30 @@ router.get('/api/cache/update/:driveId', function(req, res){
 router.get('/api/cache/get/:driveId', function(req, res){
 	CacheIndex.findByIDs(req.user.uid,req.drive.id)
 	.then(function(index){
-		index.success = true;
-		index.logined = true;
-		res.send(index);
+		if(index){ // FOUND
+			index.success = true;
+			index.logined = true;
+			res.send({
+				success: true,
+				logined: true,
+				uid: index.uid,
+				driveId: index.driveId,
+
+				driveType: index.driveType,
+				lastUpdate: index.lastUpdate,
+				cachedIndex: index.cachedIndex
+			});
+		}else{
+			res.status(404).end();
+			//res.send();
+		}
 	})
 	.done();
 });
 
 router.get('/api/fileIndex/:driveId', function(req, res) {
 	console.log('routing rest.js /api/fileIndex/:driveId');
-	
+
 	var drive = req.drive;
 	var client = api[drive._type];
 
@@ -320,7 +342,7 @@ router.get('/api/across/:driveId',function(req,res){
 	function pushData(val){
 		res.write("data: " + val + '\n\n');
 	}
-	
+
 	function closeConnecetion(){
 		res.writeHead(200,{
 			'Content-Type': 'text/event-stream',
