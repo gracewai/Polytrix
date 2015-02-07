@@ -1,6 +1,6 @@
 <md-toolbar class="topbar animated fadeInDownBig">
   <button class="menu-button menuToggle" id="sm-open-button" ng-click="toggleMenu();">Menu</button>
-  <h2 class="logo-text">POLYTRIX</h2>
+  <h2 class="logo-text" onclick="window.location='#/'">POLYTRIX</h2>
   <div class="right side items">
     <md-button class="item" style="right: 285px;" aria-label="bookmark"><i class="fa fa-database"></i></md-button>
     <a href="#/settings/" class="item" style="right: 235px;"><md-button aria-label="setting"><i class="fa fa-sliders"></i></md-button></a>
@@ -28,6 +28,7 @@
   margin-left: 30px;
 }
 .logo-text{
+  cursor:pointer;
   display:inline-block;
   float:left;
   font-family: 'Roboto', sans-serif;
