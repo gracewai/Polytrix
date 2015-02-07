@@ -117,6 +117,7 @@ indexSchema.methods.update = function(){
 			.then(function(returnedCacheRoot){
 				var mObj=JSON.stringify(returnedCacheRoot);
 				_this.cachedIndex = mObj;
+				_this.lastUpdate = new Date();
 				_this.save();
 				return _this;
 			});
@@ -132,12 +133,10 @@ indexSchema.methods.update = function(){
 				return syncIndex(_this.getIndex(_this.cachedIndex.rootIndex),_this.cachedIndex,client,drive.type,drive.access_token,drive.refresh_token);
 			}).then(function(returnedCacheRoot){
 				console.log(returnedCacheRoot);
-				console.log('_this');
 				var mObj=JSON.stringify(returnedCacheRoot);
 				_this.cachedIndex = mObj;
-				console.log(_this);
+				_this.lastUpdate = new Date();
 				_this.save();
-				console.log('called save');
 				return _this;
 			});
 		}

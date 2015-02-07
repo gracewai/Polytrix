@@ -19,6 +19,8 @@ var Code = {
 	//Drive Manipulation
 	NEW_FILE: 101,
 
+	CACHE_SYNC: 151,
+
 	//Account Setting
 	PASSWORD_CHANGE: 301,
 	UPLOAD_PHOTO: 302,
@@ -88,6 +90,9 @@ var logCtrl = {
 		Log.log(user.uid,Type.ACCOUNT_SETTING,Code.UNLINK_DRIVE,'You have unlinked a ' + drive._type + ' from your account ',{drive_type:drive._type, drive_id: drive.id});
 	},
 
+	updateCache: function(user, drive, timeUsed){
+		Log.log(user.uid,Type.DRIVE_MANIPULATION,Code.CACHE_SYNC,'You synced the ' + drive._type,{drive_type:drive._type,drive_id:drive.id,timeUsed:timeUsed});
+	},
 
 	//
 	findLogsByUser: function(uid,limit){

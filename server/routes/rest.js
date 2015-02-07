@@ -143,8 +143,11 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res) {
 
 			Log.linkDrive(user,drive);
 			CacheIndex.create(user.uid,drive);
-
-			CacheIndex.update();
+			var begin = new Date();
+			CacheIndex.update().then(function(){
+				var timeUsed = new Date() - begin;
+				Log.updateCache(req.user,drive,timeUsed);
+			});
 
 			var result = {
 				success : true,
@@ -261,11 +264,15 @@ router.get('/api/cache/check/:driveId/:identifier', function(req, res){
 });
 
 router.get('/api/cache/update/:driveId', function(req, res){
+	var begin;
 	CacheIndex.findByIDs(req.user.uid,req.drive.id)
 	.then(function(index){
+		begin = new Date();
 		return index.update();
 	})
 	.then(function(index){
+		var timeUsed = new Date() - begin;
+		Log.updateCache(req.user,req.drive,timeUsed);
 		index.success = true;
 		index.logined = true;
 		res.send(index);
