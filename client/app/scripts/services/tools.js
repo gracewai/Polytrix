@@ -18,7 +18,7 @@ angular.module('clientApp')
 			var trytime = trylimit = trylimit || 10;
 			function loop(){
 				var e = $(selector);
-				if(!expectedLength){
+				if(!expectedLength && e.length){
 					return cb(e);
 				}
 
@@ -64,7 +64,7 @@ angular.module('clientApp')
 				var day = Math.floor(daydiff);
 				var s = day == 1 ? '' : 's';
 				return day + ' day' + s + ' ago';
-			}  
+			}
 			else
 			{
 				return before.getFullYear() + '-' + (before.getMonth() + 1) + '-' + before.getDate();

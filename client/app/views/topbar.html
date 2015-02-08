@@ -2,7 +2,10 @@
   <button class="menu-button menuToggle" id="sm-open-button" ng-click="toggleMenu();">Menu</button>
   <h2 class="logo-text" onclick="window.location='#/'">POLYTRIX</h2>
   <div class="right side items">
-    <md-button class="item" style="right: 285px;" aria-label="bookmark"><i class="fa fa-database"></i></md-button>
+    <div class="item" style="right: 285px;" ng-controller="DriveManager">
+      <md-button ng-click="open();" aria-label="manage drive"><i class="fa fa-database"></i></md-button>
+      <div class="modal" ng-include="'views/drivemanage.html'"></div>
+    </div>
     <a href="#/settings/" class="item" style="right: 235px;"><md-button aria-label="setting"><i class="fa fa-sliders"></i></md-button></a>
     <div class="item" id="displayNotification" style="right: 185px;">
      <md-button aria-label="notification"><i class="fa fa-inbox"></i></md-button>
@@ -11,7 +14,7 @@
     <div class="ui floating labeled icon dropdown" style="position:absolute; right:110px; top:14px;">
       <md-button class="md-fab" aria-label="account" ng-style="{'background-image':'url(' + getUserPhoto() + ')'}" style="width:40px; height:40px;"></md-button>
       <div class="menu" style="margin-top:10px;">
-        <div class="item" ng-click="showLogoutConfirm($event)"><i class="fa fa-user icon"></i>{{user.name}}</div>
+        <div class="item" onclick="window.location='#/settings'"><i class="fa fa-user icon"></i>{{user.name}}</div>
         <div class="item" ng-click="showLogoutConfirm($event)"><i class="fa fa-sign-out icon"></i>Log out</div>
       </div>
     </div>

@@ -96,14 +96,14 @@ router.get('/api/auth/:drive', requireLogined, function(req, res) {
 	if(req.query.reurl){
 		req.session.driveRedirectUrl = req.query.reurl;
 	}
-
-	var result = {
-		success : true,
-		logined : true,
-		redirectUrl : url
-	};
-
-	res.send(result);
+	res.redirect(url);
+	// var result = {
+	// 	success : true,
+	// 	logined : true,
+	// 	redirectUrl : url
+	// };
+	//
+	// res.send(result);
 });
 
 var redirectLink = '/console/#settings';
@@ -158,7 +158,7 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res,next) {
 			Log.linkDrive(user,drive);
 			var cache = CacheIndex.create(user.uid,drive);
 
-			res.redirect(redirectLink + '/?redirect=drive&success=1&drive=' + req.prams.drive);
+			res.redirect(redirectLink + '/?redirect=drive&success=1&drive=' + req.params.drive);
 
 			// var result = {
 			// 	success : true,
