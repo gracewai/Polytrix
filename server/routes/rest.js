@@ -106,6 +106,8 @@ router.get('/api/auth/:drive', requireLogined, function(req, res) {
 	res.send(result);
 });
 
+var redirectLink = '/console/#settings';
+
 //
 // GET /api/redirect/:drive
 //
@@ -118,7 +120,7 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res,next) {
 		next();
 	}else{
 		var error = req.query.error || 'unknown';
-		res.redirect('/???/error?=' + error);
+		res.redirect(redirectLink + '?redirect=drive&success=0&error=' + error);
 	}
 
 },function(req,res){
@@ -156,13 +158,15 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res,next) {
 			Log.linkDrive(user,drive);
 			var cache = CacheIndex.create(user.uid,drive);
 
-			var result = {
-				success : true,
-				logined : true,
-				drive	: req.params.drive
-			};
+			res.redirect(redirectLink + '/?redirect=drive&success=1&drive=' + req.prams.drive);
 
-			res.send(result);
+			// var result = {
+			// 	success : true,
+			// 	logined : true,
+			// 	drive	: req.params.drive
+			// };
+			//
+			// res.send(result);
 
 			try{
 
@@ -203,14 +207,15 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res,next) {
 
 			console.log(err);
 
-			var result = {
-				success : false,
-				logined : true,
-				drive	: req.params.drive,
-				msg		: err
-			};
-
-			res.send(result);
+			res.redirect(redirectLink + '?redirect=drive&success=0&drive=' + req.prams.drive);
+			// var result = {
+			// 	success : false,
+			// 	logined : true,
+			// 	drive	: req.params.drive,
+			// 	msg		: err
+			// };
+			//
+			// res.send(result);
 		});
 	})
 	.done();
