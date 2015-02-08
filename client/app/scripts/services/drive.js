@@ -19,6 +19,8 @@ angular.module('clientApp')
 		this.cacheInitPromise = this.cache.retrive(function(err){
 			console.log('retirved error, should be try again but not implemented, error:');//try again??
 			console.log(err);
+		}).then(function(){
+			_this.cacheReady = true;
 		});
 		this.cacheInitPromise.then(function(){
 			if(_this.initCallback) _this.initCallback();
@@ -41,9 +43,18 @@ angular.module('clientApp')
 	//
 	Drive.prototype.list = function(identifier, fromCacheCallback, fromServerCallback){
 		var _this = this;
-		this.listFromCache(identifier)
-		.then(function(index){
-			fromCacheCallback(index);
+		var promise;
+		if(!this.cacheReady){
+			promise = $q(function(r){r();});
+		}else{
+			promise = this.listFromCache(identifier)
+			.then(function(index){
+				fromCacheCallback(index);
+			},function(err){
+				console.log(err);
+			});
+		}
+		promise.then(function(){
 			return _this.listFromServer(identifier);
 		})
 		.then(function(result){
@@ -60,8 +71,6 @@ angular.module('clientApp')
 
 	Drive.prototype.listFromCache = function(identifier){
 		var _this = this;
-		identifier = identifier || _this.rootPath;
-
 		//actuall action of getting index from cache
 		function getIndex(){
 			return $q(function(reslove){

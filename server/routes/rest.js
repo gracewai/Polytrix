@@ -333,6 +333,7 @@ router.get('/api/cache/get/:driveId', function(req, res){
 		if(index){ // FOUND
 			index.success = true;
 			index.logined = true;
+			res.setHeader('Last-Modified', index.lastUpdate.toUTCString());
 			res.send({
 				success: true,
 				logined: true,

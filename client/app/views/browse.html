@@ -206,7 +206,7 @@
           </thead>
           <tbody>
             <!-- go to parent -->
-            <tr class="item">
+            <tr ng-hide="(!currentPath || currentPath == drive.cache.cachedIndex.rootIndex)" class="item">
               <td colspan="2">
                 <div class="content" ng-click="getFileIndex(parentIndex)">
                   <i class="fa fa-folder icon"></i>
@@ -214,7 +214,7 @@
                 </div>
               </td>
               <td class="right aligned">
-                <a href="{{file.drive.downloadLink(file.identifier)}}">
+                <a style="opacity:0;z-index:-1;">
                   <div class="ui labeled icon button">
                     <i class="info circle icon"></i>
                     View details

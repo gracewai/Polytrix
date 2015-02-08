@@ -21,6 +21,10 @@ angular.module('clientApp')
 			if(!code)
 				return 'fa-info-circle';
 			switch(code){
+			case 151:
+				return 'fa-refresh';
+			case 303:
+				return 'fa-link'
 			case 401:
 				return 'fa-sign-in';
 			default:
@@ -39,7 +43,7 @@ angular.module('clientApp')
 						// }
 						return row;
 					});
-					console.log('$scope.user.notification');
+					console.log('$scope.user.notification:');
 					console.log($scope.user.notification);
 				}else{
 					console.log(result);

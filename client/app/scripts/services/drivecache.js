@@ -23,10 +23,12 @@ angular.module('clientApp')
 	};
 
 	Cache.prototype.getMetadata = function(identifier){
+		identifier = identifier || this.cachedIndex.rootIndex;
 		return this.cachedIndex[identifier];
 	};
 
 	Cache.prototype.getFileList = function(identifier){
+		identifier = identifier || this.cachedIndex.rootIndex;
 		var index = this.cachedIndex[identifier];
 		if(!index) return null;
 		var _this = this;
@@ -48,8 +50,6 @@ angular.module('clientApp')
 				//OK
 				_this.lastUpdate = result.lastUpdate;
 				_this.cachedIndex = JSON.parse(result.cachedIndex);
-				console.log('cache retrived');
-				console.log(_this.cachedIndex);
 				$rootScope.$emit(_this.onUpdatedEvent);
 			}else{
 				console.log(result);
@@ -69,14 +69,10 @@ angular.module('clientApp')
 		var _this = this;
 		return FileIndex.get({driveId:this.id}).$promise
 		.then(function(result) {
-			console.log('result');
-			console.log(result);
 			if(result.success){
 				//OK
 				_this.lastUpdate = result.lastUpdate;
 				_this.cachedIndex = JSON.parse(result.cachedIndex);
-				console.log('cache retrived');
-				console.log(_this.cachedIndex);
 				$rootScope.$emit(_this.onRetrivedEvent);
 			}else{
 				console.log(result);

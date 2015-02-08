@@ -68,7 +68,6 @@ angular.module('clientApp')
 								return element;
 							});
 							$scope.files.push.apply($scope.files,prased);
-							console.log($scope.files);
 						}
 						return ++i;
 					})
@@ -95,12 +94,12 @@ angular.module('clientApp')
 	}])
 	.controller('SingleDriveCtrl', ['$scope', '$resource', function ($scope, $resource) {
 		var drive = $scope.drive = null;
-		var lastPath = null;
+		$scope.currentPath = null;
 		$scope.parentIndex = null;
 		$scope.files = [];
 
 		$scope.getFileIndex = function(path){
-			lastPath = path;
+			$scope.currentPath = path;
 			// drive.listFromServer(path)
 			// .then(function(result){
 			//   if(result.success){
@@ -113,7 +112,7 @@ angular.module('clientApp')
 				$scope.parentIndex =  index.metadata.parent_identifier;
 			},
 			function fromServer(index){
-				if(lastPath == path){//view not changed
+				if($scope.currentPath == path){//view not changed
 					$scope.files = index;
 				}
 			})
