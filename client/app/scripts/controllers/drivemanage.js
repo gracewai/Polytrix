@@ -58,6 +58,9 @@ angular.module('clientApp')
         window.location='#/settings';
         $scope.open();
       }
+      for(var key in $scope.drives){
+        $scope.drives[key].accounts = [];
+      }
       for(var i in $scope.userInfo.drives){
         var drive = $scope.userInfo.drives[i]
         $scope.drives[drive.type].accounts.push({email:drive.id,id:drive.id});
@@ -73,11 +76,11 @@ angular.module('clientApp')
         $scope.error = queries.error;
         $scope.rediectDriveType = queries.drive;
 
-        // delete $location.$$search.redirect;
-        // delete $location.$$search.drive;
-        // delete $location.$$search.error;
-        // delete $location.$$search.success;
-        // $location.$$compose();
+        delete $location.$$search.redirect;
+        delete $location.$$search.drive;
+        delete $location.$$search.error;
+        delete $location.$$search.success;
+        $location.$$compose();
       }
     };
 

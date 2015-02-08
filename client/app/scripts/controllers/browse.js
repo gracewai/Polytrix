@@ -57,6 +57,7 @@ angular.module('clientApp')
 
 		$scope.getFileIndex = function(path,drive){
 			$scope.files = [];
+
 			function get(i){
 				if(i < drivelist.length)
 					return drivelist[i].listFromServer(path)
@@ -78,7 +79,7 @@ angular.module('clientApp')
 
 		function init(){
 			userInfo = UserInfo.get();
-
+			drivelist = [];
 			for(var i in userInfo.drives){
 				var driveI = userInfo.drives[i];
 				drivelist.push(new Drive(driveI.type, driveI.id));
