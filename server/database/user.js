@@ -13,8 +13,8 @@ var userSchema = new Schema({
 	// passport content:
 	// {
 	//	_type: String,
-	//	
-	//	
+	//
+	//
 	//	//for _type=local
 	//	upw: String,
 	//
@@ -32,12 +32,73 @@ var userSchema = new Schema({
 			_type: String,
 			access_token: String,
 			refresh_token: String,
-			expires_on: Date
+			expires_on: Date,
+			account_info: Schema.Types.Mixed,
 		}
 	],
-	nextDriveId: {type: Number, default: 1}
+	nextDriveId: {type: Number, default: 1},
+
+
+
+	facebook: Schema.Types.Mixed,
+	twitter: Schema.Types.Mixed
+	// setttings: {
+
+	// }
 });
 
+
+
+
+//
+//	find user
+//
+
+
+userSchema.statics.findUser = function(uid){
+	var _this = this;
+	return Q.Promise(function(resolve,reject){
+		_this.findOne({ uid: uid }, function(err, user){
+			if (err){
+				var _err = {
+					error: 'mongoose error',
+					details: err
+				};
+				reject(_err);
+			}else{
+				resolve(user);
+			}
+		});
+	});
+};
+
+userSchema.statics.findUserByEmail = function(email){
+	var _this = this;
+	return Q.Promise(function(resolve,reject){
+		_this.findOne({ email: email }, function(err, user){
+			if (err){
+				var _err = {
+					error: 'mongoose error',
+					details: err
+				};
+				reject(_err);
+			}else{
+				resolve(user);
+			}
+		});
+	});
+};
+
+
+
+
+
+
+
+
+//
+//	login, register related
+//
 function createNewUser(uid,name,email,passport,options){
 	var newUser = new User({
 		uid: uid,
@@ -46,7 +107,7 @@ function createNewUser(uid,name,email,passport,options){
 		passport: passport,
 		drives: []
 	});
-	
+
 	if(util.exists(options.photoUse))	newUser.photoUse	= options.photoUse;
 	if(options.photos)		newUser.photos		= options.photos;
 
@@ -94,7 +155,7 @@ userSchema.statics.registerLocal = function(uid, upw, name, email){
 	util.requireArg('upw',upw,'registerLocal',js);
 	util.requireArg('name',name,'registerLocal',js);
 	util.requireArg('email',email,'registerLocal',js);
-		
+
 	return this.register(uid,name,email,{
 		_type:'local',
 		upw:upw,
@@ -126,40 +187,36 @@ userSchema.statics.registerFacebook = function(accessToken, refreshToken, profil
 	return this.register('fb' + profile.id,profile.displayName,email,profile, options);
 };
 
-userSchema.statics.findUser = function(uid){
-	var _this = this;
-	return Q.Promise(function(resolve,reject){
-		_this.findOne({ uid: uid }, function(err, user){
-			if (err){
-				var _err = {
-					error: 'mongoose error',
-					details: err
-				};
-				reject(_err);
-			}else{
-				resolve(user);
-			}
-		});
-	});
+userSchema.methods.validPassword = function(upw){
+	var ok = false;
+	var msg = '';
+
+	if(this.passport._type == 'local'){
+		if(this.passport.upw == upw){
+			ok = true;
+		}else{
+			msg = 'incorrect password';
+		}
+	}else{
+		msg = 'user passport type not local';
+	}
+
+	return {
+		ok: ok,
+		msg: msg
+	};
 };
 
-userSchema.statics.findUserByEmail = function(email){
-	var _this = this;
-	return Q.Promise(function(resolve,reject){
-		_this.findOne({ email: email }, function(err, user){
-			if (err){
-				var _err = {
-					error: 'mongoose error',
-					details: err
-				};
-				reject(_err);
-			}else{
-				resolve(user);
-			}
-		});
-	});
-};
 
+
+
+
+
+
+
+//
+// drives
+//
 userSchema.methods.addDrive = function(drive){
 	var _this = this;
 	return Q.Promise(function(resolve,reject){
@@ -186,7 +243,7 @@ userSchema.methods.addDrive = function(drive){
 				if(!existed){
 					_this.drives.push(drive);
 					_this.save();
-					resolve(_this);	
+					resolve(_this);
 				}
 				break;
 			default:
@@ -215,25 +272,16 @@ userSchema.methods.getDrive = function(driveId){
 	return null;
 };
 
-userSchema.methods.validPassword = function(upw){
-	var ok = false;
-	var msg = '';
-
-	if(this.passport._type == 'local'){
-		if(this.passport.upw == upw){
-			ok = true;
-		}else{
-			msg = 'incorrect password';
-		}
-	}else{
-		msg = 'user passport type not local';
-	}
-
-	return {
-		ok: ok,
-		msg: msg
-	};
+userSchema.methods.removeDrive = function(driveId){
+	throw new Error('function not implemented');
 };
+
+
+
+
+//
+//info
+//
 
 //return user infos without security infomation like access_token
 userSchema.methods.getFilteredInfo = function(){
@@ -248,7 +296,7 @@ userSchema.methods.getFilteredInfo = function(){
 		passportType : passport._type,
 		drives: []
 	};
-	
+
 	//filter drives
 	for(var i in user.drives){
 		var drive = user.drives[i];
@@ -294,9 +342,21 @@ userSchema.methods.getPublicInfo = function(){
 	}
 };
 
-userSchema.methods.removeDrive = function(driveId){
-	throw new Error('function not implemented');
+
+
+
+
+//
+//	user settings
+//
+userSchema.methods.setPassword = function(newPw){
+	this.password = newPw;
+	this.save();
 };
+
+
+
+
 
 var User = mongoose.model('User', userSchema);
 module.exports = User;
