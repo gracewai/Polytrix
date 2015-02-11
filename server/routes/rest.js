@@ -16,6 +16,7 @@
 //		fileIndex GET	(for folder use only, list out all files in the given folder)
 //		sharelink GET
 //		move GET
+//		quota GET
 //		across (SSE GET) move file/folder across drive. use Server-Sent Event to receive moving progress
 //
 
@@ -175,8 +176,21 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res) {
 });
 
 /////////////////////////////
-
 router.get('/api/info/:driveId', requireLogined, function(req,res){
+	var result = {
+		success: false,
+		logined: true,
+		msg: 'function not implemented'
+	};
+	res.send(result);
+});
+
+router.get('/api/qouta/:driveId', requireLogined, function(req,res){
+
+	var service = api[req.params.drive];
+
+	service.getQouta(req.drive.access_token,req.drive.refresh_token);
+
 	var result = {
 		success: false,
 		logined: true,
