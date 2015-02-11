@@ -192,7 +192,7 @@ angular.module('clientApp')
 				$scope.loading = false;
 				switch(response.status){
 					case 400:
-						Error.add('400 Bad Request');	
+						Error.add('400 Bad Request');
 					break;
 					case 401:
 						Error.add('Incorrect password or invalid account credentials');
@@ -212,17 +212,23 @@ angular.module('clientApp')
 					window.location = '/console/';
 				},function(response){
 					$scope.loading = false;
-					switch(response.status){
-						case 400:
-							Error.add('400 Bad Request');	
-						break;
-						case 401:
-							Error.add('Incorrect password or invalid account credentials');
-						break;
-						default:
-							Error.add('Unknown Error, Status code:' + response.status);
-						break;
+					if(typeof response.success == 'undefined'){
+						switch(response.status){
+							case 400:
+								Error.add('400 Bad Request');
+							break;
+							case 401:
+								Error.add('Incorrect password or invalid account credentials');
+							break;
+							default:
+								Error.add('Unknown Error, Status code:' + response.status);
+							break;
+						}
+					}else{
+						if(response.msg) Error.add(response.msg);
+						else Error.add('Unknown Error');
 					}
+
 					Error.updateView();
 				}
 			);

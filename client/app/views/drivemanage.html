@@ -1,0 +1,173 @@
+<div id="manageDriveModal" class="ui modal">
+  <div class="header">
+    <div ng-hide="userInfo.drives.length" class="ui steps">
+      <div class="step">
+        <i class="write icon"></i>
+        <div class="content">
+          <div class="title">Registration</div>
+          <div class="description">Input your personal information</div>
+        </div>
+      </div>
+      <div class="active step">
+        <i class="cloud icon"></i>
+        <div class="content">
+          <div class="title">Add Drive</div>
+          <div class="description">Link your accounts to Polytrix</div>
+
+        </div>
+      </div>
+      <div class="disabled step">
+        <i class="check circle icon"></i>
+        <div class="content">
+          <div class="title">Finish</div>
+          <div class="description">Start using Polytrix</div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="userInfo.drives.length" style="padding-top:20px;">Drive Management</div>
+  </div>
+
+
+
+  <div class="content">
+    <div class="description">
+
+      <div ng-hide="userInfo.drives.length" class="ui header">
+        Link your drive to Polytrix
+      </div>
+      <div class="sub header">
+        You can link more than one account in each drive.
+      </div>
+      <div ng-show="success=='1'" class="ui green message">
+        Congratulation! You linked a {{rediectDriveType}} account to Polytrix successfully!
+      </div>
+      <div ng-show="error" class="ui red message">Your {{rediectDriveType}} account linking failed. Reason: {{error}}</div>
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="ui {{$first?'top':$last?'bottom':'';}} attached segment" ng-repeat="drive in drives"  ng-controller="SingleDriveManage">
+
+
+
+        <h4 class="ui header">
+
+
+
+          <div ng-hide="drive.accounts.length" ng-click="addDrive()"  class="ui right floated basic button">
+            <i class="linkify icon"></i>
+            Connect
+          </div>
+          <div ng-show="drive.accounts.length" ng-click="toogleManageSegment();" class="manageButton ui primary button">
+            <i class="{{manageBtnIco}} icon"></i>
+            {{manageBtnTxt}}
+          </div>
+
+
+          <div class="leftPart">
+            <img class="ui mini" ng-src="{{drive.icon}}">
+            <div class="content">{{drive.name}}
+              <div ng-show="drive.accounts.length" class="sub header">You have already linked <a ng-click="toogleManageSegment();" >{{drive.accounts.length}} accounts</a>
+              </div>
+              <div ng-hide="drive.accounts.length" class="sub header">No account linked</a>
+              </div>
+            </div>
+          </div>
+
+        </h4>
+
+
+
+        <div class="manageDriveSegment">
+          <div class="ui tertiary segment">
+            <h5 ng-repeat="account in drive.accounts" class="ui header row-account">
+              <div class="removeDrive">
+                <div class="ui red  button">
+                  <i class="unlink icon"></i>Revoke
+                </div>
+              </div>
+              <div class="linkedDrive">
+                <i class="mail icon"></i>
+                <div class="content">
+                  {{account.email}}
+                </div>
+              </div>
+            </h5>
+
+            <h5 class="ui header row-account">
+              <div class="linkedDrive">
+                <i class="add square icon"></i>
+                <div class="content">
+                  <a ng-click="addDrive()">Add another account</a>
+                </div>
+              </div>
+            </h5>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="actions">
+    <div class="positive ui button"><b>Next</b>
+      <i class="arrow right icon"></i>
+    </div>
+  </div>
+
+</div>
+
+
+<style>
+#manageDriveModal a{
+  cursor:pointer;
+}
+#manageDriveModal .ui.header.row-account{
+  margin:1em 0 0 0;
+}
+#manageDriveModal .ui.header.row-account:first-child{
+  margin:0;
+}
+#manageDriveModal .add-drive {
+  width: 600px;
+}
+#manageDriveModal .manageAccount {
+  float: right;
+}
+#manageDriveModal .color1 {
+  color: #000;
+}
+#manageDriveModal .leftPart {
+  float: left;
+  width: 75%;
+  word-wrap: break-word;
+}
+#manageDriveModal .manageButton {
+  float: right;
+}
+#manageDriveModal .manageDriveSegment {
+  clear: both;
+  padding-top: 5px;
+  display: none;
+}
+#manageDriveModal .removeDrive {
+  float: right;
+}
+#manageDriveModal .removeDrive .ui.button{
+  font-size: .9em;
+}
+#manageDriveModal .linkedDrive {
+  padding-top: 8px;
+}
+
+</style>

@@ -26,8 +26,10 @@ var router = require('express').Router();
 var _404 = require('./404');
 var api = require('polytrix-core-api');
 var CacheIndex = require('../database/cacheindex');
+var User = require('../database/user');
 var UploadHandler = require('../controllers/upload');
 var Log = require('../controllers/log');
+var Q = require('q');
 
 var requireLogined = require('./login').requireLogined;
 
@@ -95,25 +97,37 @@ router.get('/api/auth/:drive', requireLogined, function(req, res) {
 	if(req.query.reurl){
 		req.session.driveRedirectUrl = req.query.reurl;
 	}
-
-	var result = {
-		success : true,
-		logined : true,
-		redirectUrl : url
-	};
-
-	res.send(result);
+	res.redirect(url);
+	// var result = {
+	// 	success : true,
+	// 	logined : true,
+	// 	redirectUrl : url
+	// };
+	//
+	// res.send(result);
 });
+
+var redirectLink = '/console/#settings';
 
 //
 // GET /api/redirect/:drive
 //
 //
-// @return  successful msg |Or| /redirect to reurl/
-router.get('/api/redirect/:drive', requireLogined, function(req, res) {
+// @return  /redirect to reurl/
+router.get('/api/redirect/:drive', requireLogined, function(req, res,next) {
 	console.log('routing rest.js /api/redirect/:drive');
-	var service = api[req.params.drive];
 
+	if(req.query.code){
+		next();
+	}else{
+		var error = req.query.error || 'unknown';
+		res.redirect(redirectLink + '?redirect=drive&success=0&error=' + error);
+	}
+
+},function(req,res){
+	console.log('success');
+
+	var service = api[req.params.drive];
 	service.getToken(req.query.code)
 	.then(function(tokens){
 		var drive = {
@@ -143,33 +157,66 @@ router.get('/api/redirect/:drive', requireLogined, function(req, res) {
 			console.log(drive);
 
 			Log.linkDrive(user,drive);
-			CacheIndex.create(user.uid,drive);
+			var cache = CacheIndex.create(user.uid,drive);
+
+			res.redirect(redirectLink + '/?redirect=drive&success=1&drive=' + req.params.drive);
+
+			// var result = {
+			// 	success : true,
+			// 	logined : true,
+			// 	drive	: req.params.drive
+			// };
+			//
+			// res.send(result);
+
+			try{
+
+
+			//followup actions
+			//--cache--
+			console.log('cache');
 			var begin = new Date();
-			CacheIndex.update().then(function(){
+			Q.Promise(function(resolve){
+				setTimeout(function(){
+					resolve();
+				},500);
+			})
+			.then(function(){
+				return cache.update();
+			}).then(function(){
 				var timeUsed = new Date() - begin;
 				Log.updateCache(req.user,drive,timeUsed);
-			});
+			})
+			.done();
 
-			var result = {
-				success : true,
-				logined : true,
-				drive	: req.params.drive
-			};
-
-			res.send(result);
+			//update account info
+			// console.log('account info');
+			// service.accountInfo(drive.access_token,drive.refresh_token)
+			// .then(function(accountInfo){
+			// 	return User.findUser(req.user.uid)
+			// 	.then(function(user){
+			// 		user.getDrive(drive.id).accountInfo = accountInfo;
+			// 		user.save();
+			// 	});
+			// })
+			// .done();
+		}catch(err){
+			console.log(err);
+		}
 		})
 		.catch(function(err){
 
 			console.log(err);
 
-			var result = {
-				success : false,
-				logined : true,
-				drive	: req.params.drive,
-				msg		: err
-			};
-
-			res.send(result);
+			res.redirect(redirectLink + '?redirect=drive&success=0&drive=' + req.prams.drive);
+			// var result = {
+			// 	success : false,
+			// 	logined : true,
+			// 	drive	: req.params.drive,
+			// 	msg		: err
+			// };
+			//
+			// res.send(result);
 		});
 	})
 	.done();
@@ -300,6 +347,7 @@ router.get('/api/cache/get/:driveId', function(req, res){
 		if(index){ // FOUND
 			index.success = true;
 			index.logined = true;
+			res.setHeader('Last-Modified', index.lastUpdate.toUTCString());
 			res.send({
 				success: true,
 				logined: true,

@@ -129,7 +129,7 @@ router.post('/register', function(req, res, next) {
 			res.send({
 				success: false,
 				logined: false,
-				msg: 'not implemented error message'
+				msg: err.toString()
 			});
 		});
 	}
