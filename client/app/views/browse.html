@@ -136,17 +136,84 @@
         </div>
       </div>
     </div>
+    <!-- upload task -->
+    <div ng-controller="uploadCtrl">
+          <div id="bgdiv"></div>
+          <div id="upload_grid">
+          </div>
+          <div id="ani"></div>
+          <input type="button" value="Start upload" ng-click="startUpload();">
+          <input id="ajaxfile" type="file" mualtiple><br>
+          <task val="task"></task>
+        </div>
+        <style>
+body{
+  margin:0;
+  padding:0;
+}
+#upload_grid,#bgdiv{
+  height:100%;
+  width:100%;
+  margin:0;
+  position:absolute;
+  z-index: -1;
+}
+#upload_grid.onupload{
+  z-index: 1;
+}
+#ani{
+  border-radius: 100px;
+  border:100px rgba(255,0,0,0.8) solid;
+  height:0;
+  width:0;
+  position:fixed;
+  top:50%;
+  left:50%;
+  margin-top: -100px;
+  margin-left: -100px;
+  display:none;
+}
+#ani.play{
+  display:block;
+  -webkit-animation: uploadAnimation 1s; /* Chrome, Safari, Opera */
+    animation: uploadAnimation 1s;
+}
+@-webkit-keyframes uploadAnimation {
+    from {
+      border: 5px rgba(255,0,0,0) solid;
+      margin-top:0px;
+      margin-left:0px;
+    }
+    to {
+      border: 100px rgba(255,0,0,0.8) solid;
+      margin-top: -100px;
+    margin-left: -100px;
+    }
+}
+</style>
+<!-- end upload task -->
   </div>
 
 
 
   <div class="floated center eleven wide column">
-    <div class="ui search">
-      <div class="ui icon input">
-        <input type="text" class="prompt" placeholder="Quick Search" style="width:250px;">
-        <i class="search icon"></i>
+    <div>
+      <div class="ui search" style="float:left;">
+        <div class="ui icon input">
+          <input type="text" class="prompt" placeholder="Quick Search" style="width:250px;">
+          <i class="search icon"></i>
+        </div>
       </div>
+      <div style="float:right;width:300px">
+        <!-- download task -->
+        
+        <!-- download task end -->
+      </div>
+      <div style="clear: both;"></div>
     </div>
+
+
+
     <div class="menu" style="margin-top:5px;">
       <div id="driveTabs" class="ui pointing secondary menu">
         <a class="active item" data-tab="all">All</a>

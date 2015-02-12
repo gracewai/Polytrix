@@ -48,6 +48,8 @@ angular.module('clientApp')
       Tools.selectElement('#manageDriveModal',function(jq){
         if(skipAnimation){
           jq = jq.modal('setting', 'duration', 0);
+        }else{
+          jq = jq.modal('setting', 'duration', 400);
         }
         jq.modal('show');
       },1,50,30);
