@@ -99,10 +99,10 @@ angular.module('clientApp')
 	//	@param{string} identifier		(optional) indicate which resource is being retrieved. if not given, retrive the root file list
 	//	@return-promise (http response)
 	//
-	var FileIndex = $resource('/api/fileIndex/:driveId');
+	var FileIndex = $resource('/api/drive/:driveId/:fileId/list/');
 	Drive.prototype.listFromServer = function(identifier){
 		identifier = identifier || this.rootPath;
-		return FileIndex.get({driveId:this.id,i:identifier}).$promise;
+		return FileIndex.get({driveId:this.id,fileId:identifier}).$promise;
 	}
 
 	//
@@ -110,7 +110,7 @@ angular.module('clientApp')
 	//	return a string of downloadLink, passing the identifier.
 	//
 	Drive.prototype.downloadLink = function(identifier){
-		return "/api/download/" + this.id + "?i=" + identifier;
+		return "/api/drive/" + this.id + "/" + identifier + "/download";
 	};
 
 	//

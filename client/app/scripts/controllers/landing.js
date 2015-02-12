@@ -179,7 +179,11 @@ angular.module('clientApp')
 				}
 				else
 				{
-					$scope.select('register');
+					if(result.notFound){
+						$scope.select('register');
+					}else{
+						console.log(result);
+					}
 				}
 			});
 		};
@@ -207,7 +211,7 @@ angular.module('clientApp')
 
 		$scope.register = function(){
 			$scope.loading = true;
-			connectService.register(form.email,form.name,form.email,form.upw,
+			connectService.register(form.uid,form.name,form.email,form.upw,
 				function(result){
 					window.location = '/console/';
 				},function(response){

@@ -1,15 +1,29 @@
 #!/usr/bin/env node
 var debug = require('debug')('server');
 var app = require('../app');
+var express = require('express');
 var https = require('https');
 var fs = require('fs');
 
 app.set('port', process.env.PORT || 3000);
 app.set('sslport', 8000);
 
+// try{
+// 	var server = app.listen(app.get('port'), function() {
+// 		console.log('Express server listening on port ' + server.address().port);
+// 	});
+// }catch(err){
+// 	console.log('launch http server fail, dose port ' + app.get('port') + ' using?');
+// 	console.log(err);
+// }
+
 try{
-	var server = app.listen(app.get('port'), function() {
-		console.log('Express server listening on port ' + server.address().port);
+	var http = express();
+	http.get('*',function(req,res){
+		res.redirect('https://io.dev:8000'+req.url);
+	});
+	http.listen(app.get('port'), function() {
+		console.log('Express server listening on port ' + app.get('port'));
 	});
 }catch(err){
 	console.log('launch http server fail, dose port ' + app.get('port') + ' using?');
