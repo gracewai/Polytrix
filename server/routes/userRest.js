@@ -56,11 +56,19 @@ router.get('/api/account/info/', function(req, res) {
 
 		user
 		.then(function(user){
-			res.send({
-				success:true,
-				logined:!!req.user,
-				userInfo: user.getPublicInfo()
-			});
+			if(user){
+				res.send({
+					success:true,
+					logined:!!req.user,
+					userInfo: user.getPublicInfo()
+				});
+			}else{
+				res.send({
+					success:false,
+					logined:!!req.user,
+					notFound: true
+				});
+			}
 		})
 		.catch(function(err){
 			res.send({

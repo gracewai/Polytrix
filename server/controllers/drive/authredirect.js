@@ -12,7 +12,7 @@ module.exports.requireCode = function(req, res, next) {
 		next();
 	}else{
 		var error = req.query.error || 'unknown';
-		res.redirect(redirectLink(false,error));
+		res.redirect(redirectLink(false,req.params.drive,error));
 	}
 
 };
@@ -23,7 +23,7 @@ module.exports.handle = function(req,res){
 	service.getToken(req.query.code)
 	.then(function(tokens){
 
-		var drive = createDrive(type,tokens);
+		var drive = createDrive(req.params.drive,tokens);
 		if(!drive)return;
 
 		return req.user.addDrive(drive)
@@ -34,13 +34,13 @@ module.exports.handle = function(req,res){
 
 			res.redirect(redirectLink(true,req.params.drive));
 
-			followUpActions(req.user.uid,drive,cache);
+			followUpActions(req.user,drive,cache);
 		})
 		.catch(function(err){
 
 			console.log(err);
 
-			res.redirect(redirectLink + '?redirect=drive&success=0&drive=' + req.prams.drive);
+			res.redirect(redirectLink(false,req.params.drive,err));
 		});
 	})
 	.done();
@@ -52,15 +52,12 @@ module.exports.handle = function(req,res){
 
 
 
-function redirectLink(success, driveOrError){
+function redirectLink(success, drive, error){
 	var url = UrlBuilder('/console/#settings');
 	url.query.redirect = 'drive';
 	url.query.success = success ? '1' : '0';
-	if(success){
-		url.query.drive = driveOrError;
-	}else{
-		url.query.error = driveOrError;
-	}
+	if(drive) url.query.drive = drive;
+	if(error) url.query.error = error;
 	return url.build();
 }
 
@@ -90,7 +87,7 @@ function createDrive(type,tokens){
 }
 
 
-function followUpActions(uid,drive,cache){
+function followUpActions(user,drive,cache){
 	try{
 
 		//followup actions
@@ -107,7 +104,7 @@ function followUpActions(uid,drive,cache){
 			return cache.update();
 		}).then(function(){
 			var timeUsed = new Date() - begin;
-			Log.updateCache(req.user,drive,timeUsed);
+			Log.updateCache(user,drive,timeUsed);
 		})
 		.done();
 
@@ -115,7 +112,7 @@ function followUpActions(uid,drive,cache){
 		// console.log('account info');
 		// service.accountInfo(drive.access_token,drive.refresh_token)
 		// .then(function(accountInfo){
-		// 	return User.findUser(uid)
+		// 	return User.findUser(user.uid)
 		// 	.then(function(user){
 		// 		user.getDrive(drive.id).accountInfo = accountInfo;
 		// 		user.save();

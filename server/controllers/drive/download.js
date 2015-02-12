@@ -2,12 +2,14 @@
 var api = require('polytrix-core-api');
 
 module.exports = function(req, res) {
+	var fileId = req.params.fileId
+
 	try{
 		var drive = req.drive;
 		var client = api[drive._type];
 		if(client.downloadFileLink){
 			client.downloadFileLink(
-				req.query.i,
+				fileId,
 				drive.access_token,
 				drive.refresh_token)
 			.then(function(link){
@@ -21,13 +23,13 @@ module.exports = function(req, res) {
 		}
 		else if(client.downloadFilePipe){
 			client.downloadFilePipe(
-				req.query.i,
+				fileId,
 				drive.access_token,
 				drive.refresh_token,
 				res
 			);
 		}else{
-			client.downloadFile(req.query.i,drive.access_token,drive.refresh_token)
+			client.downloadFile(fileId,drive.access_token,drive.refresh_token)
 			.then(function(result)
 			{
 				if(result.success){

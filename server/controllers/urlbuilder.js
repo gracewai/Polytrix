@@ -10,7 +10,7 @@ var UriBuilder = function(url){
 };
 
 UriBuilder.prototype.build = function(){
-	var url = '';
+	var url = this._url;
 
 	var first = true;
 	for(var key in this.query){
@@ -20,8 +20,10 @@ UriBuilder.prototype.build = function(){
 		}else{
 			url += '&';
 		}
-		url += encodeURIComponent(key) + '=' + encodeURIComponent(value);
-	};
+		url += encodeURIComponent(key) + '=' + encodeURIComponent(this.query[key]);
+	}
+
+	return url;
 };
 
 module.exports = function(url){

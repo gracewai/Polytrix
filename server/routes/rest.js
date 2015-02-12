@@ -21,119 +21,103 @@
 'use strict';
 
 var router = require('express').Router();
-var _404 = require('./404');
-var api = require('polytrix-core-api');
-var CacheIndex = require('../database/cacheindex');
-var User = require('../database/user');
-var UploadHandler = require('../controllers/upload');
-var Log = require('../controllers/log');
-var Q = require('q');
-
 var requireLogined = require('./login').requireLogined;
-
 var DriveCtrl = require('../controllers/drive');
 var Middlewares = require('./middlewares');
+
+////=================================
+//	Params middleware assertion
 
 router.param('drive', Middlewares.validateParamDrive);
 
 router.param('driveId', Middlewares.validateParamDriveId);
-////////////////////////////////////////////////
 
-//	GET /api/auth/[drive name]
-//	@method drive
-//	@return /redirect to auth link/ & finally redirect to reurl
-//
+////=================================
+//	Drive authorization
+
+// Redirect to drive authorization link
 router.get('/api/auth/:drive', requireLogined, DriveCtrl.authlink);
 
-// GET /api/redirect/:drive
-//
-//
-// @return  /redirect to reurl/
-router.get('/api/redirect/:drive', requireLogined,
+// Not an api, for internal uses
+router.get('/api/auth/:drive/redirect', requireLogined,
 	DriveCtrl.authRedirect.requireCode,
 	DriveCtrl.authRedirect.handle);
 
-/////////////////////////////
 
-router.get('/api/info/:driveId', requireLogined,
+////=================================
+//	Drive
+
+// Get the drive information
+router.get('/api/drive/:driveId/info/', requireLogined,
 	Middlewares.functionNotImplemented);
 
-router.get('/api/download/:driveId', requireLogined,
+// Get the drive qouta information
+router.get('/api/drive/driveId/qouta/', requireLogined,
+	Middlewares.functionNotImplemented);
+
+
+////=================================
+//	File
+
+// Get the metadata
+router.get('/api/drive/:driveId/:fileId/', requireLogined,
+	Middlewares.functionNotImplemented);
+
+// Download the file (redirect to the file's download link)
+router.get('/api/drive/:driveId/:fileId/download/', requireLogined,
 	DriveCtrl.download);
 
-router.post('/api/upload/:driveId', requireLogined,
+// Upload the file
+router.post('/api/drive/:driveId/:fileId/', requireLogined,
 	DriveCtrl.upload);
 
-router.get('/api/delete/:driveId', requireLogined,
-	Middlewares.functionNotImplemented);
-
-router.get('/api/cache/check/:driveId/:identifier', requireLogined,
-	DriveCtrl.cache.check);
-
-router.get('/api/cache/update/:driveId', requireLogined,
-	DriveCtrl.cache.update);
-
-router.get('/api/cache/get/:driveId', requireLogined,
-	DriveCtrl.cache.get);
-
-router.get('/api/fileIndex/:driveId', requireLogined,
+// List out the files in a folder
+router.get('/api/drive/:driveId/:fileId/list/', requireLogined,
 	DriveCtrl.file.list);
 
-router.get('/api/sharelink/:driveId', requireLogined,
+// Delete the file
+router.delete('/api/drive/:driveId/:fileId/', requireLogined,
 	Middlewares.functionNotImplemented);
 
-router.get('/api/move/:driveId', requireLogined,
+// Move the file
+router.get('/api/drive/:driveId/:fileId/move/', requireLogined,
 	Middlewares.functionNotImplemented);
 
-//! function not implemented
-router.get('/api/across/:driveId', requireLogined,
+// Move the file across drives
+router.get('/api/drive/:driveId/:fileId/across/', requireLogined,
 	Middlewares.functionNotImplemented);
+
+// Get the share link of the file
+router.get('/api/drive/:driveId/:fileId/share/', requireLogined,
+	Middlewares.functionNotImplemented);
+
+// Create a share link of the file
+router.post('/api/drive/:driveId/:fileId/share/', requireLogined,
+	Middlewares.functionNotImplemented);
+
+// Remove the share link of the file
+router.delete('/api/drive/:driveId/:fileId/share/', requireLogined,
+	Middlewares.functionNotImplemented);
+
+
+////=================================
+//	Cache
+
+// Get the cache
+router.get('/api/drive/:driveId/cache/', requireLogined,
+	DriveCtrl.cache.get);
+
+// Request the cache to be synced from drive provider
+router.get('/api/drive/:driveId/cache/update/', requireLogined,
+	DriveCtrl.cache.update);
+
+// Get the file metadata from the cache
+router.get('/api/drive/:driveId/cache/:fileId/', requireLogined,
+	Middlewares.functionNotImplemented);
+
+// Check the consistency of the file between drive provider and get the file metadata
+router.get('/api/drive/:driveId/cache/:fileId/check', requireLogined,
+	DriveCtrl.cache.check);
 
 
 module.exports = router;
-
-
-
-
-
-
-
-
-// router.get('/api/across/:driveId',
-
-// function(req,res){
-// 	res.writeHead(200, {
-// 		'Content-Type': 'text/event-stream',
-// 		'Cache-Control': 'no-cache',
-// 		'Connection': 'keep-alive'
-// 	});
-
-// 	var time = 0;
-// 	function pushData(val){
-// 		res.write("data: " + val + '\n\n');
-// 	}
-
-// 	function closeConnecetion(){
-// 		res.writeHead(200,{
-// 			'Content-Type': 'text/event-stream',
-// 			'Connection': 'close'
-// 		});
-// 		res.end();
-// 	}
-
-// 	function keepPushData(){
-// 		time++;
-// 		var result = {
-// 			progress: time
-// 		};
-// 		result = JSON.stringify(result);
-// 		pushData(result);
-
-// 		if(time > 5){
-// 			closeConnecetion();
-// 		}
-
-// 		setTimeout(function(){keepPushData();},1000);
-// 	}
-// 	keepPushData();
-// }

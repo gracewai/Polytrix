@@ -20,7 +20,7 @@ module.exports.validateParamDrive = function(req, res, next, val){
 	}
 };
 
-moudle.exports.validateParamDriveId = function(req, res, next, val){
+module.exports.validateParamDriveId = function(req, res, next, val){
 	console.log('routing rest.js :driveId');
 	var drive = req.user.getDrive(req.params.driveId);
 
