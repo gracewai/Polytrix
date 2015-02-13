@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var passport = require('passport');
 
 var dbconnect = require('./database/dbconnect');
@@ -28,6 +29,12 @@ var app = express();
 
     //enable session
     app.use(session({
+        store: new MongoStore({
+            db:dbconnect.db,
+            host:dbconnect.ip,
+            port:dbconnect.port,
+            touchAfter: 5 * 60,//5 minutes
+        }),
         secret: 'polytrix_session',
         resave: false,
         saveUninitialized: true,
@@ -94,8 +101,10 @@ if (app.get('env') === 'production') {
     app.get('/console/',function(req,res){
         res.sendFile(path.join(__dirname, '../client/app/index.html'));});
 
-    app.use('/console/',express.static(path.join(__dirname, '/dist')));
-    app.use(express.static(path.join(__dirname, '/dist')));
+    app.use('/console/',express.static(path.join(__dirname, '../client')));
+    app.use('/console/',express.static(path.join(__dirname, '../client/app')));
+    app.use(express.static(path.join(__dirname, '../client')));
+    app.use(express.static(path.join(__dirname, '../client/app')));
 
     // production error handler
     // no stacktraces leaked to user
