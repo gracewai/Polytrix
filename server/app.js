@@ -11,8 +11,6 @@ var dbconnect = require('./database/dbconnect');
 var passportStrategies = require('./controllers/passport');
 
 var _404 = require('./routes/404');
-
-var index = require('./routes/index');
 var login = require('./routes/login');
 var rest = require('./routes/rest');
 var userRest = require('./routes/userRest');
@@ -43,7 +41,6 @@ var app = express();
 
 //routers
 
-app.use(index);
 app.use(login);
 app.use(rest);
 app.use(userRest);
