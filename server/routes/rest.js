@@ -47,6 +47,26 @@ router.get('/api/auth/:drive/redirect', requireLogined,
 
 
 ////=================================
+//	Cache
+
+// Get the cache
+router.get('/api/drive/cache/:driveId/', requireLogined,
+	DriveCtrl.cache.get);
+
+// Request the cache to be synced from drive provider
+router.get('/api/drive/cache/:driveId/update/', requireLogined,
+	DriveCtrl.cache.update);
+
+// Get the file metadata from the cache
+router.get('/api/drive/cache/:driveId/:fileId/', requireLogined,
+	Middlewares.functionNotImplemented);
+
+// Check the consistency of the file between drive provider and get the file metadata
+router.get('/api/drive/cache/:driveId/:fileId/check', requireLogined,
+	DriveCtrl.cache.check);
+
+
+////=================================
 //	Drive
 
 // Get the drive information
@@ -108,26 +128,6 @@ router.post('/api/drive/:driveId/:fileId/share/', requireLogined,
 // Remove the share link of the file
 router.delete('/api/drive/:driveId/:fileId/share/', requireLogined,
 	Middlewares.functionNotImplemented);
-
-
-////=================================
-//	Cache
-
-// Get the cache
-router.get('/api/drive/:driveId/cache/', requireLogined,
-	DriveCtrl.cache.get);
-
-// Request the cache to be synced from drive provider
-router.get('/api/drive/:driveId/cache/update/', requireLogined,
-	DriveCtrl.cache.update);
-
-// Get the file metadata from the cache
-router.get('/api/drive/:driveId/cache/:fileId/', requireLogined,
-	Middlewares.functionNotImplemented);
-
-// Check the consistency of the file between drive provider and get the file metadata
-router.get('/api/drive/:driveId/cache/:fileId/check', requireLogined,
-	DriveCtrl.cache.check);
 
 
 module.exports = router;
