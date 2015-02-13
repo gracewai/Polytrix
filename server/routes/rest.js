@@ -16,6 +16,7 @@
 //		fileIndex GET	(for folder use only, list out all files in the given folder)
 //		sharelink GET
 //		move GET
+//		quota GET
 //		across (SSE GET) move file/folder across drive. use Server-Sent Event to receive moving progress
 //
 'use strict';
@@ -54,7 +55,7 @@ router.get('/api/drive/:driveId/info/', requireLogined,
 
 // Get the drive qouta information
 router.get('/api/drive/:driveId/qouta/', requireLogined,
-	Middlewares.functionNotImplemented);
+	DriveCtrl.qouta);
 
 
 ////=================================
