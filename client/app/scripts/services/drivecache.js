@@ -10,8 +10,8 @@
 angular.module('clientApp')
   .service('DriveCache', ['$resource','$rootScope', function ($resource,$rootScope) {
 
-	var FileIndex = $resource('/api/drive/:driveId/cache/');
-	var UpdateIndex = $resource('/api/drive/:driveId/cache/update/');
+	var FileIndex = $resource('/api/drive/cache/:driveId/');
+	var UpdateIndex = $resource('/api/drive/cache/:driveId/update/');
 
 	var Cache = function(type, id){
 		this.type = type;

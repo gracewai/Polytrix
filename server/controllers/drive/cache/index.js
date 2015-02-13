@@ -3,6 +3,7 @@ var CacheIndex = require('../../../database/cacheindex');
 var Log = require('../../log');
 
 module.exports.get = function(req, res){
+	console.log('get');
 	CacheIndex.findByIDs(req.user.uid,req.drive.id)
 	.then(function(index){
 		if(index){ // FOUND
