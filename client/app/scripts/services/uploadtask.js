@@ -9,7 +9,10 @@
  */
 angular.module('clientApp')
   .service('UploadTask', ['Task','$q' , function (Task,$q) {
-  	//
+
+  var uploadUrl='/test/uploadtask/' ;
+
+  //
 	//	MultipartTask : Task
 	//
 	var MultipartTask = function(destination, webkitEntry, file){
@@ -31,7 +34,7 @@ angular.module('clientApp')
 		form_data.append("filesize",file.size);
 		form_data.append("file",file_data);
 		$.ajax({
-			url: "/test/uploadtask/",
+			url: uploadUrl,
 			type: 'post',
 			//dataType: 'text',
 			xhr: function(){

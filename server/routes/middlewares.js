@@ -55,3 +55,18 @@ module.exports.validateParamDriveId = function(req, res, next, val){
 
 	_404.send(res);// send 404
 };
+
+module.exports.requireLogined = function(req, res, next){
+	if(req.user){
+		next();
+	}else{
+
+		var result = {
+			success : false,
+			logined : false,
+			msg : 'user not logined'
+		};
+
+		res.send(result);
+	}
+};
