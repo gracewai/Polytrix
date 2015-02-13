@@ -1,6 +1,6 @@
 var api = require('polytrix-core-api');
-var CacheIndex = require('../../database/cacheindex');
-var Log = require('../log');
+var CacheIndex = require('../../../database/cacheindex');
+var Log = require('../../log');
 
 module.exports.get = function(req, res){
 	CacheIndex.findByIDs(req.user.uid,req.drive.id)

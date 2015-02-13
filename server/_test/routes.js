@@ -4,7 +4,7 @@ var router = express.Router();
 var api = require('polytrix-core-api');
 var passport = require('passport');
 var _404 = require('../routes/404');
-var uploadHandlers = require('../controllers/upload');
+var uploadHandlers = require('../controllers/drive/file/upload/multipart');
 var CacheIndex = require('../database/cacheindex');
 
 router.use('/test/js',express.static(__dirname + '/views/js'));

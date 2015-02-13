@@ -15,25 +15,17 @@
 'use strict';
 
 var router = require('express').Router();
-var User  = require('../database/user');
-var Log  = require('../controllers/log');
-var requireLogined = require('./login').requireLogined;
+var UserCtrl = require('../controllers/user');
+var Middlewares = require('./middlewares');
+var requireLogined = Middlewares.requireLogined;
 
 // Check whether the user is logined
 //
 //	GET /api/account/status
 //	@return { success: Boolean, logined: Boolean } loginStatus
 //
-router.get('/api/account/status', function(req,res){
-	console.log('routing userRest.js /api/account/status');
-
-	var result = {
-		success : true,
-		logined : !!req.user,
-	};
-
-	res.send(result);
-});
+router.get('/api/account/status',
+	UserCtrl.status);
 
 // Get a user's public info or current logined user's details
 //
@@ -42,57 +34,8 @@ router.get('/api/account/status', function(req,res){
 //  @params {String}(optional) email
 //	@return { success: Boolean, logined: Boolean } loginStatus
 //
-router.get('/api/account/info/', function(req, res) {
-	console.log('routing userRest.js /api/account/info');
-
-	if(req.query.uid || req.query.email){
-		var user;
-
-		if(req.query.uid){
-			user = User.findUser(req.query.uid);
-		}else{
-			user = User.findUserByEmail(req.query.email);
-		}
-
-		user
-		.then(function(user){
-			if(user){
-				res.send({
-					success:true,
-					logined:!!req.user,
-					userInfo: user.getPublicInfo()
-				});
-			}else{
-				res.send({
-					success:false,
-					logined:!!req.user,
-					notFound: true
-				});
-			}
-		})
-		.catch(function(err){
-			res.send({
-				success:false,
-				logined:!!req.user,
-				msg: err
-			});
-		})
-		.done();
-		
-	}else if(req.user){
-		
-		res.send({
-			success:true,
-			logined:!!req.user,
-			userInfo: req.user.getFilteredInfo()
-		});
-
-	}else{
-		res.send({
-			success: false, logined: false, msg: 'no user sepicified, please give uid'
-		});
-	}
-});
+router.get('/api/account/info/',
+	UserCtrl.info);
 
 // Get current user's recent activity
 //
@@ -111,32 +54,10 @@ router.get('/api/account/info/', function(req, res) {
 //		}]
 //	}
 //
-router.get('/api/account/activity/', requireLogined, function(req, res) {
-	console.log('routing userRest.js /api/account/activity');
+router.get('/api/account/activity/', requireLogined,
+	Middlewares.functionNotImplemented);
 
-	res.send({
-		success:false,
-		logined: true,
-		msg: 'unimplemented route'
-	})
-
-});
-
-router.get('/api/account/log/', requireLogined, function(req, res) {
-	console.log('routing userRest.js /api/account/log');
-
-	var limit = req.query.limit || 0;
-
-	Log.findLogsByUser(req.user.uid,limit)
-	.then(function(docs){
-
-		res.send({
-			success: true,
-			logined: true,
-			logs: docs,
-		});
-	})
-	.done();
-});
+router.get('/api/account/log/', requireLogined, 
+	UserCtrl.log);
 
 module.exports = router;

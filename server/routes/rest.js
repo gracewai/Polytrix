@@ -21,9 +21,10 @@
 'use strict';
 
 var router = require('express').Router();
-var requireLogined = require('./login').requireLogined;
 var DriveCtrl = require('../controllers/drive');
+var DriveAuthorization = require('../controllers/auth');
 var Middlewares = require('./middlewares');
+var requireLogined = Middlewares.requireLogined;
 
 ////=================================
 //	Params middleware assertion
@@ -36,12 +37,12 @@ router.param('driveId', Middlewares.validateParamDriveId);
 //	Drive authorization
 
 // Redirect to drive authorization link
-router.get('/api/auth/:drive', requireLogined, DriveCtrl.authlink);
+router.get('/api/auth/:drive', requireLogined, DriveAuthorization.authUrl);
 
 // Not an api, for internal uses
 router.get('/api/auth/:drive/redirect', requireLogined,
-	DriveCtrl.authRedirect.requireCode,
-	DriveCtrl.authRedirect.handle);
+	DriveAuthorization.redirect.requireCode,
+	DriveAuthorization.redirect.handle);
 
 
 ////=================================
@@ -52,7 +53,7 @@ router.get('/api/drive/:driveId/info/', requireLogined,
 	Middlewares.functionNotImplemented);
 
 // Get the drive qouta information
-router.get('/api/drive/driveId/qouta/', requireLogined,
+router.get('/api/drive/:driveId/qouta/', requireLogined,
 	Middlewares.functionNotImplemented);
 
 
@@ -65,11 +66,19 @@ router.get('/api/drive/:driveId/:fileId/', requireLogined,
 
 // Download the file (redirect to the file's download link)
 router.get('/api/drive/:driveId/:fileId/download/', requireLogined,
-	DriveCtrl.download);
+	DriveCtrl.file.download);
+
+// Create a file
+router.get('/api/drive/:driveId/new/', requireLogined,
+	Middlewares.functionNotImplemented);
+
+// Create and upload a file
+router.post('/api/drive/:driveId/new/', requireLogined,
+	Middlewares.functionNotImplemented);
 
 // Upload the file
 router.post('/api/drive/:driveId/:fileId/', requireLogined,
-	DriveCtrl.upload);
+	DriveCtrl.file.upload);
 
 // List out the files in a folder
 router.get('/api/drive/:driveId/:fileId/list/', requireLogined,
