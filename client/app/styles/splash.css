@@ -1,0 +1,48 @@
+[ng-cloak]#loading-splash {
+  display: block !important;
+}
+#loading-splash {display: none;}
+#loading-splash h2 {
+  font-size: 2.1em;
+  font-weight: 500;
+}
+.loading-logo .polytrix-text {
+  font-size: 50px;
+  color: #66e;
+  font-family: "Arial";
+  font-weight: 700;
+}
+.loading-logo .loading-animation {
+  padding-top: 10px;
+  text-align: center;
+  font-family: "Luckiest Guy", cursive;
+  color: #66e;
+  font-size: 30px;
+}
+.loading-logo .loading-animation .updown {
+  -webkit-animation: updown 1.2s infinite;
+  animation: updown 1.2s infinite;
+}
+
+
+@-webkit-keyframes updown {
+  0% { -webkit-transform:translate(0,0); }
+  25% { -webkit-transform:translate(0,-15px); }
+  50% { -webkit-transform:translate(0,0); }
+  100% { -webkit-transform:translate(0,0); }
+}
+html{
+  height: 100%;
+  background: #cccccc;
+}
+#loading-splash .container{
+  
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#loading-splash .border{
+  /*border:rgba(100,100,100,0.3) solid 1px;*/
+  position:relative;
+}

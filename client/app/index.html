@@ -5,9 +5,30 @@
     <title>Polytrix</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+
+    <!-- loading splash -->
+    <link href='https://fonts.googleapis.com/css?family=Luckiest+Guy' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/styles/splash.css" />
+    <div id="loading-splash" ng-cloak>
+      <div class="container">
+        <div class="border">
+          
+          <div class="loading-logo">
+          
+            <div class="polytrix-text">Polytrix</div>
+            <div class="loading-animation">
+              Loading...
+            </div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/scripts/splash.js"></script>
+    <!-- end loading splash -->
+
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
-    <!-- <link rel="stylesheet" href="bower_components/semantic-ui/dist/semantic.css" /> -->
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
     <!-- bower:webcomponent -->
     <!-- endbower -->
@@ -19,8 +40,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+    
   </head>
   <body ng-app="clientApp">
+    
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->

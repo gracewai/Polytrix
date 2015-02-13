@@ -9,7 +9,7 @@
  */
 angular.module('clientApp')
 	.controller('Topbar',['$scope','UserInfo','User', function ($scope,UserInfo,User){
-		$scope.defaultPhoto = 'http://www.scumlabs.com/wp-content/uploads/2011/04/Nyan-Cat.jpg';
+		$scope.defaultPhoto = '/images/Nyan-Cat.jpg';
 		$scope.user = UserInfo.get();
 		$scope.getUserPhoto = function(){
 			if($scope.user)

@@ -14,20 +14,20 @@ angular.module('clientApp')
       googledrive: {
         type:'googledrive',
         name:'Google Drive',
-        icon:'http://g.harvard.edu/_/rsrc/1366301789484/home/Google-Drive-Logo-32x32.png',
+        icon:'/images/googledrive.png',
         accounts:[]
       },
       onedrive:{
         type: 'onedrive',
         name: 'One Drive',
-        icon:'http://cache.filehippo.com/img/ex/2863__OneDrive_icon.png',
+        icon:'/images/onedrive.png',
         accounts:[]
       },
       dropbox:{
         type: 'dropbox',
         dropbox: 'dropbox',
         name: 'Dropbox',
-        icon:'http://win.downloadatoz.com/resources/soft/windows/famous/icon/d/r/o/dropbox-1367055358.png',
+        icon:'/images/dropbox.png',
         accounts:[]
       }
     };
@@ -57,7 +57,6 @@ angular.module('clientApp')
 
     $scope.userInfoUpdate = function(){
       if($scope.userInfo.drives.length == 0){
-        window.location='#/settings';
         $scope.open();
       }
       for(var key in $scope.drives){
