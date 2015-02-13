@@ -88,6 +88,13 @@ if (app.get('env') === 'development') {
 if (app.get('env') === 'production') {
 
     // changes it to use the optimized version for production
+    app.get('/',function(req,res){
+        res.sendFile(path.join(__dirname, '../client/app/welcome.html'));});
+
+    app.get('/console/',function(req,res){
+        res.sendFile(path.join(__dirname, '../client/app/index.html'));});
+
+    app.use('/console/',express.static(path.join(__dirname, '/dist')));
     app.use(express.static(path.join(__dirname, '/dist')));
 
     // production error handler

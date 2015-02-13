@@ -1,0 +1,43 @@
+<div ng-controller="uploadCtrl"> <button ng-click="startUpload()">start upload</button> <div id="bgdiv"></div> <div id="upload_grid"> </div> <div id="ani"></div> <button ng-click="selectFiles()">Upload File</button> <button ng-click="selectFolders()">Upload Folder</button> <input id="ajaxfile" type="file" multiple><br> <input id="ajaxfolder" type="file" multiple webkitdirectory directory><br> <task val="task"></task> </div> <style>body{
+	margin:0;
+	padding:0;
+}
+#upload_grid,#bgdiv{
+	height:100%;
+	width:100%;
+	margin:0;
+	position:absolute;
+	z-index: -1;
+}
+#upload_grid.onupload{
+	z-index: 1;
+}
+#ani{
+	border-radius: 100px;
+	border:100px rgba(255,0,0,0.8) solid;
+	height:0;
+	width:0;
+	position:fixed;
+	top:50%;
+	left:50%;
+	margin-top: -100px;
+	margin-left: -100px;
+	display:none;
+}
+#ani.play{
+	display:block;
+	-webkit-animation: uploadAnimation 1s; /* Chrome, Safari, Opera */
+    animation: uploadAnimation 1s;
+}
+@-webkit-keyframes uploadAnimation {
+    from {
+    	border: 5px rgba(255,0,0,0) solid;
+    	margin-top:0px;
+    	margin-left:0px;
+    }
+    to {
+    	border: 100px rgba(255,0,0,0.8) solid;
+    	margin-top: -100px;
+		margin-left: -100px;
+    }
+}</style>

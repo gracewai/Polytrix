@@ -1,0 +1,10 @@
+<div class="notification-popup ui vertical segment" style="font-size:14px" ng-repeat="row in user.notification"> <i class="fa icon {{getIconByCode(row.code)}}"></i> {{row.message}} <time-ago time="row.time"></time-ago> </div> <style>.notification-popup.ui.segment{
+	padding-bottom: 0.5em;
+}
+.notification-popup .time-stamp,
+.notification-popup time-ago{
+	display:block;
+	text-align: right;
+	font-size: 0.7em;
+	color: #666;
+}</style>
