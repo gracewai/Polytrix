@@ -25,23 +25,29 @@ var router = require('express').Router();
 var DriveCtrl = require('../controllers/drive');
 var DriveAuthorization = require('../controllers/auth');
 var Middlewares = require('./middlewares');
-var requireLogined = Middlewares.requireLogined;
 
 ////=================================
-//	Params middleware assertion
+//	Params middlewares assertion
 
-router.param('drive', Middlewares.validateParamDrive);
+router.param('drive',
+	Middlewares.validateParamDrive);
 
-router.param('driveId', Middlewares.validateParamDriveId);
+router.param('driveId',
+	Middlewares.requireLogined,
+	Middlewares.validateParamDriveId,
+	Middlewares.renewToken);
 
 ////=================================
 //	Drive authorization
 
 // Redirect to drive authorization link
-router.get('/api/auth/:drive', requireLogined, DriveAuthorization.authUrl);
+router.get('/api/auth/:drive',
+	Middlewares.requireLogined,
+	DriveAuthorization.authUrl);
 
 // Not an api, for internal uses
-router.get('/api/auth/:drive/redirect', requireLogined,
+router.get('/api/auth/:drive/redirect',
+	Middlewares.requireLogined,
 	DriveAuthorization.redirect.requireCode,
 	DriveAuthorization.redirect.handle);
 
@@ -50,19 +56,19 @@ router.get('/api/auth/:drive/redirect', requireLogined,
 //	Cache
 
 // Get the cache
-router.get('/api/drive/cache/:driveId/', requireLogined,
+router.get('/api/drive/cache/:driveId/',
 	DriveCtrl.cache.get);
 
 // Request the cache to be synced from drive provider
-router.get('/api/drive/cache/:driveId/update/', requireLogined,
+router.get('/api/drive/cache/:driveId/update/',
 	DriveCtrl.cache.update);
 
 // Get the file metadata from the cache
-router.get('/api/drive/cache/:driveId/:fileId/', requireLogined,
+router.get('/api/drive/cache/:driveId/:fileId/',
 	Middlewares.functionNotImplemented);
 
 // Check the consistency of the file between drive provider and get the file metadata
-router.get('/api/drive/cache/:driveId/:fileId/check', requireLogined,
+router.get('/api/drive/cache/:driveId/:fileId/check',
 	DriveCtrl.cache.check);
 
 
@@ -70,11 +76,11 @@ router.get('/api/drive/cache/:driveId/:fileId/check', requireLogined,
 //	Drive
 
 // Get the drive information
-router.get('/api/drive/:driveId/info/', requireLogined,
+router.get('/api/drive/:driveId/info/',
 	Middlewares.functionNotImplemented);
 
 // Get the drive qouta information
-router.get('/api/drive/:driveId/qouta/', requireLogined,
+router.get('/api/drive/:driveId/qouta/',
 	DriveCtrl.qouta);
 
 
@@ -82,51 +88,59 @@ router.get('/api/drive/:driveId/qouta/', requireLogined,
 //	File
 
 // Get the metadata
-router.get('/api/drive/:driveId/:fileId/', requireLogined,
+router.get('/api/drive/:driveId/:fileId/',
 	Middlewares.functionNotImplemented);
 
 // Download the file (redirect to the file's download link)
-router.get('/api/drive/:driveId/:fileId/download/', requireLogined,
+router.get('/api/drive/:driveId/:fileId/download/',
 	DriveCtrl.file.download);
 
-// Create a file
-router.get('/api/drive/:driveId/new/', requireLogined,
+// Create a file or folder
+router.get('/api/drive/:driveId/:fileId/new/',
 	Middlewares.functionNotImplemented);
 
 // Create and upload a file
-router.post('/api/drive/:driveId/new/', requireLogined,
+router.post('/api/drive/:driveId/:fileId/new/',
 	Middlewares.functionNotImplemented);
 
 // Upload the file
-router.post('/api/drive/:driveId/:fileId/', requireLogined,
+router.post('/api/drive/:driveId/:fileId/',
 	DriveCtrl.file.upload);
 
 // List out the files in a folder
-router.get('/api/drive/:driveId/:fileId/list/', requireLogined,
+router.get('/api/drive/:driveId/:fileId/list/',
 	DriveCtrl.file.list);
 
 // Delete the file
-router.delete('/api/drive/:driveId/:fileId/', requireLogined,
+router.delete('/api/drive/:driveId/:fileId/',
+	Middlewares.functionNotImplemented);
+
+// Rename the file
+router.patch('/api/drive/:driveId/:fileId/',
+	Middlewares.functionNotImplemented);
+
+// Copy the file
+router.get('/api/drive/:driveId/:fileId/copy/',
 	Middlewares.functionNotImplemented);
 
 // Move the file
-router.get('/api/drive/:driveId/:fileId/move/', requireLogined,
+router.get('/api/drive/:driveId/:fileId/move/',
 	Middlewares.functionNotImplemented);
 
 // Move the file across drives
-router.get('/api/drive/:driveId/:fileId/across/', requireLogined,
+router.get('/api/drive/:driveId/:fileId/across/',
 	Middlewares.functionNotImplemented);
 
 // Get the share link of the file
-router.get('/api/drive/:driveId/:fileId/share/', requireLogined,
+router.get('/api/drive/:driveId/:fileId/share/',
 	Middlewares.functionNotImplemented);
 
 // Create a share link of the file
-router.post('/api/drive/:driveId/:fileId/share/', requireLogined,
+router.post('/api/drive/:driveId/:fileId/share/',
 	Middlewares.functionNotImplemented);
 
 // Remove the share link of the file
-router.delete('/api/drive/:driveId/:fileId/share/', requireLogined,
+router.delete('/api/drive/:driveId/:fileId/share/',
 	Middlewares.functionNotImplemented);
 
 
