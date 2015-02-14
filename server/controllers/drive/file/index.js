@@ -1,4 +1,3 @@
-var api = require('polytrix-core-api');
 
 module.exports.upload = require('./upload');
 module.exports.download = require('./download');
@@ -6,10 +5,7 @@ module.exports.download = require('./download');
 module.exports.list = function(req, res) {
 	console.log('routing rest.js /api/fileIndex/:driveId');
 
-	var drive = req.drive;
-	var client = api[drive._type];
-
-	client.getFileIndex(req.params.fileId,drive.access_token,drive.refresh_token)
+	req.apiClient.metadata.listFile(req.params.fileId)
 	.then(function(result)
 	{
 		result.logined = true;

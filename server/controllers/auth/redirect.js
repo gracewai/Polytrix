@@ -1,4 +1,3 @@
-var api = require('polytrix-core-api');
 var Q = require('q');
 
 var Log = require('../log');
@@ -18,9 +17,8 @@ module.exports.requireCode = function(req, res, next) {
 };
 
 module.exports.handle = function(req,res){
-	var service = api[req.params.drive];
-	
-	service.getToken(req.query.code)
+
+	req.apiClient.auth.getToken(req.query.code)
 	.then(function(tokens){
 
 		var drive = createDrive(req.params.drive,tokens);

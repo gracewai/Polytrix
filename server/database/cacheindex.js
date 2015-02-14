@@ -53,7 +53,7 @@ indexSchema.methods.getParentIndex = function(index){
 
 function syncIndex(index,cacheRoot,client,type,access_token,refresh_token){
 	console.log('stage 2');
-	return client.getFileIndex(index.identifier,access_token,refresh_token)
+	return client.metadata.listFile(access_token,refresh_token,index.identifier)
 	.then(function(responseIndex){
 		
 		// console.log(responseIndex);
@@ -123,11 +123,11 @@ indexSchema.methods.update = function(){
 			});
 		}else{
 			console.log('no');
-			return client.getFolderInformation(client.rootIdentifier,drive.access_token,drive.refresh_token)
+			return client.metadata.get(drive.access_token,drive.refresh_token,client.rootIdentifier)
 			.then(function(metadata){
 				console.log(metadata);
 				_this.cachedIndex = {};
-				metadata.identifier = metadata.identifier || '/';
+				metadata.identifier = metadata.identifier;
 				_this.cachedIndex.rootIndex = metadata.identifier;
 				_this.cachedIndex[metadata.identifier] = metadata;
 				return syncIndex(_this.getIndex(_this.cachedIndex.rootIndex),_this.cachedIndex,client,drive.type,drive.access_token,drive.refresh_token);

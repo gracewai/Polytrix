@@ -25,8 +25,9 @@ module.exports.validateParamDriveId = function(req, res, next, val){
 	var drive = req.user.getDrive(req.params.driveId);
 
 	if(drive){
-		var client = api[drive._type];
-		if(client){
+		var service = api[drive._type];
+		if(service){
+			req.apiClient = service.client(drive.access_token,drive.refresh_token);
 			req.drive = drive;
 			next();
 			return;

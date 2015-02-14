@@ -8,7 +8,7 @@ module.exports.qouta = function(req,res){
 
 	var service = api[req.params.drive];
 
-	service.getQouta(req.drive.access_token,req.drive.refresh_token);
+	req.apiClient.info.usageQouta();
 
 	var result = {
 		success: false,
