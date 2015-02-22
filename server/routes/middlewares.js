@@ -43,7 +43,7 @@ module.exports.renewToken = function(req,res,next,val){
 	if(drive._type == 'dropbox' || now < drive.expires_on ){
 		next();
 	}else{
-		client.renewToken(drive.refresh_token)
+		req.apiClient.auth.renewToken(drive.refresh_token)
 		.then(function(data){
 			if(data.access_token){
 				drive.access_token = data.access_token;
@@ -73,3 +73,63 @@ module.exports.requireLogined = function(req, res, next){
 		res.send(result);
 	}
 };
+
+module.exports.chainMiddlewares = function(){
+	var _arguments = arguments;
+	return function(req,res,next,val){
+		var funcs = Array.prototype.slice.call(_arguments);
+		function _next(){
+			if(funcs.length){
+				var func = funcs.shift();
+				func(req,res,_next,val);
+			}else{
+				next();
+			}
+		}
+		_next();
+	};
+};
+
+// module.exports.paramDriveIdMiddlewares = function(req,res,next,val){
+// 	if(!req.user){
+// 		var result = {
+// 			success : false,
+// 			logined : false,
+// 			msg : 'user not logined'
+// 		};
+
+// 		return res.send(result);
+// 	}
+// 	///
+// 	console.log('routing rest.js :driveId');
+// 	var drive = req.user.getDrive(req.params.driveId);
+
+// 	if(!drive){
+// 		return _404.send(res);
+// 	}
+// 	var service = api[drive._type];
+// 	if(service){
+// 		req.apiClient = service.client(drive.access_token,drive.refresh_token);
+// 		req.drive = drive;
+// 	}
+// 	///
+// 	var drive = req.drive;
+// 	var now = new Date();
+// 	if(drive._type == 'dropbox' || now < drive.expires_on ){
+// 		next();
+// 	}else{
+// 		req.apiClient.auth.renewToken()
+// 		.then(function(data){
+// 			if(data.access_token){
+// 				drive.access_token = data.access_token;
+// 			}
+// 			if(data.expires_on){
+// 				drive.expires_on = new Date(data.expires_on);
+// 			}
+// 			console.log('Refreshed the token for ' + drive._type);
+// 			req.user.save();
+// 			next();
+// 		})
+// 		.done();
+// 	}
+// };

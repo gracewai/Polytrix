@@ -32,10 +32,10 @@ var Middlewares = require('./middlewares');
 router.param('drive',
 	Middlewares.validateParamDrive);
 
-router.param('driveId',
+router.param('driveId',Middlewares.chainMiddlewares(
 	Middlewares.requireLogined,
 	Middlewares.validateParamDriveId,
-	Middlewares.renewToken);
+	Middlewares.renewToken));
 
 ////=================================
 //	Drive authorization
