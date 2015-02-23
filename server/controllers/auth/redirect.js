@@ -3,6 +3,7 @@ var Q = require('q');
 var Log = require('../log');
 var CacheIndex = require('../../database/cacheindex');
 var UrlBuilder = require('../urlbuilder');
+var api = require('polytrix-core-api');
 
 module.exports.requireCode = function(req, res, next) {
 	console.log('routing rest.js /api/redirect/:drive');
@@ -17,8 +18,10 @@ module.exports.requireCode = function(req, res, next) {
 };
 
 module.exports.handle = function(req,res){
+	try{
 
-	req.apiClient.auth.getToken(req.query.code)
+
+	api[req.params.drive].auth.getToken(req.query.code)
 	.then(function(tokens){
 
 		var drive = createDrive(req.params.drive,tokens);
@@ -42,6 +45,9 @@ module.exports.handle = function(req,res){
 		});
 	})
 	.done();
+}catch(err){
+	console.log(err.stack);
+}
 };
 
 

@@ -65,7 +65,7 @@ function syncIndex(index,cacheRoot,client,type,access_token,refresh_token){
 			var metadata = responseIndex.content[i];
 			cacheRoot[metadata.identifier] = metadata;
 			index.files.push(metadata.identifier);
-			metadata.parent = index.identifier;
+			//metadata.parent = index.identifier;
 		}
 		//console.log(cacheRoot);
 		console.log('stage 2.6');

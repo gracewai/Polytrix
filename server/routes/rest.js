@@ -56,30 +56,38 @@ router.get('/api/auth/:drive/redirect',
 //	Cache
 
 // Get the cache
+// @param driveId
 router.get('/api/drive/cache/:driveId/',
 	DriveCtrl.cache.get);
 
 // Request the cache to be synced from drive provider
+// @param driveId
 router.get('/api/drive/cache/:driveId/update/',
 	DriveCtrl.cache.update);
 
 // Get the file metadata from the cache
+// @param driveId
+// @param fileId
 router.get('/api/drive/cache/:driveId/:fileId/',
 	Middlewares.functionNotImplemented);
 
 // Check the consistency of the file between drive provider and get the file metadata
-router.get('/api/drive/cache/:driveId/:fileId/check',
-	DriveCtrl.cache.check);
+// @param driveId
+// @param fileId
+router.get('/api/drive/cache/:driveId/:fileId/sync',
+	DriveCtrl.cache.sync);
 
 
 ////=================================
 //	Drive
 
 // Get the drive information
+// @param driveId
 router.get('/api/drive/:driveId/info/',
 	Middlewares.functionNotImplemented);
 
 // Get the drive qouta information
+// @param driveId
 router.get('/api/drive/:driveId/qouta/',
 	DriveCtrl.qouta);
 
@@ -88,46 +96,75 @@ router.get('/api/drive/:driveId/qouta/',
 //	File
 
 // Get the metadata
+// @param driveId
+// @param fileId
 router.get('/api/drive/:driveId/:fileId/',
 	Middlewares.functionNotImplemented);
 
 // Download the file (redirect to the file's download link)
+// @param driveId
+// @param fileId
 router.get('/api/drive/:driveId/:fileId/download/',
 	DriveCtrl.file.download);
 
 // Create a file or folder
+// @param driveId
+// @param fileId - the destination folder's id
+// @param name - the name of the new file or folder
 router.get('/api/drive/:driveId/:fileId/new/',
 	Middlewares.functionNotImplemented);
 
 // Create and upload a file
+// @param driveId
+// @param fileId - the destination folder's id
+// @param name - the name of the new file or folder
 router.post('/api/drive/:driveId/:fileId/new/',
 	Middlewares.functionNotImplemented);
 
 // Upload the file
+// @param driveId
+// @param fileId
 router.post('/api/drive/:driveId/:fileId/',
 	DriveCtrl.file.upload);
 
 // List out the files in a folder
+// @param driveId
+// @param fileId - the folder's id
 router.get('/api/drive/:driveId/:fileId/list/',
 	DriveCtrl.file.list);
 
 // Delete the file
+// @param driveId
+// @param fileId
 router.delete('/api/drive/:driveId/:fileId/',
 	Middlewares.functionNotImplemented);
 
-// Rename the file
+// Rename the file or folder
+// @param driveId
+// @param fileId
+// @param name - new name
 router.patch('/api/drive/:driveId/:fileId/',
 	Middlewares.functionNotImplemented);
 
 // Copy the file
+// @param driveId
+// @param fileId
+// @param destinationFileId - the destination folder's id
 router.get('/api/drive/:driveId/:fileId/copy/',
 	Middlewares.functionNotImplemented);
 
 // Move the file
+// @param driveId
+// @param fileId
+// @param destinationFileId - the destination folder's id
 router.get('/api/drive/:driveId/:fileId/move/',
 	Middlewares.functionNotImplemented);
 
 // Move the file across drives
+// @param driveId
+// @param fileId
+// @param destinationDriveId - the destination drive's id
+// @param destinationFileId - the destination folder's id
 router.get('/api/drive/:driveId/:fileId/across/',
 	Middlewares.functionNotImplemented);
 
