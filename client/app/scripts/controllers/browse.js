@@ -8,8 +8,15 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-	.controller('BrowseCtrl',['$scope','UserInfo','Tools','Drive', function ($scope, UserInfo, Tools, Drive) {
+	.controller('BrowseCtrl',['$scope','UserInfo','Tools','Drive','Search', function ($scope, UserInfo, Tools, Drive, Search) {
 		$scope.drivelist = [];
+		$scope.searchText = '';
+		$scope.search = function(){
+			if($scope.searchText){
+				console.clear();
+				console.table(Search.search($scope.searchText),'fullpath');
+			}
+		};
 
 		UserInfo.onchange($scope,function(){
 			var info = UserInfo.get();

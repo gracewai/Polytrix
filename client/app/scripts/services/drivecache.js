@@ -116,7 +116,6 @@ angular.module('clientApp')
 
 
 	Cache.prototype.syncFileListIndex = function(fileList,folderId){
-		
 		var cachedIndex = this.cachedIndex;
 		var changed = false;
 		var folder = cachedIndex[folderId];

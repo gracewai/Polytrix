@@ -8,26 +8,22 @@
  * File controller
  */
 angular.module('clientApp')
-  .factory("DragValue",function(){
-    this.val = null;
-    this.get = function(){
-      return this.val;
-    };
-    this.set = function(val){
-      this.val = val;
-    };
-    return this;
-  })
-  .controller('File',['$scope','$element','DragValue',function($scope,$element,DragValue){
-    var dragFileImage = $(".dragFileImage")[0];
+  .controller('File',['$scope','$element',function($scope,$element){
+    var dragFileImageDiv = $(".dragFileImage");
+    var dragFileImage = dragFileImageDiv.scope();
+    dragFileImageDiv = dragFileImageDiv[0];
+
+    $scope.selected = false;
+
     $scope.onDragStart = function(event){
-      dragFileImage.innerHTML = $scope.file.name;
-      event.dataTransfer.setDragImage(dragFileImage, 0, 0);
-      DragValue.set({scope:$scope,element:$element});
+      dragFileImage.addFile($scope,$element);
+      dragFileImage.setTitle($scope.file.name);
+      event.dataTransfer.setDragImage(dragFileImageDiv, 0, 0);
     };
     $scope.onDrop = function(event){
-      var values = DragValue.get();
-      console.log(values.scope);
+      var values = dragFileImage.files;
+      console.log(values);
+      dragFileImage.clear();
     };
     $scope.getIconClass = function(){
       return _browse_getClass_($scope.file);

@@ -1,7 +1,3 @@
-<div class="dragFileImage">
-  asdasdasd
-</div>
-
 <div class="ui grid">
   <div class="left floated right four wide column">
     <div class="ui vertical accordion menu" style="margin-top:60px;">
@@ -204,7 +200,7 @@ body{
     <div>
       <div class="ui search" style="float:left;">
         <div class="ui icon input">
-          <input type="text" class="prompt" placeholder="Quick Search" style="width:250px;">
+          <input type="text" class="prompt" ng-model="searchText" ng-change="search()" placeholder="Quick Search" style="width:250px;">
           <i class="search icon"></i>
         </div>
       </div>

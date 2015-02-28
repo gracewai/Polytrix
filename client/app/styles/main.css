@@ -34,7 +34,26 @@ html,body{
     padding:10px 20px;
     box-shadow: 0 0 5px #000;
 }
+.dragFileImage.active{
+    z-index: 1000;
+}
 
+.dragFileImage .file-num{
+    color:#fff;
+    background: #f33;
+    border-radius: 50%;
+    position: absolute;
+    width:30px;
+    height: 30px;
+    text-align: center;
+    display:table;
+    /*top:0;*/
+    /*right:100%;*/
+}
+.dragFileImage .file-num span{
+    display:table-cell;
+    vertical-align:middle
+}
 @media screen and (max-width: 63em) {
     .main {
         padding: 0 2em;
