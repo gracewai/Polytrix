@@ -83,7 +83,7 @@ angular.module('clientApp')
 				var driveI = userInfo.drives[i];
 				drivelist.push(new Drive(driveI.type, driveI.id));
 			}
-		};
+		}
 
 
 		$scope.getClass = _browse_getClass_;

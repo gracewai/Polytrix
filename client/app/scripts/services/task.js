@@ -74,6 +74,13 @@ angular.module('clientApp')
 		success();
 	};
 
+	//Task.prototype.executeAll()
+	//	call this if you want to run the task and its subtasks.
+	//	this is the only way to run the task.
+	//	you cannot simply call execute() as you must pass sucess, file, progress functions to it.
+	//
+	//	implementation is in more below
+	//
 
 	Task.prototype.addSubTask = function(subTask){
 		this.subTask.push(subTask);

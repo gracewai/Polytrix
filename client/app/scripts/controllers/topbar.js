@@ -8,7 +8,7 @@
  * Topbar controller
  */
 angular.module('clientApp')
-	.controller('Topbar',['$scope','UserInfo','User', function ($scope,UserInfo,User){
+	.controller('Topbar',['$scope','UserInfo','User','Global', function ($scope,UserInfo,User,Global){
 		$scope.defaultPhoto = '/images/Nyan-Cat.jpg';
 		$scope.user = UserInfo.get();
 		$scope.getUserPhoto = function(){
@@ -32,7 +32,6 @@ angular.module('clientApp')
 			}
 		};
 		UserInfo.onchange($scope,function(userInfo){
-			console.log(userInfo);
 			$scope.user = userInfo;
 			User.getLogs(6).then(function(result){
 				if(result.success){
@@ -43,8 +42,6 @@ angular.module('clientApp')
 						// }
 						return row;
 					});
-					console.log('$scope.user.notification:');
-					console.log($scope.user.notification);
 				}else{
 					console.log(result);
 				}

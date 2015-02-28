@@ -27,6 +27,14 @@ html,body{
     transition: opacity 0.6s;
 }
 
+.dragFileImage{
+    position:absolute;
+    z-index:-1000;
+    background:#cdf;
+    padding:10px 20px;
+    box-shadow: 0 0 5px #000;
+}
+
 @media screen and (max-width: 63em) {
     .main {
         padding: 0 2em;

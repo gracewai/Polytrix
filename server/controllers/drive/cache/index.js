@@ -57,6 +57,7 @@ module.exports.sync = function(req,res){
 				if(syncFileListIndex(cache,result.content,req.params.fileId)){
 					index.cachedIndex = JSON.stringify(cache);
 					index.save();
+					console.log('updated index');
 				}
 				result.logined = true;
 				res.send(result);

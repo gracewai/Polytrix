@@ -1,3 +1,7 @@
+<div class="dragFileImage">
+  asdasdasd
+</div>
+
 <div class="ui grid">
   <div class="left floated right four wide column">
     <div class="ui vertical accordion menu" style="margin-top:60px;">
@@ -230,7 +234,7 @@ body{
             </tr>
           </thead>
           <tbody>
-            <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
+            <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" ng-controller="File" ng-init="init(file,file.drive,true,true);" class="item">
               <td>
                 <div class="content" ng-click="file.is_folder && switchAndView(file.identifier,file.drive)">
                   <i class="{{getClass(file)}} icon"></i>
@@ -273,7 +277,7 @@ body{
           </thead>
           <tbody>
             <!-- go to parent -->
-            <tr ng-hide="(!currentPath || currentPath == drive.cache.cachedIndex.rootIndex)" class="item">
+            <tr ng-controller="File" ng-init="init(null,drive,false,true);" ng-hide="(!currentPath || currentPath == drive.cache.cachedIndex.rootIndex)" class="item">
               <td colspan="2">
                 <div class="content" ng-click="getFileIndex(parentIndex)">
                   <i class="fa fa-folder icon"></i>
@@ -291,7 +295,7 @@ body{
             </tr>
 
             <!-- files -->
-            <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" class="item">
+            <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" ng-controller="File" ng-init="init(file,drive,true,true);" class="item">
               <td>
                 <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">
                   <i class="{{getClass(file)}}"></i>

@@ -55,10 +55,11 @@ angular.module('clientApp')
 			});
 		}
 		promise.then(function(){
-			return _this.listFromServer(identifier);
+			return _this.listFromSyncedCache(identifier);
 		})
 		.then(function(result){
 			if(result.success){
+				_this.cache.syncFileListIndex(result.content,identifier);
 				fromServerCallback(result.content);
 			}else{
 				console.log('result not success');
@@ -93,6 +94,20 @@ angular.module('clientApp')
 		}
 	};
 
+
+	//
+	//	Retrive the file list of specified resource. return a promise of that.
+	//	@method listFromServer
+	//	@param{string} identifier		(optional) indicate which resource is being retrieved. if not given, retrive the root file list
+	//	@return-promise (http response)
+	//
+	var SyncIndex = $resource('/api/drive/cache/:driveId/:fileId/sync');
+	Drive.prototype.listFromSyncedCache = function(identifier){
+		identifier = identifier || this.rootPath;
+		return SyncIndex.get({driveId:this.id,fileId:identifier}).$promise;
+	};
+
+
 	//
 	//	Retrive the file list of specified resource. return a promise of that.
 	//	@method listFromServer
@@ -103,7 +118,7 @@ angular.module('clientApp')
 	Drive.prototype.listFromServer = function(identifier){
 		identifier = identifier || this.rootPath;
 		return FileIndex.get({driveId:this.id,fileId:identifier}).$promise;
-	}
+	};
 
 	//
 	//	@method downloadLink
