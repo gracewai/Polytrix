@@ -8,13 +8,14 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-	.controller('BrowseCtrl',['$scope','UserInfo','Tools','Drive','Search', function ($scope, UserInfo, Tools, Drive, Search) {
+	.controller('BrowseCtrl',['$scope','UserInfo','Tools','Global','Search', function ($scope, UserInfo, Tools, Global, Search) {
 		$scope.drivelist = [];
+		$scope.drives = [];
 		$scope.searchText = '';
 		$scope.search = function(){
 			if($scope.searchText){
 				console.clear();
-				console.table(Search.search($scope.searchText),'fullpath');
+				console.table(Search.search($scope.searchText));
 			}
 		};
 
@@ -26,22 +27,14 @@ angular.module('clientApp')
 				elements.tab();
 			},$scope.drivelist.length+1,50);
 
-			for(var i in $scope.drivelist){
-				var drive = $scope.drivelist[i];
-				drive.drive = new Drive(drive.type, drive.id);
-			}
+			$scope.drives = Global.drives.val;
+			Global.drives.ready(function(val){
+				$scope.drives = val;
+			});
 		});
 
 		UserInfo.update();
 
-		$scope.select = function(index){
-			console.log(index);
-		};
-
-		$scope.switchAndView = function(id, drive){
-			$('#driveTabs>.item').tab('change tab', drive.id);
-			angular.element('#' + drive.id).scope().getFileIndex(id);
-		};
 		$scope.getDriveName = function(driveType){
 			switch(driveType){
 				case 'dropbox':     return 'Dropbox';
@@ -51,7 +44,7 @@ angular.module('clientApp')
 			}
 		};
 	}])
-	.controller('CombinedView',['$scope', 'UserInfo', 'Drive',function($scope, UserInfo, Drive){
+	.controller('CombinedView',['$scope', 'UserInfo', 'Global',function($scope, UserInfo, Global){
 		var userInfo = null;
 		var drivelist = [];
 		$scope.files = [];
@@ -61,6 +54,33 @@ angular.module('clientApp')
 			drive_list: drivelist
 		};
 
+		$scope.clickOnFolder = function(file){
+			$scope.switchAndView(file.identifier,file.drive);
+		};
+
+		$scope.switchAndView = function(id, drive){
+			$('#driveTabs>.item').tab('change tab', drive.id);
+			angular.element('#' + drive.id).scope().getFileIndex(id);
+		};
+
+		$scope.getFileTitle = function(file){
+			function driveName(driveType){
+				switch(driveType){
+					case 'dropbox':     return 'Dropbox';
+					case 'googledrive': return 'Google Drive';
+					case 'onedrive':    return 'One Drive';
+					default: return 'Unknown';
+				}
+			}
+			return file.name + ' @ ' + driveName(file.drive.type);
+		};
+		$scope.getDownloadLink = function(file){
+			return file.drive.downloadLink(file.identifier);
+		};
+
+		$scope.update = function(){
+			$scope.getFileIndex();
+		};
 
 		$scope.getFileIndex = function(path,drive){
 			$scope.files = [];
@@ -85,25 +105,41 @@ angular.module('clientApp')
 
 		function init(){
 			userInfo = UserInfo.get();
-			drivelist = [];
-			for(var i in userInfo.drives){
-				var driveI = userInfo.drives[i];
-				drivelist.push(new Drive(driveI.type, driveI.id));
-			}
+			drivelist = Global.drives.val;
 		}
 
 
 		$scope.getClass = _browse_getClass_;
+		$scope.getFileTypeName = _browse_getFileType_;
+		
 		UserInfo.onchange($scope,init);
-
 		init();
 		setTimeout($scope.getFileIndex,100);
 	}])
 	.controller('SingleDriveCtrl', ['$scope', '$resource', function ($scope, $resource) {
-		var drive = $scope.drive = null;
+		var drive = $scope.drive;
 		$scope.currentPath = null;
 		$scope.parentIndex = null;
 		$scope.files = [];
+
+		$scope.clickOnFolder = function(file){
+			$scope.getFileIndex(file.identifier);
+		};
+
+		$scope.update = function(){
+
+		};
+
+		$scope.getFileTitle = function(file){
+			return file.name;
+		};
+		$scope.getDownloadLink = function(file){
+			return drive.downloadLink(file.identifier);
+		};
+
+		$scope.update = function(){
+			$scope.getFileIndex($scope.currentPath);
+		};
 
 		$scope.getFileIndex = function(path){
 			$scope.currentPath = path;
@@ -132,7 +168,6 @@ angular.module('clientApp')
 		};
 
 		$scope.getClass = _browse_getClass_;
-
 		$scope.getFileTypeName = _browse_getFileType_;
 	}]);
 

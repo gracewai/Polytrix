@@ -1,0 +1,52 @@
+<table class="ui unstackable table">
+  <thead>
+    <tr>
+      <th class="left aligned">Name</th>
+      <th class="right aligned">Type</th>
+      <th class="right aligned">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- go to parent -->
+    <tr ng-controller="File" ng-init="init(null,drive,false,true);" ng-hide="(!currentPath || currentPath == drive.cache.cachedIndex.rootIndex)" class="item">
+      <td colspan="2">
+        <div class="content" ng-click="getFileIndex(parentIndex)">
+          <i class="fa fa-folder icon"></i>
+          <div style="display:inline;cursor: pointer;">../</div>
+        </div>
+      </td>
+      <td class="right aligned">
+        <a style="opacity:0;z-index:-1;">
+          <div class="ui labeled icon button">
+            <i class="info circle icon"></i>
+            View details
+          </div>
+        </a>
+      </td>
+    </tr>
+
+    <!-- files -->
+    <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:['is_file','name']" ng-controller="File" ng-init="init(file,drive,true,true);" class="item">
+      <td>
+        <div class="content" ng-click="file.is_folder && clickOnFolder(file)">
+          <i class="{{getClass(file)}}"></i>
+          <div style="display:inline;cursor: pointer;">{{getFileTitle(file)}}</div>
+        </div>
+      </td>
+      <td ng-show="file.is_folder" class="right aligned">
+        <b>Folder</b>  
+      </td>
+      <td ng-hide="file.is_folder" class="right aligned">
+        <b>{{getFileTypeName(file).toUpperCase();}}</b>
+      </td>
+      <td class="right aligned">
+        <a href="{{getDownloadLink(file)}}">
+          <div class="ui labeled icon button">
+            <i class="info circle icon"></i>
+            View details
+          </div>
+        </a>    
+      </td>
+    </tr>
+  </tbody>
+</table>

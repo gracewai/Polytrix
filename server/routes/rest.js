@@ -158,15 +158,16 @@ router.get('/api/drive/:driveId/:fileId/copy/',
 // @param fileId
 // @param destinationFileId - the destination folder's id
 router.get('/api/drive/:driveId/:fileId/move/',
-	Middlewares.functionNotImplemented);
+	DriveCtrl.file.operation.move);
 
 // Move the file across drives
 // @param driveId
 // @param fileId
+// @param fileName
 // @param destinationDriveId - the destination drive's id
 // @param destinationFileId - the destination folder's id
 router.get('/api/drive/:driveId/:fileId/across/',
-	Middlewares.functionNotImplemented);
+	DriveCtrl.file.operation.across);
 
 // Get the share link of the file
 router.get('/api/drive/:driveId/:fileId/share/',

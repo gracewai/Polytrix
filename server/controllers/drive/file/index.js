@@ -1,6 +1,7 @@
 
 module.exports.upload = require('./upload');
 module.exports.download = require('./download');
+module.exports.operation = require('./operation');
 
 module.exports.list = function(req, res) {
 	console.log('routing rest.js /api/fileIndex/:driveId');

@@ -54,11 +54,11 @@ module.exports.sync = function(req,res){
 		.then(function(index){
 			if(index){
 				var cache = JSON.parse(index.cachedIndex);
-				if(syncFileListIndex(cache,result.content,req.params.fileId)){
+				/*if(syncFileListIndex(cache,result.content,req.params.fileId)){
 					index.cachedIndex = JSON.stringify(cache);
 					index.save();
 					console.log('updated index');
-				}
+				}*/
 				result.logined = true;
 				res.send(result);
 			}else{

@@ -10,7 +10,7 @@
  *
  */
 angular.module('clientApp')
-  .factory('Global', ['$rootScope','DriveCache','UserInfo','Ready', function($rootScope,DriveCache,UserInfo,Ready) {
+  .factory('Global', ['$rootScope','Drive','UserInfo','Ready', function($rootScope,Drive,UserInfo,Ready) {
     var _this = this;
     this.ready = function(element, func){
       this[element].ready(func);
@@ -26,25 +26,21 @@ angular.module('clientApp')
       _this.userinfo.change();
     });
 
-    this.driveCaches = new Ready([]);
+    this.drives = new Ready([]);
     this.userinfo.ready(function(userinfo){
       for(var i in userinfo.drives){
         var drive = userinfo.drives[i];
-        _this.driveCaches.val.push(new DriveCache(drive.type,drive.id));
+        _this.drives.val.push(new Drive(drive.type,drive.id));
       }
-      function loop(i){
-        var ready = _this.driveCaches.val[i];
-        ready.retrive();
-        ready.onRetrived($rootScope,function(){
-          if(i){
-            loop(i-1);
+      var interval = setInterval(function(){
+        for(var i in _this.drives.val){
+          if(!_this.drives.val[i].cacheReady){
+            return false;
           }
-          else{
-            _this.driveCaches.ready();
-          }
-        });
-      }
-      loop(_this.driveCaches.val.length-1);
+        }
+        clearInterval(interval);
+        _this.drives.ready();
+      },100);
     });
 
 

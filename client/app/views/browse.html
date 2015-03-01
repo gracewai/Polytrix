@@ -138,10 +138,10 @@
     </div>
     <!-- upload task -->
     <div ng-controller="uploadCtrl">
-          <div id="bgdiv"></div>
+          <!-- <div id="bgdiv"></div>
           <div id="upload_grid">
           </div>
-          <div id="ani"></div>
+          <div id="ani"></div> -->
           <input type="button" value="Start upload" ng-click="startUpload();">
           <input id="ajaxfile" type="file" mualtiple><br>
           <task val="task"></task>
@@ -217,104 +217,16 @@ body{
     <div class="menu" style="margin-top:5px;">
       <div id="driveTabs" class="ui pointing secondary menu">
         <a class="active item" data-tab="all">All</a>
-        <a ng-repeat="driveMeta in drivelist" class="item" data-tab="{{driveMeta.id}}">{{getDriveName(driveMeta.type)}}</a>
+        <a ng-repeat="drive in drives" class="item" data-tab="{{drive.id}}">{{getDriveName(drive.type)}}</a>
       </div>
 
       <div class="ui active tab" data-tab="all">
-        <table ng-controller="CombinedView" class="ui unstackable table">
-          <thead>
-            <tr>
-              <th class="left aligned">Name</th>
-              <th class="right aligned">Type</th>
-              <th class="right aligned">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" ng-controller="File" ng-init="init(file,file.drive,true,true);" class="item">
-              <td>
-                <div class="content" ng-click="file.is_folder && switchAndView(file.identifier,file.drive)">
-                  <i class="{{getClass(file)}} icon"></i>
-                  <div style="display:inline;cursor: pointer;">{{file.name}} @ {{getDriveName(file.drive.type)}}</div>
-                  <!-- <span ng-show="file.is_file">
-                    {{
-                      file.file_size/(1024*1024)
-                    }} MB
-                  </span> -->
-                </div>
-              </td>
-              <td class="right aligned" ng-show="file.is_folder" >
-                <b>Folder</b>  
-              </td>
-              <td class="right aligned" ng-hide="file.is_folder">
-                <b>{{file.name.split('.').pop().toUpperCase();}}</b>
-              </td>
-              <td class="right aligned">
-                <a href="{{file.drive.downloadLink(file.identifier)}}">
-                  <div class="ui labeled icon button">
-                    <i class="info circle icon"></i>
-                    View details
-                  </div>
-                </a>
-              </td>
-            </tr>            
-          </tbody>
-        </table>
+        <div ng-controller="CombinedView" ng-include="'views/browseview.html'"></div>
       </div>
 
 
-      <div class="ui tab" ng-repeat="driveMeta in drivelist" data-tab="{{driveMeta.id}}">
-        <table ng-controller="SingleDriveCtrl" id="{{driveMeta.id}}" ng-init="init(driveMeta.drive)" class="ui unstackable table">
-          <thead>
-            <tr>
-              <th class="left aligned">Name</th>
-              <th class="right aligned">Type</th>
-              <th class="right aligned">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- go to parent -->
-            <tr ng-controller="File" ng-init="init(null,drive,false,true);" ng-hide="(!currentPath || currentPath == drive.cache.cachedIndex.rootIndex)" class="item">
-              <td colspan="2">
-                <div class="content" ng-click="getFileIndex(parentIndex)">
-                  <i class="fa fa-folder icon"></i>
-                  <div style="display:inline;cursor: pointer;">../</div>
-                </div>
-              </td>
-              <td class="right aligned">
-                <a style="opacity:0;z-index:-1;">
-                  <div class="ui labeled icon button">
-                    <i class="info circle icon"></i>
-                    View details
-                  </div>
-                </a>
-              </td>
-            </tr>
-
-            <!-- files -->
-            <tr ng-hide="file._raw.labels.trashed" ng-repeat="file in files | orderBy:'is_folder':'name'" ng-controller="File" ng-init="init(file,drive,true,true);" class="item">
-              <td>
-                <div class="content" ng-click="file.is_folder && getFileIndex(file.identifier)">
-                  <i class="{{getClass(file)}}"></i>
-                  <div style="display:inline;cursor: pointer;">{{file.name}}</div>
-                </div>
-              </td>
-              <td ng-show="file.is_folder" class="right aligned">
-                <b>Folder</b>  
-              </td>
-              <td ng-hide="file.is_folder" class="right aligned">
-                <b>{{file.name.split('.').pop().toUpperCase();}}</b>
-              </td>
-              <td class="right aligned">
-                <a href="{{drive.downloadLink(file.identifier)}}">
-                  <div class="ui labeled icon button">
-                    <i class="info circle icon"></i>
-                    View details
-                  </div>
-                </a>    
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="ui tab" ng-repeat="drive in drives" data-tab="{{drive.id}}">
+        <div ng-controller="SingleDriveCtrl" ng-init="init(drive)" id="{{drive.id}}" ng-include="'views/browseview.html'"></div>
       </div>
 
     </div>

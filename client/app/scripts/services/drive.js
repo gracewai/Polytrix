@@ -85,7 +85,7 @@ angular.module('clientApp')
 		if(this.cacheReady){
 			return getIndex();
 		}else{
-			return $q(function(resolve,reject){
+			return $q(function(resolve){
 				_this.initCallback = function(){
 					_this.cacheReady = true;
 					resolve();
@@ -94,6 +94,102 @@ angular.module('clientApp')
 		}
 	};
 
+	Drive.prototype.parentOf = function(file){
+		console.log(this);
+		return this.cache.cachedIndex[file.parent_identifier];
+	};
+
+	// Move the file
+	// @param driveId
+	// @param fileId
+	// @param destinationFileId - the destination folder's id
+	// @param scope (optional) the scope to be apply after moving
+	var FileMove = $resource('/api/drive/:driveId/:fileId/move/');
+	Drive.prototype.move = function(file, destinationFolder, scope){
+		var _this = this;
+		var fileId = file.identifier;
+		var originalFolder = this.parentOf(file);
+		var destinationId = destinationFolder.identifier;
+
+		var result = FileMove.get({driveId:this.id,fileId:fileId,destinationFileId:destinationId},function(){
+			if(result.success){
+				updateModel(result.file);
+			}else{
+				console.log(result);
+			}
+		});
+
+		function updateModel(fileMeta){
+			//remove from original folder
+			for(var i = originalFolder.files.length;i;i--){
+				if(originalFolder.files[i] == fileId){
+					originalFolder.files.splice(i,1);
+				}
+			}
+
+			//add to destinationFolder
+			destinationFolder.files = destinationFolder.files || [];
+			destinationFolder.files.push(fileId);
+
+			//set parent to destinationFolder
+			file.parent_identifier = destinationFolder.identifier;
+
+			//dropbox identifier fix
+			if(_this.type == 'dropbox'){
+				var oldId = file.identifier;
+				file.identifier = fileMeta.identifier;
+				_this.cache.cachedIndex[file.identifier] = file;
+				delete _this.cache.cachedIndex[oldId];
+			}
+			if(scope){
+				if(scope.update){
+					scope.update();
+				}else{
+					scope.$apply();
+				}
+			}
+				
+		}
+
+	};
+
+	// Move the file across drives
+	// @param driveId
+	// @param fileId
+	// @param fileName
+	// @param destinationDriveId - the destination drive's id
+	// @param destinationFileId - the destination folder's id
+	// @param scope (optional) the scope to be apply after moving
+	var FileAcross = $resource('/api/drive/:driveId/:fileId/across/');
+	Drive.prototype.across = function(file, destinationDrive, destinationFolder, scope){
+		var fileId = file.identifier;
+		var destinationId = destinationFolder.identifier;
+
+		var result = FileAcross.get({
+			driveId:this.id,
+			fileId:fileId,
+			fileName:file.name,
+			destinationDriveId:destinationDrive.id,
+			destinationFileId:destinationId
+		},function(){
+			if(result.success){
+				updateModel(result.file);
+			}else{
+				console.log(result);
+			}
+		});
+
+		function updateModel(file){
+			destinationDrive.cache.cachedIndex[file.identifier] = file;
+			if(scope){
+				if(scope.update){
+					scope.update();
+				}else{
+					scope.$apply();
+				}
+			}
+		}
+	};
 
 	//
 	//	Retrive the file list of specified resource. return a promise of that.

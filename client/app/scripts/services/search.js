@@ -15,8 +15,8 @@ angular.module('clientApp')
     var tests = [];
     tests.push(new FileNameTest(searchText));
 		var result = [];
-    for(var i in Global.driveCaches.val){
-      searchDrive(Global.driveCaches.val[i].cachedIndex,tests,result);
+    for(var i in Global.drives.val){
+      searchDrive(Global.drives.val[i].cache.cachedIndex,tests,result);
     }
     return result;
   };

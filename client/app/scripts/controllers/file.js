@@ -22,9 +22,24 @@ angular.module('clientApp')
     };
     $scope.onDrop = function(event){
       var values = dragFileImage.files;
-      console.log(values);
+      if($scope.file.is_folder){
+        for(var i in values){
+          var targetFile = values[i].scope.file;
+          var toFolder = $scope.file;
+
+          if(targetFile.identifier !== toFolder.identifier){
+            if(values[i].scope.drive.id == $scope.drive.id){
+              values[i].scope.drive.move(targetFile, toFolder, $scope.$parent.$parent.$parent);
+            }else{
+              values[i].scope.drive.across(targetFile, $scope.drive, toFolder, $scope.$parent.$parent.$parent);
+            }
+          }
+        }
+      }
+
       dragFileImage.clear();
     };
+
     $scope.getIconClass = function(){
       return _browse_getClass_($scope.file);
     };
@@ -39,6 +54,9 @@ angular.module('clientApp')
 
       $scope.file = _file;
       $scope.drive = drive;
+      if($scope.drive.type === 'all' && $scope.file){
+        $scope.drive = $scope.file.drive;
+      }
       if(draggable){
         $element.attr('draggable',true);
         $element[0].addEventListener('dragstart',$scope.onDragStart);
