@@ -14,7 +14,7 @@ angular.module('clientApp')
 		$scope.search = function(){
 			if($scope.searchText){
 				console.clear();
-				console.table(Search.search($scope.searchText),'fullpath');
+				console.table(Search.search($scope.searchText),['fullpath','created_date', 'modified_date','matches']);
 			}
 		};
 
