@@ -13,7 +13,11 @@ angular.module('clientApp')
 
   var alias = {
     'document' : /document|word/,
-    'music' : /music|song|audio/
+    'music' : /music|song|audio/,
+    'video' : /film|movie|video|clip/,
+    'speardsheet' : /speardsheet|stat/,
+    'presentation' : /powerpoint|slide|presentation|keynote/,
+    'archive' : /archive|compressed|zip/
   }
 
   function lastWeekDay(dayofLastWeek){
@@ -287,6 +291,15 @@ angular.module('clientApp')
       "xlsx",
       "xls",
       "number"
+    ]
+    'archive' :
+    [
+      "rar",
+      "zip",
+      "7zip",
+      "tar",
+      "gz",
+      "gz2"
     ]
   };
   TypeMatch.prototype.test = function(file, path){
