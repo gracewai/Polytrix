@@ -20,14 +20,34 @@ angular.module('clientApp')
 		this.onUpdatedEvent = 'onCacheUpdated' + this.id;
 		this.cachedIndex = {};
 		this.lastUpdate = null;
+		switch(type){
+		case 'dropbox':		this.cachedIndex.rootIndex = '/';			break;
+		case 'googledrive':	this.cachedIndex.rootIndex = 'root';			break;
+		case 'onedrive':	this.cachedIndex.rootIndex = 'me/skydrive';	break;
+		default:
+			console.log(new Error('Unsupported drive type on Constructor::service::DriveCache'));
+			break;
+		}
 	};
 
 	Cache.prototype.getMetadata = function(identifier){
+		if(identifier === ''){
+			console.log(identifier || this.cachedIndex.rootIndex);
+			console.log(this.cachedIndex);
+		}
 		identifier = identifier || this.cachedIndex.rootIndex;
 		return this.cachedIndex[identifier];
 	};
 
 	Cache.prototype.getFileList = function(identifier){
+		// if(identifier === ''){
+		// 	var index = this.cachedIndex[identifier || this.cachedIndex.rootIndex];
+		// 	var _this = this;
+		// 	var list = index.files.map(function(id){
+		// 		return _this.cachedIndex[id];
+		// 	});
+		// 	console.log(list);
+		// }
 		identifier = identifier || this.cachedIndex.rootIndex;
 		var index = this.cachedIndex[identifier];
 		if(!index) return null;
@@ -71,8 +91,10 @@ angular.module('clientApp')
 		.then(function(result) {
 			if(result.success){
 				//OK
+				if(typeof result.cachedIndex === 'string'){
+					_this.cachedIndex = JSON.parse(result.cachedIndex);
+				}
 				_this.lastUpdate = result.lastUpdate;
-				_this.cachedIndex = JSON.parse(result.cachedIndex);
 				$rootScope.$emit(_this.onRetrivedEvent);
 			}else{
 				console.log(result);
@@ -116,11 +138,34 @@ angular.module('clientApp')
 
 
 	Cache.prototype.syncFileListIndex = function(fileList,folderId){
+		function contructFolder(folderId){
+			cachedIndex[folderId] = {
+				//etag: null,
+				identifier: folderId,
+				parent_identifier: null,
+				//mimetype: null,
+				//created_date: new Date(0);
+				//modified_date: new Date(0);
+				name: 'unknown',
+				description: '',
+				//checksum: null,
+				//file_size: null
+				files:[]
+			};
+			return cachedIndex[folderId];
+		}
+
 		var cachedIndex = this.cachedIndex;
 		var changed = false;
 		var folder = cachedIndex[folderId];
-		if(!folder && (folderId == 'root' || folderId == '/' || folderId == 'me/skydrive' || typeof folderId === 'undefined')){
-			folder = cachedIndex[cachedIndex.rootIndex];
+		if(!folder){
+			
+
+			if((folderId == 'root' || folderId == '/' || folderId == '' || folderId == 'me/skydrive' || typeof folderId === 'undefined')){
+				folder = cachedIndex[cachedIndex.rootIndex] || contructFolder(cachedIndex.rootIndex);
+			}else if(folderId){
+				folder = contructFolder(cachedIndex.rootIndex);
+			}
 		}
 		//remove the index
 		(function(){

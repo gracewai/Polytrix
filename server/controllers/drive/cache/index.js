@@ -52,7 +52,12 @@ module.exports.sync = function(req,res){
 	{
 		return CacheIndex.findByIDs(req.user.uid,req.drive.id)
 		.then(function(index){
-			if(index){
+			if(typeof index.cachedIndex !== 'sting'){
+				if(index.cachedIndex){
+					result.logined = true;
+					
+					return res.send(result);
+				}
 				var cache = JSON.parse(index.cachedIndex);
 				/*if(syncFileListIndex(cache,result.content,req.params.fileId)){
 					index.cachedIndex = JSON.stringify(cache);

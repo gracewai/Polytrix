@@ -151,11 +151,13 @@ angular.module('clientApp')
 			// });
 			drive.list(path,
 			function fromCache(index){
+				if(!index)
+					return;
 				$scope.files = index.files;
 				$scope.parentIndex =  index.metadata.parent_identifier;
 			},
 			function fromServer(index){
-				if($scope.currentPath == path){//view not changed
+				if($scope.currentPath == path && index && index[0]){//view not changed
 					$scope.files = index;
 				}
 			})

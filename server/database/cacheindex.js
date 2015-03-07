@@ -146,5 +146,10 @@ indexSchema.methods.update = function(){
 	});
 };
 
+indexSchema.pre('save', function (next) {
+  this.lastUpdate = new Date();
+  next();
+});
+
 CacheIndex = mongoose.model('CacheIndex', indexSchema);
 module.exports = CacheIndex;

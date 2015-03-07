@@ -77,7 +77,14 @@ angular.module('clientApp')
 			return $q(function(reslove){
 				var metadata = _this.cache.getMetadata(identifier);
 				var files = _this.cache.getFileList(identifier);
-				reslove({metadata:metadata,files:files});
+				if(identifier === ''){
+					console.log({metadata:metadata,files:files});
+				}
+				if(metadata){
+					reslove({metadata:metadata,files:files});
+				}else{
+					reslove(null);
+				}
 			});
 		}
 

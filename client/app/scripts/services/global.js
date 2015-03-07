@@ -39,6 +39,7 @@ angular.module('clientApp')
           }
         }
         clearInterval(interval);
+        console.log('ready');
         _this.drives.ready();
       },100);
     });
