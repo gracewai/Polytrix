@@ -7,24 +7,20 @@
     <meta name="viewport" content="width=device-width">
 
     <!-- loading splash -->
-    <link href='https://fonts.googleapis.com/css?family=Luckiest+Guy' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/styles/splash.css" />
+    <link rel="stylesheet" type="text/css" href="styles/splash.css" />
     <div id="loading-splash" ng-cloak>
-      <div class="container">
-        <div class="border">
-          
-          <div class="loading-logo">
-          
-            <div class="polytrix-text">Polytrix</div>
-            <div class="loading-animation">
-              Loading...
-            </div>
-          
-          </div>
-        </div>
+      <div class="preloader loading">
+        <span class="slice"></span>
+        <span class="slice"></span>
+        <span class="slice"></span>
+        <span class="slice"></span>
+        <span class="slice"></span>
+        <span class="slice"></span>
+      </div>
+      <div class="loader-logo-text">
+        POLYTRIX
       </div>
     </div>
-    <script src="/scripts/splash.js"></script>
     <!-- end loading splash -->
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -38,12 +34,13 @@
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
     
   </head>
   <body ng-app="clientApp">
-    
+
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->

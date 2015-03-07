@@ -115,9 +115,6 @@ angular.module('clientApp')
           }
         }
       }
-      console.log(type);
-        console.log(dateBegin);
-        console.log(dateEnd);
       if(type != null && dateBegin != null && dateEnd != null){
 
         chainTest.push(new DateMatch(type,dateBegin,dateEnd));
@@ -291,7 +288,7 @@ angular.module('clientApp')
       "xlsx",
       "xls",
       "number"
-    ]
+    ],
     'archive' :
     [
       "rar",
