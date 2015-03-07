@@ -36,6 +36,7 @@ router.get('/passport/facebook',
 //	@return redirect /login?failure=trur&strategy=String[&msg=String]
 //
 router.post('/login',
+	Logging.assertMD5Password,
 	passport.authenticate('local'),
 	Logging.logLogin,
 	Logging.sendStatus);
@@ -51,6 +52,7 @@ router.post('/login',
 //	@return redirect /login?failure=true&strategy=String[&msg=String]
 //
 router.post('/register',
+	Logging.assertMD5Password,
 	Logging.register,
 	Logging.logAccountCreation,
 	Logging.logLogin,

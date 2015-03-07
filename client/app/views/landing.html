@@ -43,7 +43,6 @@
 					<label ng-hide="selection==Selection.DEPLOY">{{form.identifier}}:</label>
 					<input type="text" class="sign-up-input" spellcheck="false" ng-change="idChange();formChange();" ng-model="form.email" placeholder="e.g. alice@polytrix.io" autofocus>
 				</label>
-
 				<div class="deploy tab row login register" layout="row">
 					<label flex>
 						Password:
@@ -53,6 +52,13 @@
 						Comfirm password:<br>
 						<input type="password" class="sign-up-input" ng-change="formChange();" ng-minlength="8" ng-model="form.upwc" placeholder="password">
 					</label>
+				</div>
+
+				<div class="deploy tab login" style="margin:-10px 0 10px -1px;padding-left:1px;">
+					<div class="ui toggle checkbox">
+				    <input type="checkbox" id="staylogin_checkbox" name="staylogin">
+				    <label for="staylogin_checkbox">Remember me</label>
+				  </div>
 				</div>
 
 				<button class="sign-up-button" ng-click="buttonClick($event)">

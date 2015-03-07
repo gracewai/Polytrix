@@ -34,6 +34,7 @@ var app = express();
             host:dbconnect.ip,
             port:dbconnect.port,
             touchAfter: 5 * 60,//5 minutes
+            ttl: 60 * 60,//1 hour
         }),
         secret: 'polytrix_session',
         resave: false,

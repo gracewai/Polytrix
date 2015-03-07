@@ -18,6 +18,20 @@ module.exports.logout = function(req,res,next){
 	}
 };
 
+module.exports.assertMD5Password = function(req,res,next){
+	if(req.body.upw && req.body.upw.length !== 32){
+		res.send({
+			success: false,
+			logined: !!req.user,
+			msg: 'invalid input'
+		});
+		console.log('The password not in hash form, request body: ');
+		console.log(req.body);
+		return;
+	}
+	next();
+};
+
 module.exports.register = function(req,res,next){
 	User.registerLocal(req.body.uid,req.body.upw,req.body.name,req.body.email)
 	.then(function(user){

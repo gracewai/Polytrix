@@ -190,20 +190,25 @@ angular.module('clientApp')
 
 		$scope.login = function(){
 			$scope.loading = true;
-			connectService.login(form.email,form.upw,function(result){
+			connectService.login(form.email,form.upw,function(){
 				window.location = '/console/';
 			}, function(response){
 				$scope.loading = false;
-				switch(response.status){
-					case 400:
-						Error.add('400 Bad Request');
-					break;
-					case 401:
-						Error.add('Incorrect password or invalid account credentials');
-					break;
-					default:
-						Error.add('Unknown Error, Status code:' + response.status);
-					break;
+				if(typeof response.success === 'undefined'){
+					switch(response.status){
+						case 400:
+							Error.add('400 Bad Request');
+						break;
+						case 401:
+							Error.add('Incorrect password or invalid account credentials');
+						break;
+						default:
+							Error.add('Unknown Error, Status code:' + response.status);
+						break;
+					}
+				}else{
+					if(response.msg) Error.add(response.msg);
+					else Error.add('Unknown Error');
 				}
 				Error.updateView();
 			})
@@ -212,11 +217,12 @@ angular.module('clientApp')
 		$scope.register = function(){
 			$scope.loading = true;
 			connectService.register(form.uid,form.name,form.email,form.upw,
-				function(result){
+				function(){
 					window.location = '/console/';
 				},function(response){
 					$scope.loading = false;
-					if(typeof response.success == 'undefined'){
+					console.log(response);
+					if(typeof response.success === 'undefined'){
 						switch(response.status){
 							case 400:
 								Error.add('400 Bad Request');
