@@ -1,5 +1,6 @@
 var passport = require('passport');
 var User = require('../../database/user');
+var StayLoginToken = require('../../database/staylogin');
 var Log = require('../log');
 
 
@@ -7,9 +8,66 @@ module.exports.login = function(req,res,next)
 {
 };
 
+module.exports.setStayLogin = function(req,res,next){
+	try{
+		if(typeof req.body.stayLogin !== 'boolean')console.log((new Error('the value is not boolean')).stack);
+	if(req.body.stayLogin){
+		var token = StayLoginToken.generateToken();
+		var stayToken = new StayLoginToken({uid:req.user.uid, token:token});
+		res.cookie('staytoken', token, { maxAge: 2592000000, secure: true, httpOnly: true });
+		stayToken.save();
+	}
+	next();
+}catch(err){
+	console.log(err.stack);
+}
+	
+};
+
+module.exports.handleStayLogin = function(req,res,next){
+	if(!req.user && req.cookies && req.cookies.staytoken){
+		StayLoginToken.findByToken(req.cookies.staytoken)
+		.catch(function(err){
+			console.log(err);
+			return null;
+		})
+		.then(function(match){
+			if(!match){
+				return next();
+			}
+			return User.findUser(match.uid)
+			.then(function(user){
+				console.log('---staylogin auto logged in,token match:'+req.cookies.staytoken+'---');
+				req.login(user,function(err){
+					if (err) {
+						console.log(err);
+						return next();
+					}
+					var token = StayLoginToken.generateToken();
+					res.cookie('staytoken', token, { maxAge: 2592000000, secure: true, httpOnly: true });
+					match.token = token;
+					match.save();
+					next();
+				});
+			});
+		});
+	}else{
+		next();
+	}
+};
+
 module.exports.logout = function(req,res,next){
 	try{
 		req.logout();
+		req.session.destroy(function(err){
+			console.log('cannot access session');
+			console.log(err);
+		});
+		if(req.cookies && req.cookies.staytoken){
+			StayLoginToken.remove({token: req.cookies.staytoken},function(err){
+				if(err)console.log(err.stack || err);
+			});
+		}
 		next();
 	}catch(err){
 		req.unsuccess = true;

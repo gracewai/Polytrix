@@ -34,12 +34,12 @@ var app = express();
             host:dbconnect.ip,
             port:dbconnect.port,
             touchAfter: 5 * 60,//5 minutes
-            ttl: 60 * 60,//1 hour
+            ttl: 5,//1 hour
         }),
         secret: 'polytrix_session',
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: app.get('env') === 'production' ? true : false }
+        cookie: { secure: app.get('env') === 'production' ? true : false, maxAge: 5 * 1000 }
     }));
 
     //passport
@@ -49,6 +49,7 @@ var app = express();
 
 //routers
 
+app.use(require('./controllers/user/logging').handleStayLogin);
 app.use(login);
 app.use(rest);
 app.use(userRest);

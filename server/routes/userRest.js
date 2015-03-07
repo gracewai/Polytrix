@@ -16,6 +16,7 @@
 
 var router = require('express').Router();
 var UserCtrl = require('../controllers/user');
+var Logging = require('../controllers/user/logging');
 var Middlewares = require('./middlewares');
 var requireLogined = Middlewares.requireLogined;
 

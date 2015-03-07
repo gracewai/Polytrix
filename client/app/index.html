@@ -5,7 +5,23 @@
     <title>Polytrix</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-
+    <script> 
+      var ajaxRes;
+      if(window.XMLHttpRequest){
+        ajaxRes = new XMLHttpRequest;
+      }
+      else{
+        ajaxRes = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      ajaxRes.onreadystatechange=function(){
+        if(ajaxRes.readyState==4 && ajaxRes.status==200){
+          if(!JSON.parse(ajaxRes.responseText).logined)
+            window.location='/';
+        }
+      }
+      ajaxRes.open("GET","/api/account/status",true);
+      ajaxRes.send();
+    </script>
     <!-- loading splash -->
     <link rel="stylesheet" type="text/css" href="styles/splash.css" />
     <div id="loading-splash" ng-cloak>

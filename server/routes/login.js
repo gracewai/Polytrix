@@ -33,11 +33,12 @@ router.get('/passport/facebook',
 //	@method login
 //	@para{string} uid		used when using local strategy
 //	@para{string} upw		used when using local strategy
-//	@return redirect /login?failure=trur&strategy=String[&msg=String]
+//	@return loginStatus
 //
 router.post('/login',
 	Logging.assertMD5Password,
 	passport.authenticate('local'),
+	Logging.setStayLogin,
 	Logging.logLogin,
 	Logging.sendStatus);
 
@@ -49,7 +50,7 @@ router.post('/login',
 //	@para{string} upw		used when using local strategy
 //	@para{string} name		used when using local strategy
 //	@para{string} email		used when using local strategy
-//	@return redirect /login?failure=true&strategy=String[&msg=String]
+//	@return loginStatus
 //
 router.post('/register',
 	Logging.assertMD5Password,
@@ -61,7 +62,7 @@ router.post('/register',
 //	POST /logout
 //
 //	@method logout
-//	@return redirect /logout
+//	@return loginStatus
 //
 router.post('/logout',
 	Logging.logout,

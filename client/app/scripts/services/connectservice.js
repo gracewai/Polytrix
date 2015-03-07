@@ -9,9 +9,9 @@
  */
 angular.module('clientApp')
   .service('connectService',['formValidateService','UserInfo', '$resource','MD5', function (formValidateService,UserInfo,$resource,md5) {
-	this.login = function(user_credential,password,success_callback,error_callback){
+	this.login = function(user_credential,password,stayLogin,success_callback,error_callback){
 		var Login = $resource('/login');
-		var result = Login.save({uid:user_credential,upw:md5(password),strategy: 'local'},function(){
+		var result = Login.save({uid:user_credential,upw:md5(password),strategy: 'local',stayLogin:stayLogin},function(){
 			if(result.success){
 				success_callback(result);
 			}else{

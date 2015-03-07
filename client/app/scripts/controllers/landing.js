@@ -18,6 +18,7 @@ angular.module('clientApp')
 			email:'',
 			upw:'',
 			upwc:'',
+			stayLogin:true,
 			width: '280px',
 			identifier: 'Email'
 		};
@@ -188,30 +189,37 @@ angular.module('clientApp')
 			});
 		};
 
+		function AjaxErrorHandler(response){
+			$scope.loading = false;
+			if(typeof response.success === 'undefined'){
+				switch(response.status){
+					case 400:
+						Error.add('400 Bad Request');
+					break;
+					case 401:
+						Error.add('Incorrect password or invalid account credentials');
+					break;
+					case 0:
+						Error.add('Server connection timeout, please try again');
+					break;
+					default:
+						Error.add('Unknown Error, Status code:' + response.status);
+					break;
+				}
+			}else{
+				if(response.msg) Error.add(response.msg);
+				else Error.add('Unknown Error');
+			}
+			Error.updateView();
+		}
+
 		$scope.login = function(){
 			$scope.loading = true;
-			connectService.login(form.email,form.upw,function(){
-				window.location = '/console/';
-			}, function(response){
-				$scope.loading = false;
-				if(typeof response.success === 'undefined'){
-					switch(response.status){
-						case 400:
-							Error.add('400 Bad Request');
-						break;
-						case 401:
-							Error.add('Incorrect password or invalid account credentials');
-						break;
-						default:
-							Error.add('Unknown Error, Status code:' + response.status);
-						break;
-					}
-				}else{
-					if(response.msg) Error.add(response.msg);
-					else Error.add('Unknown Error');
-				}
-				Error.updateView();
-			})
+			connectService.login(form.email,form.upw,form.stayLogin,
+				function(){
+					window.location = '/console/';
+				}, AjaxErrorHandler
+			);
 		};
 
 		$scope.register = function(){
@@ -219,28 +227,7 @@ angular.module('clientApp')
 			connectService.register(form.uid,form.name,form.email,form.upw,
 				function(){
 					window.location = '/console/';
-				},function(response){
-					$scope.loading = false;
-					console.log(response);
-					if(typeof response.success === 'undefined'){
-						switch(response.status){
-							case 400:
-								Error.add('400 Bad Request');
-							break;
-							case 401:
-								Error.add('Incorrect password or invalid account credentials');
-							break;
-							default:
-								Error.add('Unknown Error, Status code:' + response.status);
-							break;
-						}
-					}else{
-						if(response.msg) Error.add(response.msg);
-						else Error.add('Unknown Error');
-					}
-
-					Error.updateView();
-				}
+				},AjaxErrorHandler
 			);
 		};
 
