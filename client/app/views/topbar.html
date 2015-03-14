@@ -6,11 +6,19 @@
       <md-button ng-click="open();" aria-label="manage drive"><i class="fa fa-database"></i></md-button>
       <div class="modal" ng-include="'views/drivemanage.html'"></div>
     </div>
-    <a href="#/settings/" class="item" style="right: 235px;"><md-button aria-label="setting"><i class="fa fa-sliders"></i></md-button></a>
+
+    <div class="item" id="controlCenter" style="right: 235px;">
+      <md-button aria-label="setting">
+      <i class="fa fa-sliders"></i>
+      </md-button>
+    </div>
+    <div class="ui special popup" id="controlcenter-popup" ng-include="'views/controlcenter.html'"></div>
+
     <div class="item" id="displayNotification" style="right: 185px;">
      <md-button aria-label="notification"><i class="fa fa-inbox"></i></md-button>
     </div>
     <div class="ui special popup" id="notification-popup" ng-include="'views/notification.html'"></div>
+
     <div class="ui floating labeled icon dropdown" style="position:absolute; right:110px; top:14px;">
       <md-button class="md-fab" aria-label="account" ng-style="{'background-image':'url(' + getUserPhoto() + ')'}" style="width:40px; height:40px;"></md-button>
       <div class="menu" style="margin-top:10px;">
@@ -28,6 +36,10 @@
 <style>
 #notification-popup{
   max-width:600px;
+}
+
+#controlcenter-popup{
+  max-width: 600px;
 }
 .menu-button{
   position: fixed;

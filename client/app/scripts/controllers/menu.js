@@ -13,9 +13,11 @@ angular.module('clientApp')
 
 		$scope.options = [
 			{icon:'fa-home',name:'Home',route:'/'},
-			{icon:'fa-heart',name:'Favs',route:'/'},
 			{icon:'fa-folder',name:'Files',route:'/browse'},
-			{icon:'fa-tachometer',name:'Stats',route:'/'}
+			{icon:'fa-terminal' ,name:'Terminal', route:'/cli'},
+			{icon:'fa-tachometer',name:'Dashboard',route:'/'},
+			{icon:'fa-gears' ,name:'Settings',route:'/settings'},
+			{icon:'fa-sign-out' ,name:'Logout', route:'/logout'}
 		];
 
 		var bodyEl = $(document.body);
