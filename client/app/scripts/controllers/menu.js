@@ -15,7 +15,7 @@ angular.module('clientApp')
 			{icon:'fa-home',name:'Home',route:'/'},
 			{icon:'fa-folder',name:'Files',route:'/browse'},
 			{icon:'fa-terminal' ,name:'Terminal', route:'/cli'},
-			{icon:'fa-tachometer',name:'Dashboard',route:'/'},
+			{icon:'fa-tachometer',name:'Dashboard',route:'/dashboard'},
 			{icon:'fa-gears' ,name:'Settings',route:'/settings'},
 			{icon:'fa-sign-out' ,name:'Logout', route:'/logout'}
 		];
