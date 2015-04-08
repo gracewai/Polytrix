@@ -1,8 +1,61 @@
+<style>
+	#command {
+		font-family: 'Roboto', sans-serif;
+		font-weight: 200;
+		font-size: 30px;
+		width: 1000px;
+	}
+	.results.mysetting#gsdfgfdj{
+		width: 800px;
+		left:80px;
+		text-align: left;
+	}
+	.results.mysetting#gsdfgfdj > a.result {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
+	.results.mysetting#gsdfgfdj > a.result > div.content > div.title {
+		font-family: 'Roboto', sans-serif;
+		font-weight: 300;
+		font-size: 22px;
+	}
+</style>
 <div class="container">
-	<div class="five column ui centered grid">
-		<div class="ui massive left icon input transparent">
-			<input type="text" placeholder="Key in action to perform a task..." style="width:600px;">
-			<i class="big angle right icon"></i>
+	<h2 class="ui header segment">
+		<i class="terminal icon"></i>
+		<div class="content">
+			Terminal
+			<div class="sub header">
+				For responsive and advanced use when dealing with file logistic
+			</div>
 		</div>
+	</h2>
+	<div class="five column ui centered grid search" style="margin-top:60px;">
+		<div class="ui massive input transparent">
+			<input class="prompt" type="text" id="command" placeholder="Type things like filename or action to begin with..." autofocus>
+		</div>
+		<div id="gsdfgfdj" class="results mysetting" ></div>
 	</div>
 </div>
+<script>
+  var searchPhrase = [
+  	{
+  		title: 'Send files to ...'
+  	},
+  	{
+  		title: 'Move files to ...'
+  	},
+  	{
+  		title: 'Copy files to ...'
+  	},
+  	{
+  		title: 'Remove files from ...'
+  	},
+  	{
+  		title: 'Delete files from ...'
+  	}
+  ];
+	$('.ui.search').search({
+    source: searchPhrase
+  });
+</script>

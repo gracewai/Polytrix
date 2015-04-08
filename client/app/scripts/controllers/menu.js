@@ -28,7 +28,7 @@ angular.module('clientApp')
 		},1,50);
 		
 
-		$scope.toggleMenu = function() {
+		$scope.toggleMenu = function(index) {
 			if( isOpen ) {
 				bodyEl.removeClass('show-menu');
 			}
@@ -36,6 +36,21 @@ angular.module('clientApp')
 				bodyEl.addClass('show-menu');
 			}
 			isOpen = !isOpen;
+			if(!index)
+				return;
+			var item = $scope.options[index];
+			switch(item.name){
+				case 'Settings':
+					$('#setting-modal').modal('setting', 'transition', 'fade up').modal('show');
+					setTimeout(function(){
+					$('#right').height($('#left').height()-5)
+				},100);
+				break;
+				default:
+					window.location = '#' +item.route;
+				break;
+			}
+
 		};
 
 		$scope.closeMenuIfOpened = function(ev){
