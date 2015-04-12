@@ -12,11 +12,15 @@ angular.module('clientApp')
 		$scope.drivelist = [];
 		$scope.drives = [];
 		$scope.searchText = '';
+		$scope.viewOption = 'grid';
 		$scope.search = function(){
 			if($scope.searchText){
 				console.clear();
 				console.table(Search.search($scope.searchText),['fullpath','created_date', 'modified_date','matches']);
 			}
+		};
+		$scope.selectViewOption = function(option){
+			$scope.viewOption = option;
 		};
 
 		UserInfo.onchange($scope,function(){
@@ -43,6 +47,13 @@ angular.module('clientApp')
 				default: return 'Unknown';
 			}
 		};
+
+		$('#psudoUpload').on("click", function(){
+			$('#ajaxfile').trigger("click");
+		});
+		//var uploadShadowRoot = $('#ajaxfile')[0].createShadowRoot();
+		//var psuedoUpload = $('#psudoUpload');
+		//uploadShadowRoot.appendChild(document.importNode(psuedoUpload.content, true));
 	}])
 	.controller('CombinedView',['$scope', 'UserInfo', 'Global',function($scope, UserInfo, Global){
 		var userInfo = null;
@@ -172,6 +183,7 @@ angular.module('clientApp')
 		$scope.getClass = _browse_getClass_;
 		$scope.getFileTypeName = _browse_getFileType_;
 	}]);
+
 
 function _browse_getFileType_(filename){
 	return filename.split('.').pop();
