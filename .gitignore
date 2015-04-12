@@ -1,6 +1,7 @@
 dist
 .tmp
 .sass-cache
+.idea
 bower_components
 client/node_modules/
 server/node_modules/*
