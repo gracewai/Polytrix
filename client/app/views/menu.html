@@ -1,11 +1,12 @@
 <div class="menu-wrap">
 	<nav id="sideMenu">
 		<div class="icon-list">
-			<a ng-repeat="option in options" href="#{{option.route}}" ng-click="toggleMenu();"><i class="fa fa-fw {{option.icon}}"></i><span>{{option.name}}<span></a>
+			<a class="hand" ng-repeat="option in options" ng-click="toggleMenu($index);"><i class="fa fa-fw {{option.icon}}"></i><span>{{option.name}}<span></a>
 		</div>
 	</nav>
 	<button class="close-button" ng-click="toggleMenu();">Close Menu</button>
 </div>
+<div ng-include="'views/settings.html'"></div>
 <style>
 /* menu size */
 .menu-wrap{
@@ -20,6 +21,10 @@ body,
 	/*overflow: hidden;*/
 	width: 100%;
 	height: 100%;
+}
+
+.hand {
+	cursor: pointer;
 }
 
 .menu-wrap a {

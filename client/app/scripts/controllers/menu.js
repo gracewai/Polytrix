@@ -13,9 +13,11 @@ angular.module('clientApp')
 
 		$scope.options = [
 			{icon:'fa-home',name:'Home',route:'/'},
-			{icon:'fa-heart',name:'Favs',route:'/'},
 			{icon:'fa-folder',name:'Files',route:'/browse'},
-			{icon:'fa-tachometer',name:'Stats',route:'/'}
+			{icon:'fa-terminal' ,name:'Terminal', route:'/cli'},
+			{icon:'fa-tachometer',name:'Dashboard',route:'/dashboard'},
+			{icon:'fa-gears' ,name:'Settings',route:'/settings'},
+			{icon:'fa-sign-out' ,name:'Logout', route:'/logout'}
 		];
 
 		var bodyEl = $(document.body);
@@ -26,7 +28,7 @@ angular.module('clientApp')
 		},1,50);
 		
 
-		$scope.toggleMenu = function() {
+		$scope.toggleMenu = function(index) {
 			if( isOpen ) {
 				bodyEl.removeClass('show-menu');
 			}
@@ -34,6 +36,21 @@ angular.module('clientApp')
 				bodyEl.addClass('show-menu');
 			}
 			isOpen = !isOpen;
+			if(!index)
+				return;
+			var item = $scope.options[index];
+			switch(item.name){
+				case 'Settings':
+					$('#setting-modal').modal('setting', 'transition', 'fade up').modal('show');
+					setTimeout(function(){
+					$('#right').height($('#left').height()-5)
+				},100);
+				break;
+				default:
+					window.location = '#' +item.route;
+				break;
+			}
+
 		};
 
 		$scope.closeMenuIfOpened = function(ev){

@@ -38,6 +38,10 @@ angular
         templateUrl: 'views/settings.html',
         controller: 'SettingsCtrl'
       })
+      .when('/cli', {
+        templateUrl: 'views/cli.html',
+        controller: 'CliCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

@@ -1,6 +1,7 @@
-
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,100,200);
 html,body{
     background: #f7f7f7;
+    font-family: 'Varela Round', sans-serif;
 }
 .main-content{
     width: 90%;
@@ -24,6 +25,19 @@ html,body{
 .main {
     -webkit-transition: opacity 0.6s;
     transition: opacity 0.6s;
+}
+
+.flex-column{
+    display: -ms-flexbox;
+    -webkit-display:-webkit-flex;
+    display:flex;
+
+}
+
+.flex-1{
+    -webkit-flex: 1; /* Safari 6.1+ */
+    -ms-flex: 1; /* IE 10 */ 
+    flex: 1;
 }
 
 .dragFileImage{

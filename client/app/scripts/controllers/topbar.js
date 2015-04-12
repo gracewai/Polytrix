@@ -55,6 +55,12 @@ angular.module('clientApp')
 
 		setTimeout(function(){
 			$('.ui.floating.labeled.icon.dropdown').dropdown();
+			$('#controlCenter').popup({
+				lnline : true,
+				on: 'click',
+				position: 'bottom right',
+				setFluidWidth: 'true'
+			});
 			$('#displayNotification').popup({
 				lnline : true,
 				on: 'click',
