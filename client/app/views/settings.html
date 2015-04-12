@@ -126,9 +126,69 @@
 					<div ng-switch-when="general_tab">
 						<div class="ui form">
 							<div class="field">
-								<div class="ui toggle checkbox">
-									<input type="radio" name="notification">
-									<label><i class="announcement icon"></i>Enable Notification</label>
+								<div class="ui grid">
+									<div class="thirteen wide column">
+										<label><i class="fa fa-sign-out icon"></i>Enable Multi Session</label>
+									</div>
+									<div class="three wide column">
+										<div class="ui toggle checkbox">
+											<input type="radio" name="notification">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui grid">
+									<div class="thirteen wide column">
+										<label><i class="fa fa-map-marker icon"></i>Enable Geolocation metadata logging</label>
+									</div>
+									<div class="three wide column">
+										<div class="ui toggle checkbox">
+											<input class="right aligned" type="radio" name="geodata">
+										</div>	
+									</div>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui grid">
+									<div class="eight wide column">
+										<label><i class="fa fa-history icon"></i> Reset dashboard statistic after :</label>
+									</div>
+									<div class="eight wide column">
+										<div class="ui buttons">
+											<div class="ui blue basic button">30 Days</div>
+											<div class="ui blue basic button">3 Months</div>
+											<div class="ui blue basic button">9 Months</div>
+										</div>	
+									</div>
+								</div>
+							</div>
+							<h4 class="ui dividing header">Connect Services</h4>
+							<div class="ui hidden divider"></div>
+							<div class="field">
+								<div class="ui grid">
+									<div class="twelve wide column">
+										<label><i class="fa fa-2x fa-facebook-square icon" style="color:#3b5998;"></i> Facebook</label>
+									</div>
+									<div class="four wide column">
+										<div class="ui blue basic icon button">
+											<i class="fa fa-link icon"></i>
+											Connect
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui grid">
+									<div class="twelve wide column">
+										<label><i class="fa fa-2x fa-twitter icon" style="color:#3cf;"></i> Twitter</label>
+									</div>
+									<div class="four wide column">
+										<div class="ui blue basic icon button">
+											<i class="fa fa-link icon"></i>
+											Connect
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -153,7 +213,10 @@
 						</div>
 					</div>
 					<div ng-switch-when="experimental_tab">
-						
+						<div class="negative ui labeled icon button">
+							<i class="fa fa-bomb icon"></i>
+							Nuke
+						</div>
 					</div>
 					<div ng-switch-when="payment_tab">
 						

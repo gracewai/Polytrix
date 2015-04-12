@@ -1,259 +1,271 @@
 <div class="ui grid">
-  <div class="left floated right four wide column">
-    <div class="ui vertical accordion menu" style="margin-top:60px;">
-      <div class="item">
-        <a class="active title">
-          <i class="dropdown icon"></i>
-          File Types
-        </a>
-        <div class="active content">
-          <div class="ui form">
-            <div class="grouped fields">
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox" name="small">
-                  <label>Audio</label>
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox" name="small">
-                  <label>Images</label>
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox" name="small">
-                  <label>Documents</label>
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox" name="small">
-                  <label>Text</label>
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox" name="small">
-                  <label>Archive</label>
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox">
-                  <label>Other</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <a class="title">
-          <i class="dropdown icon"></i>
-          Visibility
-        </a>
-        <div class="content">
-          <div class="ui form">
-            <div class="grouped fields">
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox" name="small">
-                  <label>Owner</label>
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox" name="medium">
-                  <label>Folders only</label>
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox" name="large">
-                  <label>Files only</label>
-                </div>
-              </div>
-              <div class="field">
-                <div class="ui checkbox">
-                  <input type="checkbox" name="x-large">
-                  <label>Shared only</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <div class="ui labeled icon top right pointing dropdown button">
-          <i class="filter icon"></i>
-          <span class="text">Advanced Filter</span>
-          <div class="menu">
-            <div class="header">
-              <i class="marker icon"></i>
-              Filter by location
-            </div>
-            <div class="ui icon input">
-              <i class="search icon"></i>
-              <input type="text" name="search" placeholder="Search location">
-            </div>
-            <div class="divider"></div>
-            <div class="header">
-              <i class="tags icon"></i>
-              Filter by tag
-            </div>
-            <div class="item">
-              <div class="ui red empty circular label"></div>
-              Important
-            </div>
-            <div class="item">
-              <div class="ui blue empty circular label"></div>
-              Project
-            </div>
-            <div class="item">
-              <div class="ui black empty circular label"></div>
-              Work
-            </div>
-            <div class="divider"></div>
-            <div class="header">
-              <i class="calendar icon"></i>
-              Filter by date
-            </div>
-            <div class="item">
-              <i class="circle icon"></i>
-              This Week
-            </div>
-            <div class="item">
-              <i class="circle icon"></i>
-              This Month
-            </div>
-            <div class="item">
-              <i class="circle icon"></i>
-              This Year
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- upload task -->
-    <div ng-controller="uploadCtrl">
-          <!-- <div id="bgdiv"></div>
-          <div id="upload_grid">
-          </div>
-          <div id="ani"></div> -->
-          <input type="button" value="Start upload" ng-click="startUpload();">
-          <input id="ajaxfile" type="file" mualtiple><br>
-          <task val="task"></task>
-        </div>
-        <style>
-body{
-  margin:0;
-  padding:0;
-}
-#upload_grid,#bgdiv{
-  height:100%;
-  width:100%;
-  margin:0;
-  position:absolute;
-  z-index: -1;
-}
-#upload_grid.onupload{
-  z-index: 1;
-}
-#ani{
-  border-radius: 100px;
-  border:100px rgba(255,0,0,0.8) solid;
-  height:0;
-  width:0;
-  position:fixed;
-  top:50%;
-  left:50%;
-  margin-top: -100px;
-  margin-left: -100px;
-  display:none;
-}
-#ani.play{
-  display:block;
-  -webkit-animation: uploadAnimation 1s; /* Chrome, Safari, Opera */
-    animation: uploadAnimation 1s;
-}
-@-webkit-keyframes uploadAnimation {
-    from {
-      border: 5px rgba(255,0,0,0) solid;
-      margin-top:0px;
-      margin-left:0px;
-    }
-    to {
-      border: 100px rgba(255,0,0,0.8) solid;
-      margin-top: -100px;
-    margin-left: -100px;
-    }
-}
+	<div class="left floated right four wide column">
+		<div class="ui vertical accordion menu" style="margin-top:60px;">
+			<div class="item">
+				<a class="active title">
+					<i class="dropdown icon"></i>
+					File Types
+				</a>
+				<div class="active content">
+					<div class="ui form">
+						<div class="grouped fields">
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="small">
+									<label>Audio</label>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="small">
+									<label>Images</label>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="small">
+									<label>Documents</label>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="small">
+									<label>Text</label>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="small">
+									<label>Archive</label>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox">
+									<label>Other</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="item">
+				<a class="title">
+					<i class="dropdown icon"></i>
+					Visibility
+				</a>
+				<div class="content">
+					<div class="ui form">
+						<div class="grouped fields">
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="small">
+									<label>Owner</label>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="medium">
+									<label>Folders only</label>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="large">
+									<label>Files only</label>
+								</div>
+							</div>
+							<div class="field">
+								<div class="ui checkbox">
+									<input type="checkbox" name="x-large">
+									<label>Shared only</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="item">
+				<div class="ui labeled icon top right pointing dropdown button">
+					<i class="filter icon"></i>
+					<span class="text">Advanced Filter</span>
+					<div class="menu">
+						<div class="header">
+							<i class="marker icon"></i>
+							Filter by location
+						</div>
+						<div class="ui icon input">
+							<i class="search icon"></i>
+							<input type="text" name="search" placeholder="Search location">
+						</div>
+						<div class="divider"></div>
+						<div class="header">
+							<i class="tags icon"></i>
+							Filter by tag
+						</div>
+						<div class="item">
+							<div class="ui red empty circular label"></div>
+							Important
+						</div>
+						<div class="item">
+							<div class="ui blue empty circular label"></div>
+							Project
+						</div>
+						<div class="item">
+							<div class="ui black empty circular label"></div>
+							Work
+						</div>
+						<div class="divider"></div>
+						<div class="header">
+							<i class="calendar icon"></i>
+							Filter by date
+						</div>
+						<div class="item">
+							<i class="circle icon"></i>
+							This Week
+						</div>
+						<div class="item">
+							<i class="circle icon"></i>
+							This Month
+						</div>
+						<div class="item">
+							<i class="circle icon"></i>
+							This Year
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- upload task -->
+		<div ng-controller="uploadCtrl">
+<!-- <div id="bgdiv"></div>
+<div id="upload_grid">
+</div>
+<div id="ani"></div> -->
+			<input type="button" value="Start upload" ng-click="startUpload();">
+			<input id="ajaxfile" type="file" mualtiple style="visibility:hidden;"><br>
+			<task val="task"></task>
+		</div>
+<style>
+	body{
+		margin:0;
+		padding:0;
+	}
+	#upload_grid,#bgdiv{
+		height:100%;
+		width:100%;
+		margin:0;
+		position:absolute;
+		z-index: -1;
+	}
+	#upload_grid.onupload{
+		z-index: 1;
+	}
+	#ani{
+		border-radius: 100px;
+		border:100px rgba(255,0,0,0.8) solid;
+		height:0;
+		width:0;
+		position:fixed;
+		top:50%;
+		left:50%;
+		margin-top: -100px;
+		margin-left: -100px;
+		display:none;
+	}
+	#ani.play{
+		display:block;
+		-webkit-animation: uploadAnimation 1s; /* Chrome, Safari, Opera */
+		animation: uploadAnimation 1s;
+	}
+	@-webkit-keyframes uploadAnimation {
+		from {
+			border: 5px rgba(255,0,0,0) solid;
+			margin-top:0px;
+			margin-left:0px;
+		}
+		to {
+			border: 100px rgba(255,0,0,0.8) solid;
+			margin-top: -100px;
+			margin-left: -100px;
+		}
+	}
 </style>
 <!-- end upload task -->
-  </div>
-
-
-
-  <div class="floated center eleven wide column">
-    <div>
-      <div class="ui search" style="float:left;">
-        <div class="ui icon input">
-          <input type="text" class="prompt" ng-model="searchText" ng-change="search()" placeholder="Quick Search" style="width:250px;">
-          <i class="search icon"></i>
-        </div>
-      </div>
-      <div style="float:right;width:300px">
-        <!-- download task -->
-        
-        <!-- download task end -->
-      </div>
-      <div class="ui animated teal button" style="float:right;">
-        <div class="visible content">
-          <i class="fa fa-plus-circle"></i>
-          Add Files
-        </div>
-        <div class="hidden content">
-          <i class="fa fa-folder-open-o icon"></i>
-          Browse
-        </div>
-      </div>
-      <div style="clear: both;"></div>
-    </div>
-
-
-
-    <div class="menu" style="margin-top:5px;">
-      <div id="driveTabs" class="ui pointing secondary menu">
-        <a class="active item" data-tab="all">All</a>
-        <a ng-repeat="drive in drives" class="item" data-tab="{{drive.id}}">{{getDriveName(drive.type)}}</a>
-      </div>
-
-      <div class="ui active tab" data-tab="all">
-        <div ng-controller="CombinedView" ng-include="'views/browseview.html'"></div>
-      </div>
-
-
-      <div class="ui tab" ng-repeat="drive in drives" data-tab="{{drive.id}}">
-        <div ng-controller="SingleDriveCtrl" ng-init="init(drive)" id="{{drive.id}}" ng-include="'views/browseview.html'"></div>
-      </div>
-
-    </div>
-  </div>
 </div>
 
 
+
+<div class="floated center eleven wide column">
+	<div>
+		<div class="ui search" style="float:left;">
+			<div class="ui icon input">
+				<input type="text" class="prompt" ng-model="searchText" ng-change="search()" placeholder="Quick Search" style="width:250px;">
+				<i class="search icon"></i>
+			</div>
+		</div>
+		<div style="float:right;width:300px">
+			<!-- download task -->
+
+			<!-- download task end -->
+		</div>
+		<div class="ui icon inverted buttons" style="float:right;">
+			<div ng-click="selectViewOption('list')" class="ui basic button {{viewOption==='list'?'view-option-active':''}}">
+				<i class="fa fa-list icon"></i>
+			</div>
+			<div ng-click="selectViewOption('grid')" class="ui basic button {{viewOption==='grid'?'view-option-active':''}}">
+				<i class="fa fa-th icon"></i>
+			</div>
+		</div>
+		<div class="ui animated teal button" style="float:right;" id="psudoUpload">
+			<div class="visible content">
+				<i class="fa fa-plus-circle"></i>
+				Add Files
+			</div>
+			<div class="hidden content">
+				<i class="fa fa-folder-open-o icon"></i>
+				Browse
+			</div>
+		</div>			
+		<div style="clear: both;"></div>
+	</div>
+
+
+
+	<div class="menu" style="margin-top:5px;">
+		<div id="driveTabs" class="ui pointing secondary menu">
+			<a class="active item" data-tab="all">All</a>
+			<a ng-repeat="drive in drives" class="item" data-tab="{{drive.id}}">{{getDriveName(drive.type)}}</a>
+		</div>
+
+		<div class="ui active tab" data-tab="all">
+			<div ng-controller="CombinedView" ng-include="'views/browseview.html'"></div>
+		</div>
+
+
+		<div class="ui tab" ng-repeat="drive in drives" data-tab="{{drive.id}}">
+			<div ng-controller="SingleDriveCtrl" ng-init="init(drive)" id="{{drive.id}}" ng-include="'views/browseview.html'"></div>
+		</div>
+
+	</div>
+</div>
+</div>
+
+<style>
+	.view-option-active{
+		box-shadow: 0 0 0 1px transparent inset,0 1px 4px 0 rgba(39,41,43,.15)inset!important;
+	}
+</style>
 <script>
 
-$('.ui.vertical.accordion.menu')
-.accordion();
+	$('.ui.vertical.accordion.menu')
+	.accordion();
 
-$('.ui.checkbox')
-.checkbox();
+	$('.ui.checkbox')
+	.checkbox();
 
-$('.ui.labeled.icon.top.right.pointing.dropdown.button')
-.dropdown();
+	$('.ui.labeled.icon.top.right.pointing.dropdown.button')
+	.dropdown();
 
 
 </script>

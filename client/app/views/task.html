@@ -1,4 +1,9 @@
 <div class="task">
+	<div class="ui label" ng-show="val.totalItems">
+		<i class="fa fa-file-o icon"></i>
+		{{val.totalItems}} file selected
+	</div>
+
 	<button class="toggle left" ng-show="val.subTask.length" ng-click="openst = !openst">{{openst ? "-" : "+"}}</button>
 	<button class="toggle left" style="opacity:0;" ng-hide="val.subTask.length"></button>
 	<div class="left">
