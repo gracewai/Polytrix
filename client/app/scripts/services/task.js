@@ -44,14 +44,14 @@ angular.module('clientApp')
 	//	write a function take 3 arguments: sucess, fail and progress
 	//	these 3 arguments are functions to be called.
 	//
-	//	when your task on progress, call progress(progress), 
+	//	when your task on progress, call progress(progress),
 	//		pass your progress to be the argument 'progress' of progress()
 	//		progress is in range of 0 - 1.
 	//
 	//	when your task being failed, call fail(msg),
 	//		pass your error message to be the argument 'msg' of fail()
 	//
-	//	when your task being success, call success(progress), 
+	//	when your task being success, call success(progress),
 	//		it is optional to pass the argument 'progress'
 	//
 	//	example of a task that will be success after 10 seconds:
@@ -86,6 +86,25 @@ angular.module('clientApp')
 		this.subTask.push(subTask);
 		this.totalItems += subTask.totalItems;
 	};
+
+  Task.prototype.removeSubTask = function(subTask){
+    if(typeof subTask === 'string'){
+      var id = subTask;
+      for(var i = this.subTask.length-1;i>=0;i--){
+        if(this.subTask[i].id === id){
+          this.subTask.splice(i,1);
+          break;
+        }
+      }
+    }else{
+      for(var i = this.subTask.length-1;i>=0;i--){
+        if(this.subTask[i] === subTask){
+          this.subTask.splice(i,1);
+          break;
+        }
+      }
+    }
+  };
 
 	//Overrideing event
 	Task.prototype.onSubTaskProgress = function(subTask,progress){};
@@ -181,7 +200,7 @@ angular.module('clientApp')
 			}else{
 				_this.onSubTaskProgress(subTask,progress);
 			}
-			
+
 			if(parentOnSubTaskNotify)
 				parentOnSubTaskNotify(_this,progress);
 		}
@@ -256,10 +275,10 @@ angular.module('clientApp')
 
 //
 //	this controller just for test
-//	
+//
 //
 // angular.module('clientApp').controller('taskCtrl', ['$scope','UploadTask', function($scope, UploadTask){
-	
+
 // 	var task = new UploadTask.Task.MonitorTask('MultipleTask');
 
 // 	var rejectTask = new UploadTask.Task('rejectTask',4,function(success,fail,progress){
