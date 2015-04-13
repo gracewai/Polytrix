@@ -1,7 +1,12 @@
 <div class="task">
-	<div class="ui label" ng-show="val.totalItems">
-		<i class="fa fa-file-o icon"></i>
-		{{val.totalItems}} file selected
+	<div class="ui vertical animated basic button" ng-show="val.totalItems">
+		<div class="hidden content">
+			<i class="fa fa-upload"></i>
+			Upload
+		</div>
+		<div class="visible content">
+			{{val.totalItems}} file selected
+		</div>
 	</div>
 
 	<button class="toggle left" ng-show="val.subTask.length" ng-click="openst = !openst">{{openst ? "-" : "+"}}</button>

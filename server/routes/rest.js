@@ -88,7 +88,7 @@ router.get('/api/drive/:driveId/info/',
 
 // Get the drive qouta information
 // @param driveId
-router.get('/api/drive/:driveId/qouta/',
+router.get('/api/drive/:driveId/quota/',
 	DriveCtrl.qouta);
 
 
@@ -125,6 +125,7 @@ router.post('/api/drive/:driveId/:fileId/new/',
 // @param driveId
 // @param fileId
 router.post('/api/drive/:driveId/:fileId/',
+	Middlewares.streamBegin,
 	DriveCtrl.file.upload);
 
 // List out the files in a folder

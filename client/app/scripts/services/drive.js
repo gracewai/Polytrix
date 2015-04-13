@@ -37,6 +37,19 @@ angular.module('clientApp')
 		}
 	};
 
+
+	// Get each cloud storage quota information
+
+	Drive.prototype.quotaEnquiry = function(i,cb){
+		var storageInfo = $resource('/api/drive/'+this.id+'/quota/');
+		var result = storageInfo.get({},function(){
+			if(result.success){
+				cb(result,i);
+			}else{
+				console.log(result);
+			}
+		});
+	}
 	//
 	//
 	//	fromCacheCallback({metadata,files})

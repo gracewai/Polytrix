@@ -1,6 +1,7 @@
 var api = require('polytrix-core-api');
 var _404 = require('./404');
-
+var Usage = require('../database/activity');
+var crypto = require('crypto');
 module.exports.functionNotImplemented = function(req,res){
 	var result = {
 		success: false,
@@ -36,6 +37,23 @@ module.exports.validateParamDriveId = function(req, res, next, val){
 
 	_404.send(res);// send 404
 };
+
+module.exports.streamBegin = function(req,res,next){
+	req.event.beginTime = new Date();
+	next();
+};
+
+module.exports.forwardStreamEventLog = function(req,res,next){
+	var eventID = crypto.createHash('sha1').update(req.event.beginTime+req.event.filename).digest('hex');
+	var dataUsage = new Usage({
+		size: req.event.filesize,
+		type: req.event.type,
+		origin: req.event.origin,
+		endpoint: req.event.destination,
+		record: eventID
+	});
+	dataUsage.save();
+}
 
 module.exports.renewToken = function(req,res,next,val){
 	var drive = req.drive;
