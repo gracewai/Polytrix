@@ -12,7 +12,7 @@ angular.module('clientApp')
 		$scope.drivelist = [];
 		$scope.drives = [];
 		$scope.searchText = '';
-		$scope.viewOption = 'grid';
+		$scope.viewOption = 'my-grid';
 		$scope.search = function(){
 			if($scope.searchText){
 				console.clear();
@@ -47,6 +47,20 @@ angular.module('clientApp')
 				default: return 'Unknown';
 			}
 		};
+    $scope.getFileSizeString = function humanFileSize(bytes, si) {//credit: http://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable
+      if(!bytes)return '';
+      si = !si;
+
+      var thresh = si ? 1000 : 1024;
+      if(bytes < thresh) return bytes + ' B';
+      var units = si ? ['KB','MB','GB','TB','PB','EB','ZB','YB'] : ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
+      var u = -1;
+      do {
+        bytes /= thresh;
+        ++u;
+      } while(bytes >= thresh && u <= 7);
+      return bytes.toFixed(1)+' '+units[u];
+    };
 
 		$('#psudoUpload').on("click", function(){
 			$('#ajaxfile').trigger("click");
@@ -54,7 +68,16 @@ angular.module('clientApp')
 		//var uploadShadowRoot = $('#ajaxfile')[0].createShadowRoot();
 		//var psuedoUpload = $('#psudoUpload');
 		//uploadShadowRoot.appendChild(document.importNode(psuedoUpload.content, true));
-	}])
+
+    /*
+     2015 Jason Mulligan
+     @version 3.1.2
+     */
+    //$scope.getFileSizeString()
+    //!function(a){var b=/b$/,c={bits:["B","kb","Mb","Gb","Tb","Pb","Eb","Zb","Yb"],bytes:["B","kB","MB","GB","TB","PB","EB","ZB","YB"]},d=function(a){var d=void 0===arguments[1]?{}:arguments[1],e=[],f=!1,g=0,h=void 0,i=void 0,j=void 0,k=void 0,l=void 0,m=void 0,n=void 0,o=void 0,p=void 0,q=void 0,r=void 0;if(isNaN(a))throw new Error("Invalid arguments");return j=d.bits===!0,p=d.unix===!0,i=void 0!==d.base?d.base:2,o=void 0!==d.round?d.round:p?1:2,q=void 0!==d.spacer?d.spacer:p?"":" ",r=void 0!==d.suffixes?d.suffixes:{},n=void 0!==d.output?d.output:"string",h=void 0!==d.exponent?d.exponent:-1,m=Number(a),l=0>m,k=i>2?1e3:1024,l&&(m=-m),0===m?(e[0]=0,e[1]=p?"":"B"):((-1===h||isNaN(h))&&(h=Math.floor(Math.log(m)/Math.log(k))),h>8&&(g=1e3*g*(h-8),h=8),g=2===i?m/Math.pow(2,10*h):m/Math.pow(1e3,h),j&&(g=8*g,g>k&&(g/=k,h++)),e[0]=Number(g.toFixed(h>0?o:0)),e[1]=c[j?"bits":"bytes"][h],!f&&p&&(j&&b.test(e[1])&&(e[1]=e[1].toLowerCase()),e[1]=e[1].charAt(0),"B"===e[1]?(e[0]=Math.floor(e[0]),e[1]=""):j||"k"!==e[1]||(e[1]="K"))),l&&(e[0]=-e[0]),e[1]=r[e[1]]||e[1],"array"===n?e:"exponent"===n?h:"object"===n?{value:e[0],suffix:e[1]}:e.join(q)};"undefined"!=typeof exports?module.exports=d:"function"==typeof define?define(function(){return d}):a.getFileSizeString=d}($scope);
+
+
+  }])
 	.controller('CombinedView',['$scope', 'UserInfo', 'Global',function($scope, UserInfo, Global){
 		var userInfo = null;
 		var drivelist = [];
@@ -75,15 +98,16 @@ angular.module('clientApp')
 		};
 
 		$scope.getFileTitle = function(file){
-			function driveName(driveType){
-				switch(driveType){
-					case 'dropbox':     return 'Dropbox';
-					case 'googledrive': return 'Google Drive';
-					case 'onedrive':    return 'One Drive';
-					default: return 'Unknown';
-				}
-			}
-			return file.name + ' @ ' + driveName(file.drive.type);
+      return file.name;
+			//function driveName(driveType){
+			//	switch(driveType){
+			//		case 'dropbox':     return 'Dropbox';
+			//		case 'googledrive': return 'Google Drive';
+			//		case 'onedrive':    return 'One Drive';
+			//		default: return 'Unknown';
+			//	}
+			//}
+			//return file.name + ' @ ' + driveName(file.drive.type);
 		};
 		$scope.getDownloadLink = function(file){
 			return file.drive.downloadLink(file.identifier);
@@ -122,7 +146,7 @@ angular.module('clientApp')
 
 		$scope.getClass = _browse_getClass_;
 		$scope.getFileTypeName = _browse_getFileType_;
-		
+
 		UserInfo.onchange($scope,init);
 		init();
 		setTimeout($scope.getFileIndex,100);
