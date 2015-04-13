@@ -8,6 +8,7 @@ var userSchema = new Schema({
 	uid			: String,
 	name		: String,
 	email		: String,
+	serviceType : String,
 	passport	: Schema.Types.Mixed,
 
 	// passport content:
@@ -104,6 +105,7 @@ function createNewUser(uid,name,email,passport,options){
 		uid: uid,
 		name: name,
 		email: email,
+		serviceType : null,
 		passport: passport,
 		drives: []
 	});

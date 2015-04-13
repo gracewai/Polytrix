@@ -6,24 +6,18 @@ var Schema = mongoose.Schema;
 //
 
 var activitySchema = new Schema({
-	beginTime: { type: Date, default: Date.now },
+	record: String,
+	origin: String,
+	endpoint: String,
 	type: String,
 	status: String,
 	uid: String,
-	undoable: Boolean,
-	cancelable: Boolean,
+	time: Date,
+	size: Number,
+	recipient: String,
 	content: Schema.Types.Mixed
 });
 
-activitySchema.statics.types = {
-	DRIVE_MANIPULATION : 'Drive manipulation'
-};
-
-activitySchema.statics.status = {
-	ACTIVE : 'active',
-	FINISH : 'finish',
-	WAITING : 'waiting', //waiting to be active
-};
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;

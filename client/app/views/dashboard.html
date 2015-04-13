@@ -28,21 +28,21 @@
 							<i class="fa fa-user icon"></i>
 							User ID : 
 						</span>
-						<div class="ui label">brianso9</div>
+						<div class="ui label">{{user.name}}</div>
 					</div>
 					<div class="item">
 						<span>
 							<i class="fa fa-tag icon"></i>
 							Account Type: 
 						</span>
-						<div class="ui label">Premium</div>
+						<div class="ui label">{{user.serviceType? user.serviceType : Standard}}</div>
 					</div>
 					<div class="item">
 						<span>
 							<i class="fa fa-envelope-o icon"></i>
 							Email:
 						</span>
-						<div class="ui label">briansostudio@gmail.com</div>
+						<div class="ui label">{{user.email}}</div>
 					</div>
 					<div class="item">
 						<canvas id="myDoughnutChart" width="220" height="220"></canvas>
@@ -59,82 +59,30 @@
 	  </div>
 	</h2>
 	<div class="ui three column grid">
-		<div class="column">
+		<div class="column" ng-repeat="drive in storage">
 			<div class="ui segment">
 				<div class="flex-column">
 					<div class="flex-1">
 						<h3 class="ui header">
-							<img src="/images/dropbox.png">
+							<img ng-src="/images/{{drive.info.type}}.png">
 							<div class="content">
-								Dropbox
+								{{drive.name}}
 							</div>
 						</h3>
 						<div class="ui list">
 							<div class="item">
-								Capacity: <b>42 GB</b>
+								Capacity: <b>{{drive.info.total}}</b>
 							</div>
 							<div class="item">
-								Used: <b>28GB (64%)</b>
+								Used: <b>{{drive.info.used[0]}} ({{drive.info.used[1]}}%)</b>
 							</div>
 							<div class="item">
-								Available: <b>14GB (36%)</b>
+								Available: <b>{{drive.info.free[0]}} ({{drive.info.free[1]}}%)</b>
 							</div>
 						</div>
 					</div>
 					<div class="flex-1">
 						<canvas id="dropboxChart" width="120" height="120"></canvas>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="column">
-			<div class="ui segment">
-				<div class="flex-column">
-					<div class="flex-1">
-						<h3 class="ui header">
-							<img src="/images/googledrive.png">
-							<div class="content">Google Drive</div>
-						</h3>
-						<div class="ui list">
-							<div class="item">
-								Capacity: <b>42 GB</b>
-							</div>
-							<div class="item">
-								Used: <b>28GB (64%)</b>
-							</div>
-							<div class="item">
-								Available: <b>14GB (36%)</b>
-							</div>
-						</div>
-					</div>
-					<div class="flex-1">
-						<canvas id="googleChart" width="120" height="120"></canvas>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="column">
-			<div class="ui segment">
-				<div class="flex-column">
-					<div class="flex-1">
-						<h3 class="ui header">
-							<img src="/images/onedrive.png">
-							<div class="content">OneDrive</div>
-						</h3>
-						<div class="ui list">
-							<div class="item">
-								Capacity: <b>42 GB</b>
-							</div>
-							<div class="item">
-								Used: <b>28GB (64%)</b>
-							</div>
-							<div class="item">
-								Available: <b>14GB (36%)</b>
-							</div>
-						</div>
-					</div>
-					<div class="flex-1">
-						<canvas id="msChart" width="120" height="120"></canvas>
 					</div>
 				</div>
 			</div>
@@ -216,62 +164,6 @@
 		</tbody>
 	</table>
 </div>
-
 <script>
 
-	var ctx = $("#myLineChart").get(0).getContext("2d");
-	var data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-        {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
-        },
-        {
-            label: "My Second dataset",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [28, 48, 40, 19, 86, 27, 90]
-        }
-    ]
-};
-	var myLineChart = new Chart(ctx).Line(data);
-	var graph = $("#myDoughnutChart").get(0).getContext("2d");
-	var googleChart = $("#googleChart").get(0).getContext("2d");
-	var dropboxChart = $("#dropboxChart").get(0).getContext("2d");
-	var onedriveChart = $("#msChart").get(0).getContext("2d");
-	var usage = [
-    {
-        value: 300,
-        color:"#30e8bd",
-        highlight: "#66eece",
-        label: "Google Drive"
-    },
-    {
-        value: 50,
-        color: "#3080e8",
-        highlight: "#66a1ee",
-        label: "OneDrive"
-    },
-    {
-        value: 100,
-        color: "#e8308c",
-        highlight: "#ee66aa",
-        label: "Dropbox"
-    }
-]
-	var myDoughnutChart = new Chart(graph).Doughnut(usage);
-	var googleUsage = new Chart(googleChart).Doughnut(usage);
-	var dropboxUsage = new Chart(dropboxChart).Doughnut(usage);
-	var onedriveUsage = new Chart(onedriveChart).Doughnut(usage);
 </script>
