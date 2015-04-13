@@ -10,38 +10,38 @@
 					<div class="ui form">
 						<div class="grouped fields">
 							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox" name="small">
+								<div class="ui checkbox" ng-click="selectFilter('audio')">
+									<input type="checkbox" ng-model="filterTargets.audio">
 									<label>Audio</label>
 								</div>
 							</div>
+              <div class="field">
+                <div class="ui checkbox" ng-click="selectFilter('video')">
+                  <input type="checkbox" name="small" ng-model="filterTargets.video">
+                  <label>Video</label>
+                </div>
+              </div>
 							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox" name="small">
+								<div class="ui checkbox" ng-click="selectFilter('image')">
+									<input type="checkbox" name="small" ng-model="filterTargets.image">
 									<label>Images</label>
 								</div>
 							</div>
 							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox" name="small">
+								<div class="ui checkbox" ng-click="selectFilter('document')">
+									<input type="checkbox" name="small" ng-model="filterTargets.document">
 									<label>Documents</label>
 								</div>
 							</div>
 							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox" name="small">
-									<label>Text</label>
-								</div>
-							</div>
-							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox" name="small">
+								<div class="ui checkbox" ng-click="selectFilter('archive')">
+									<input type="checkbox" name="small" ng-model="filterTargets.archive">
 									<label>Archive</label>
 								</div>
 							</div>
 							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox">
+								<div class="ui checkbox" ng-click="selectFilter('other')">
+									<input type="checkbox" name="small" ng-model="filterTargets.other">
 									<label>Other</label>
 								</div>
 							</div>

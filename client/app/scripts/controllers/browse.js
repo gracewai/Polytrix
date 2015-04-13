@@ -8,11 +8,20 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-	.controller('BrowseCtrl',['$scope','UserInfo','Tools','Global','Search', function ($scope, UserInfo, Tools, Global, Search) {
+	.controller('BrowseCtrl',['$scope','UserInfo','Tools','Global','Search','$timeout', function ($scope, UserInfo, Tools, Global, Search,$timeout) {
 		$scope.drivelist = [];
 		$scope.drives = [];
 		$scope.searchText = '';
 		$scope.viewOption = 'my-grid';
+    $scope.filterTargets = {
+      audio:false,
+      video:false,
+      image:false,
+      document:false,
+      text:false,
+      other:false
+    };
+
 		$scope.search = function(){
 			if($scope.searchText){
 				console.clear();
@@ -75,8 +84,41 @@ angular.module('clientApp')
      */
     //$scope.getFileSizeString()
     //!function(a){var b=/b$/,c={bits:["B","kb","Mb","Gb","Tb","Pb","Eb","Zb","Yb"],bytes:["B","kB","MB","GB","TB","PB","EB","ZB","YB"]},d=function(a){var d=void 0===arguments[1]?{}:arguments[1],e=[],f=!1,g=0,h=void 0,i=void 0,j=void 0,k=void 0,l=void 0,m=void 0,n=void 0,o=void 0,p=void 0,q=void 0,r=void 0;if(isNaN(a))throw new Error("Invalid arguments");return j=d.bits===!0,p=d.unix===!0,i=void 0!==d.base?d.base:2,o=void 0!==d.round?d.round:p?1:2,q=void 0!==d.spacer?d.spacer:p?"":" ",r=void 0!==d.suffixes?d.suffixes:{},n=void 0!==d.output?d.output:"string",h=void 0!==d.exponent?d.exponent:-1,m=Number(a),l=0>m,k=i>2?1e3:1024,l&&(m=-m),0===m?(e[0]=0,e[1]=p?"":"B"):((-1===h||isNaN(h))&&(h=Math.floor(Math.log(m)/Math.log(k))),h>8&&(g=1e3*g*(h-8),h=8),g=2===i?m/Math.pow(2,10*h):m/Math.pow(1e3,h),j&&(g=8*g,g>k&&(g/=k,h++)),e[0]=Number(g.toFixed(h>0?o:0)),e[1]=c[j?"bits":"bytes"][h],!f&&p&&(j&&b.test(e[1])&&(e[1]=e[1].toLowerCase()),e[1]=e[1].charAt(0),"B"===e[1]?(e[0]=Math.floor(e[0]),e[1]=""):j||"k"!==e[1]||(e[1]="K"))),l&&(e[0]=-e[0]),e[1]=r[e[1]]||e[1],"array"===n?e:"exponent"===n?h:"object"===n?{value:e[0],suffix:e[1]}:e.join(q)};"undefined"!=typeof exports?module.exports=d:"function"==typeof define?define(function(){return d}):a.getFileSizeString=d}($scope);
-
-
+    $scope.selectFilter = function(target){
+      $timeout(function(){
+        $scope.filterTargets[target] = !$scope.filterTargets[target];
+        console.log($scope.filterTargets[target]);
+      });
+    };
+    $scope.myFilter = function(item, i){
+      var needFilter = false;
+      for(var i in $scope.filterTargets){
+        if($scope.filterTargets[i]){
+          needFilter = true;
+          break;
+        }
+      }
+      if(!needFilter)return true;
+      var faClass = _browse_getClass_(item);
+      switch(faClass){
+        case 'fa fa-file-audio-o':
+          return $scope.filterTargets.audio;
+        case 'fa fa-file-image-o':
+          return $scope.filterTargets.image;
+        case 'fa fa-file-pdf-o':
+        case 'fa fa-file-powerpoint-o':
+        case 'fa fa-file-excel-o':
+        case 'fa fa-file-text-o':
+          return $scope.filterTargets.document;
+        case 'fa fa-file-video':
+          return $scope.filterTargets.video;
+        case 'fa fa-file-archive-o':
+          return $scope.filterTargets.archive;
+        case 'fa fa-file-code-o':
+        case 'fa fa-file-o':
+          return $scope.filterTargets.other;
+      }
+    };
   }])
 	.controller('CombinedView',['$scope', 'UserInfo', 'Global',function($scope, UserInfo, Global){
 		var userInfo = null;
