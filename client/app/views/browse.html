@@ -15,12 +15,12 @@
 									<label>Audio</label>
 								</div>
 							</div>
-              <div class="field">
-                <div class="ui checkbox" ng-click="selectFilter('video')">
-                  <input type="checkbox" name="small" ng-model="filterTargets.video">
-                  <label>Video</label>
-                </div>
-              </div>
+							<div class="field">
+								<div class="ui checkbox" ng-click="selectFilter('video')">
+									<input type="checkbox" name="small" ng-model="filterTargets.video">
+									<label>Video</label>
+								</div>
+							</div>
 							<div class="field">
 								<div class="ui checkbox" ng-click="selectFilter('image')">
 									<input type="checkbox" name="small" ng-model="filterTargets.image">
@@ -58,26 +58,26 @@
 					<div class="ui form">
 						<div class="grouped fields">
 							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox" name="small">
+								<div class="ui checkbox" ng-click="selectFilter('owner')">
+									<input type="checkbox" ng-model="filterTargets.owner" name="small">
 									<label>Owner</label>
 								</div>
 							</div>
 							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox" name="medium">
+								<div class="ui checkbox" ng-click="selectFilter('folder')">
+									<input type="checkbox" ng-model="filterTargets.folder" name="medium">
 									<label>Folders only</label>
 								</div>
 							</div>
 							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox" name="large">
+								<div class="ui checkbox" ng-click="selectFilter('files')">
+									<input type="checkbox" ng-model="filterTargets.files" name="large">
 									<label>Files only</label>
 								</div>
 							</div>
 							<div class="field">
-								<div class="ui checkbox">
-									<input type="checkbox" name="x-large">
+								<div class="ui checkbox" ng-click="selectFilter('shared')">
+									<input type="checkbox" ng-model="filterTargets.shared" name="x-large">
 									<label>Shared only</label>
 								</div>
 							</div>
@@ -142,10 +142,10 @@
 <div id="upload_grid">
 </div>
 <div id="ani"></div> -->
-			<input type="button" value="Start upload" ng-click="startUpload();">
-			<input id="ajaxfile" type="file" mualtiple style="visibility:hidden;"><br>
-			<task val="task"></task>
-		</div>
+<input type="button" value="Start upload" ng-click="startUpload();">
+<input id="ajaxfile" type="file" mualtiple style="visibility:hidden;"><br>
+<task val="task"></task>
+</div>
 <style>
 	body{
 		margin:0;
@@ -227,6 +227,7 @@
 				Browse
 			</div>
 		</div>
+		<div ng-include="'views/detailsview.html'" ng-controller="DetailsView"></div>
 		<div style="clear: both;"></div>
 	</div>
 

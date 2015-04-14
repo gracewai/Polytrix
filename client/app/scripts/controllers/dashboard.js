@@ -33,7 +33,10 @@ angular.module('clientApp')
    };
 
     $scope.storage = [];
+    $scope.accumulativeUsage = [];
 
+
+    var count = $scope.drives.length;
     for(var i = 0;i<$scope.drives.length;i++){
       $scope.drives[i].quotaEnquiry(i,function(result,i){
         var info = {
@@ -51,11 +54,31 @@ angular.module('clientApp')
             default: return 'Unknown';
           }
         }
-        $scope.storage.push({info:info,name:name(),usage:[{value: info.used[1],color:"#30e8bd",highlight: "#66eece", label: 'Used'},{value: info.free[1],color: "#3080e8",highlight: "#66a1ee", label: 'Available' }]});
-        console.log($scope.storage);
+        $scope.accumulativeUsage.push({value:result.totalQuota,color: '#234',highlight:'#246', label:name()});
+        //console.log(ctx);
+        var usage = [{value: info.used[1],color:"#30e8bd",highlight: "#66eece", label: 'Used'},{value: info.free[1],color: "#3080e8",highlight: "#66a1ee", label: 'Available' }]
+        //var graph = new Chart(ctx).Doughnut(usage);
+        $scope.storage.push({info:info,name:name(), usage: usage});
+        setTimeout(function(){
+
+          $scope.storage[i].ctx = $('#'+$scope.storage[i].info.type+'Chart').get(0).getContext("2d");
+          $scope.storage[i].graph = new Chart($scope.storage[i].ctx).Doughnut($scope.storage[i].usage);
+        },0);
+
+
+        count--;
+        if(count==0){
+          setTimeout(function(){
+            console.log($scope.accumulativeUsage);
+            $scope.accumulativeUsageCtx = $('#accumulativeUsageChart').get(0).getContext("2d");
+            $scope.accumulativeUsageGraph = new Chart($scope.accumulativeUsageCtx).Doughnut($scope.accumulativeUsage);
+          },0);
+        }
       });
+      
     }
 
+    console.log($scope.storage);
     //----
   var ctx = $("#myLineChart").get(0).getContext("2d");
   var data = {
@@ -83,34 +106,8 @@ angular.module('clientApp')
         }
     ]
 };
-  var myLineChart = new Chart(ctx).Line(data);
-  var graph = $("#myDoughnutChart").get(0).getContext("2d");
-  //var googleChart = $("#googleChart").get(0).getContext("2d");
-  //var dropboxChart = $("#dropboxChart").get(0).getContext("2d");
-  //var onedriveChart = $("#msChart").get(0).getContext("2d");
-  var usage = [
-    {
-        value: 300,
-        color:"#30e8bd",
-        highlight: "#66eece",
-        label: "Google Drive"
-    },
-    {
-        value: 50,
-        color: "#3080e8",
-        highlight: "#66a1ee",
-        label: "OneDrive"
-    },
-    {
-        value: 100,
-        color: "#e8308c",
-        highlight: "#ee66aa",
-        label: "Dropbox"
-    }
-]
-  var myDoughnutChart = new Chart(graph).Doughnut(usage);
-  //var dropboxUsage = new Chart(dropboxChart).Doughnut(usage);
   	//-----Dashboard graphical data display settings
+    var myLineChart = new Chart(ctx).Line(data);  
   	var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   	var lastMonth = (new Date().getMonth)-1;
   	var getDataRange = function (size, option){

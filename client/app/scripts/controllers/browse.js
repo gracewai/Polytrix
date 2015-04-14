@@ -19,7 +19,9 @@ angular.module('clientApp')
       image:false,
       document:false,
       text:false,
-      other:false
+      other:false,
+      file:false,
+      folder:false
     };
 
 		$scope.search = function(){

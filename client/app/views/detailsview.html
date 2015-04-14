@@ -1,0 +1,234 @@
+<style>
+	.ui.slider.range input[type="range"] {
+			-webkit-appearance: none;
+			border-width: 1px;
+			border-style: solid;
+			border-radius: 50rem;
+			border-color: rgba(0, 0, 0, 0.1);
+			padding: 3px 5px;
+		}
+
+		.ui.slider.range input[type="range"]::-moz-range-track {
+			background: none;
+			border: none;
+		}
+
+		.ui.slider.range input[type="range"]::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			background: #89B84C;
+			border-radius: 50rem;
+			height: 0.7em;
+			width: 0.7em;
+		}
+
+		.ui.slider.range input[type="range"]::-moz-range-thumb {
+			background: #89B84C;
+			border-color: #89B84C;
+			border-radius: 50rem;
+			height: 0.7em;
+			width: 0.7em;
+		}
+	#view * { margin: 0; padding: 0; list-style: none; }
+	
+	#view {  -webkit-perspective: 700px; -webkit-perspective-origin-x: -50px;-webkit-perspective-origin-y: 600px; width: 400px; margin: 0; position: relative; }
+	#stack { position: relative; width: 100%; height: 100%; margin-top: 25%;; }
+	#stack li { position: absolute; top: 0; left: 0; background: #ccc; -webkit-transition: all .5s linear; -webkit-box-shadow: 0 0 10px #000; }
+	#stack li > img { height: 300px; display:block;}
+	
+	#made { position: absolute; top: 30px; right: 30px; font-size: 10px; }
+	
+	#controls { position: absolute; bottom: 30px; left: 30px; font-size: 11px; }
+	button { padding: 10px; cursor: pointer	; }
+	a { color: #fff; text-decoration: none; border-bottom: 1px dotted white; }
+
+	#rotate_controls { position: absolute; right: 30px; bottom: 30px; font-size: 11px; }
+	#rotate_controls button { background: transparent; color: #fff; border: none; text-decoration: underline; }
+	
+
+	.version-container{
+		width:350px;
+		margin: 0 0 0 auto;
+		height:300px;
+	}
+</style>
+<div class="ui test modal version">
+	<div class="header"><i class="fa fa-file-o icon"></i> File title</div>
+	<div class="content">
+		<div class="ui grid">
+			<div class="nine wide column">
+				
+				
+				
+				<div class="version-container">
+				<div id="view">
+					<ul id="stack">
+					<li ng-repeat="version in versions"><img ng-src="{{version.img}}" alt=""></li>
+						<!-- <li style="-webkit-transform: translate3d(0px, -200px, -200px); z-index: 12;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -400px, -400px); z-index: 11;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -600px, -600px); z-index: 10;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -800px, -800px); z-index: 9;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -1000px, -1000px); z-index: 8;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -1200px, -1200px); z-index: 7;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -1400px, -1400px); z-index: 6;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -1600px, -1600px); z-index: 5;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -1800px, -1800px); z-index: 4;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -2000px, -2000px); z-index: 3;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -2200px, -2200px); z-index: 2;"><img src="/images/test.png"></li>
+						<li style="-webkit-transform: translate3d(0px, -2400px, -2400px); z-index: 1;"><img src="/images/test.png"></li> -->
+					</ul>
+				</div>
+				</div>
+				
+				<div id="controls">
+					<button class="next">Prev</button>
+					<button class="prev" disabled="disabled">Next</button>		
+				</div>
+
+
+				<div class="ui slider range">
+					<input type="range" min="0" step="1" value="7" />
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</div>
+			<div class="seven wide column">
+				<div class="ui form">
+					<div class="field">
+						<div class="ui two column grid">
+							<div class="column">
+								<label>
+									<i class="fa fa-2x fa-copy icon"></i>
+									<b>Version History</b>
+								</label>	
+							</div>
+							<div class="column">
+								<div class="ui toggle checkbox">
+									<input type="checkbox">
+									<label></label>
+								</div>										
+							</div>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui two column grid">
+							<div class="column">
+								<label>
+									<i class="fa fa-2x fa-lock icon"></i>
+									<b>Encryption</b>
+								</label>
+							</div>
+							<div class="column">
+								<div class="ui toggle checkbox">
+									<input type="checkbox">
+									<label></label>
+								</div>										
+							</div>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui two column grid">
+							<div class="column">
+								<label>
+									<i class="fa fa-2x fa-puzzle-piece icon"></i>
+									<b>Extension Support</b>
+								</label>	
+							</div>
+							<div class="column">
+								<div class="ui toggle checkbox">
+									<input type="checkbox">
+									<label></label>
+								</div>										
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ui hidden divider"></div>
+				<h4 class="ui dividing header">
+					<i class="fa fa-info icon"></i>
+					Metadata Information
+				</h4>
+				<div class="ui hidden divider"></div>
+				<div class="ui two column grid">
+					<div class="column">
+						<label>
+							<i class="fa fa-pie-chart icon"></i>
+							File size:
+						</label>
+					</div>
+					<div class="column">
+						<div class="ui label">
+							2.56 MB
+						</div>
+					</div>
+				</div>
+				<div class="ui two column grid">
+					<div class="column">
+						<label>
+							<i class="fa fa-file icon"></i>
+							File type:
+						</label>
+					</div>
+					<div class="column">
+						<div class="ui label">
+							<i class="fa fa-file-text icon"></i>
+							<b>Word Document</b>	
+						</div>
+					</div>
+				</div>						
+				<div class="ui two column grid">
+					<div class="column">
+						<label>
+							<i class="fa fa-calendar icon"></i>
+							Created Date: 
+						</label>
+					</div>
+					<div class="column">
+						<div class="ui label">
+							Sun Feb 01 1998 00:00:00
+						</div>
+					</div>
+				</div>
+				<div class="ui two column grid">
+					<div class="column">
+						<label>
+							<i class="fa fa-calendar icon"></i>
+							Modified Date: 
+						</label>
+					</div>
+					<div class="column">
+						<div class="ui label">
+							Sun Feb 01 1998 00:00:00
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="actions">
+		<div class="ui black button">
+			<i class="fa fa-times icon"></i>
+			Close
+		</div>
+	</div>
+</div>
+<script>
+
+	</script>

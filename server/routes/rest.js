@@ -92,6 +92,11 @@ router.get('/api/drive/:driveId/quota/',
 	DriveCtrl.qouta);
 
 
+// Users profile and settings update implementation
+
+router.post('/api/account/update',
+	Middlewares.updateAccountDetails);
+
 ////=================================
 //	File
 
@@ -127,6 +132,9 @@ router.post('/api/drive/:driveId/:fileId/new/',
 router.post('/api/drive/:driveId/:fileId/',
 	Middlewares.streamBegin,
 	DriveCtrl.file.upload);
+
+//router.get('/api/share/:fileId', 
+//	Middlewares.generateShortenUrl);
 
 // List out the files in a folder
 // @param driveId

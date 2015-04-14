@@ -2,6 +2,8 @@ var api = require('polytrix-core-api');
 var _404 = require('./404');
 var Usage = require('../database/activity');
 var crypto = require('crypto');
+//var request = require('request');
+
 module.exports.functionNotImplemented = function(req,res){
 	var result = {
 		success: false,
@@ -38,9 +40,21 @@ module.exports.validateParamDriveId = function(req, res, next, val){
 	_404.send(res);// send 404
 };
 
+module.exports.updateAccountDetails = function(req,res, next){
+	req.user.name = req.body.name?req.body.name:req.user.name;
+	req.user.password = req.body.password?req.body.password:req.user.password;
+	req.user.email = req.body.email?req.body.email:req.user.email;
+	req.user.save();
+};
+
 module.exports.streamBegin = function(req,res,next){
 	req.event.beginTime = new Date();
 	next();
+};
+
+module.exports.genertateShortenUrl = function(req,res,next){
+	var api_key = '31e735f3da507cb3b3c8c4909b35152d544c7595f956498b791ef56faab1a5461f929a0e337057b8574b3edf422a1d15e0f5aea4745525152b672711';
+	var api_url = 'https://io.dev:3010/api/'
 };
 
 module.exports.forwardStreamEventLog = function(req,res,next){
