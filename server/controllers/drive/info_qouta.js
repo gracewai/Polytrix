@@ -13,7 +13,7 @@ module.exports.qouta = function(req,res){
 		var info = {
 			success: true,
 			logined: true,
-			totalQuota: result.total_bytes,
+			totalQuota: result._raw.quotaBytesTotal || result.total_bytes,
 			usedQuota: result.used_bytes,
 		};
 		res.send(info);
