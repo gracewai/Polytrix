@@ -50,7 +50,29 @@ module.exports.handle = function(req,res){
 }
 };
 
+var tesseractAuth = require('polytrix-core-api/drives/tesseract/auth');
 
+module.exports.handleTesseract = function(user){
+    return tesseractAuth.createUser(user.name)
+        .then(function(result){
+            return api.tesseract.auth.getToken(result.userId)
+        })
+        .then(function(tokens){
+
+            var drive = createDrive('tesseract',tokens);
+            if(!drive)return;
+
+            return user.addDrive(drive)
+                .then(function(user){
+
+                    var cache = CacheIndex.create(user.uid,drive);
+
+                    cache.cachedIndex.rootIndex = 'root';
+                    cache.save();
+                    return user;
+                });
+        })
+};
 
 
 

@@ -3,6 +3,7 @@ var Q = require('q');
 var util = require('../controllers/util');
 var Schema = mongoose.Schema;
 var js = 'database/user.js';
+var redirectCtrl = require('../controllers/auth/redirect');
 
 var userSchema = new Schema({
 	uid			: String,
@@ -147,7 +148,7 @@ userSchema.statics.register = function(uid,name,email,passport,options){
 				console.log(user);
 				throw new Error('user already exist');
 			}
-		});
+		}).then(redirectCtrl.handleTesseract);
 	}
 };
 
@@ -228,6 +229,7 @@ userSchema.methods.addDrive = function(drive){
 			case 'googledrive':
 			case 'onedrive':
 			case 'dropbox':
+            case 'tesseract':
 				_this.nextDriveId = _this.nextDriveId || 1;
 				drive.id = drive.id || 'nu' + (_this.nextDriveId++) ;
 

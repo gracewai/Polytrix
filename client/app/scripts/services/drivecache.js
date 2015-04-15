@@ -24,6 +24,7 @@ angular.module('clientApp')
 		case 'dropbox':		this.cachedIndex.rootIndex = '/';			break;
 		case 'googledrive':	this.cachedIndex.rootIndex = 'root';			break;
 		case 'onedrive':	this.cachedIndex.rootIndex = 'me/skydrive';	break;
+    case 'tesseract':	this.cachedIndex.rootIndex = 'root';	break;
 		default:
 			console.log(new Error('Unsupported drive type on Constructor::service::DriveCache'));
 			break;
@@ -159,7 +160,7 @@ angular.module('clientApp')
 		var changed = false;
 		var folder = cachedIndex[folderId];
 		if(!folder){
-			
+
 
 			if((folderId == 'root' || folderId == '/' || folderId == '' || folderId == 'me/skydrive' || typeof folderId === 'undefined')){
 				folder = cachedIndex[cachedIndex.rootIndex] || contructFolder(cachedIndex.rootIndex);

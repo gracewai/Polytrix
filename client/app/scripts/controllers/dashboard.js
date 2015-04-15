@@ -48,6 +48,7 @@ angular.module('clientApp')
             case 'dropbox':     return 'Dropbox';
             case 'googledrive': return 'Google Drive';
             case 'onedrive':    return 'One Drive';
+            case 'tesseract':    return 'Tesseract';
             default: return 'Unknown';
           }
         }
@@ -122,7 +123,7 @@ angular.module('clientApp')
   			case 'day' :
   				break;
   			default:
-  				var range = []; 
+  				var range = [];
   				for(var i = 0;i < size;i++){
   					range.push(monthNames[i]);
   				}

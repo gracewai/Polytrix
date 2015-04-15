@@ -11,6 +11,12 @@ angular.module('clientApp')
   .controller('DriveManager',['$scope','UserInfo','$location','Tools', function ($scope,UserInfo,$location,Tools){
 
     $scope.drives = {
+      tesseract:{
+        type: 'tesseract',
+        name: 'Tesseract',
+        icon: '/images/tesseract.png',
+        accounts:[]
+      },
       googledrive: {
         type:'googledrive',
         name:'Google Drive',
@@ -25,7 +31,6 @@ angular.module('clientApp')
       },
       dropbox:{
         type: 'dropbox',
-        dropbox: 'dropbox',
         name: 'Dropbox',
         icon:'/images/dropbox.png',
         accounts:[]

@@ -31,6 +31,7 @@ angular.module('clientApp')
 		case 'dropbox':		this.rootPath = '/';			break;
 		case 'googledrive':	this.rootPath = 'root';			break;
 		case 'onedrive':	this.rootPath = 'me/skydrive';	break;
+    case 'tesseract':	this.rootPath = 'root';	break;
 		default:
 			console.log(new Error('Unsupported drive type on Constructor::service::Drive'));
 			break;
@@ -168,7 +169,7 @@ angular.module('clientApp')
 					scope.$apply();
 				}
 			}
-				
+
 		}
 
 	};

@@ -66,18 +66,24 @@
             <i class="linkify icon"></i>
             Connect
           </div>
-          <div ng-show="drive.accounts.length" ng-click="toogleManageSegment();" class="manageButton ui primary button">
+          <div ng-show="drive.accounts.length && drive.type !== 'tesseract'" ng-click="toogleManageSegment();" class="manageButton ui primary button">
             <i class="{{manageBtnIco}} icon"></i>
             {{manageBtnTxt}}
+          </div>
+          <div ng-show="drive.type === 'tesseract'" ng-click="upgrade()"  class="ui right floated primary button">
+            <i class="level up icon"></i>
+            Upgrade
           </div>
 
 
           <div class="leftPart">
             <img class="ui mini" ng-src="{{drive.icon}}">
             <div class="content">{{drive.name}}
-              <div ng-show="drive.accounts.length" class="sub header">You have already linked <a ng-click="toogleManageSegment();" >{{drive.accounts.length}} accounts</a>
+              <div ng-show="drive.accounts.length && drive.type !== 'tesseract'" class="sub header">You have already linked <a ng-click="toogleManageSegment();" >{{drive.accounts.length}} accounts</a>
               </div>
-              <div ng-hide="drive.accounts.length" class="sub header">No account linked</a>
+              <div ng-hide="drive.accounts.length" class="sub header">No account linked
+              </div>
+              <div ng-show="drive.type === 'tesseract'" class="sub header">Free storage provided by Polytrix. <a>What is this?</a>
               </div>
             </div>
           </div>
@@ -86,7 +92,7 @@
 
 
 
-        <div class="manageDriveSegment">
+        <div class="manageDriveSegment" ng-hide="drive.type === 'tesseract'">
           <div class="ui tertiary segment">
             <h5 ng-repeat="account in drive.accounts" class="ui header row-account">
               <div class="removeDrive">

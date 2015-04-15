@@ -98,13 +98,14 @@ module.exports.register = function(req,res,next){
 				req.unsuccess = true;
 				req.myError = err;
 			}
-			next();
+			next(err);
 		});
 	})
 	.catch(function(err){
+            console.log(err);
 		req.unsuccess = true;
 		req.myError = err;
-		next();
+		next(err);
 	});
 };
 

@@ -34,12 +34,12 @@ var app = express();
             host:dbconnect.ip,
             port:dbconnect.port,
             touchAfter: 5 * 60,//5 minutes
-            ttl: 5,//1 hour
+            ttl: 60 * 60,//1 hour
         }),
         secret: 'polytrix_session',
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: app.get('env') === 'production' ? true : false, maxAge: 5 * 1000 }
+        cookie: { secure: app.get('env') === 'production' ? true : false, maxAge: 60 * 60 * 1000 }
     }));
 
     //passport
@@ -59,7 +59,7 @@ app.use(userRest);
 /**
  * Development Settings
  */
-if (app.get('env') === 'development') {
+if (app.get('env') === 'development' || !app.get('env')) {
     app.get('/',function(req,res){
         res.sendFile(path.join(__dirname, '../client/app/welcome.html'));
     });
@@ -82,7 +82,8 @@ if (app.get('env') === 'development') {
     // Error Handling
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
-        res.render('error', {
+        console.log(err.stack);
+        res.send({
             message: err.message,
             error: err
         });
@@ -112,9 +113,9 @@ if (app.get('env') === 'production') {
     // no stacktraces leaked to user
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: {}
+        console.log(err.stack);
+        res.send({
+            message: err.message
         });
     });
 }

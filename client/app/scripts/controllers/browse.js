@@ -53,6 +53,7 @@ angular.module('clientApp')
 				case 'dropbox':     return 'Dropbox';
 				case 'googledrive': return 'Google Drive';
 				case 'onedrive':    return 'One Drive';
+        case 'tesseract':    return 'Tesseract';
 				default: return 'Unknown';
 			}
 		};
