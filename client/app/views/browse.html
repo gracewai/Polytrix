@@ -209,6 +209,27 @@
 
 			<!-- download task end -->
 		</div>
+		<div class="ui icon top left pointing dropdown basic button" style="float: right;">
+			<i class="fa fa-ellipsis-v icon"></i>
+			<div class="menu">
+				<div class="header">Sorting display</div>
+				<div class="item">By alphabetical</div>
+				<div class="item">By file size</div>
+				<div class="item">By date</div>
+				<div class="item">Reverse order</div>
+				<div class="ui divider"></div>
+				<div class="header">Action</div>
+				<div class="item">Copy</div>
+				<div class="item">Move to...</div>
+				<div class="item">Create new folder</div>
+				<div class="item">Tag this item</div>
+				<div class="ui divider"></div>
+				<div class="header">More</div>
+				<div class="item">View details</div>
+				<div class="item">Download item</div>
+				<div class="item">Help</div>
+			</div>
+		</div>
 		<div class="ui icon inverted buttons" style="float:right;">
 			<div ng-click="selectViewOption('list')" class="ui basic button {{viewOption==='list'?'view-option-active':''}}">
 				<i class="fa fa-list icon"></i>
@@ -217,14 +238,38 @@
 				<i class="fa fa-th icon"></i>
 			</div>
 		</div>
-		<div class="ui animated teal button" style="float:right;" id="psudoUpload">
-			<div class="visible content">
-				<i class="fa fa-plus-circle"></i>
-				Add Files
+		<div class="ui animated button" style="float: right;">
+			<div class="visible content"><i class="fa fa-eye icon"></i>Browse Mode</div>
+			<div class="hidden content"><i class="fa fa-check-square-o icon"></i>Selection Mode</div>
+		</div>
+		<div class="ui teal buttons" style="float:right;">
+			<div class="ui floating dropdown icon button">
+				<i class="dropdown icon"></i>
+				<div class="menu">
+					<div class="item" id="fileSelect">
+						<i class="fa fa-file icon"></i> Select Files
+					</div>
+					<div class="item" id="folderSelect">
+						<i class="fa fa-folder-open icon"></i> Select Folder
+					</div>
+					<div class="divider"></div>
+					<div class="item" id="folderCreate">
+						<i class="fa fa-folder icon"></i> Create new folder
+					</div>
+					<div class="item">
+						<i class="fa fa-cloud-upload icon"></i> Advanced Uploader
+					</div>
+				</div>
 			</div>
-			<div class="hidden content">
-				<i class="fa fa-folder-open-o icon"></i>
-				Browse
+			<div class="ui animated button" id="psudoUpload">
+				<div class="visible content">
+					<i class="fa fa-plus-circle icon"></i>
+					Add Files
+				</div>
+				<div class="hidden content">
+					<i class="fa fa-folder-open-o icon"></i>
+					Browse
+				</div>
 			</div>
 		</div>
 		<div ng-include="'views/detailsview.html'" ng-controller="DetailsView"></div>
@@ -268,5 +313,11 @@
 	$('.ui.labeled.icon.top.right.pointing.dropdown.button')
 	.dropdown();
 
+	$('.dropdown')
+  .dropdown({
+    // you can use any ui transition
+    transition: 'drop'
+  })
+;
 
 </script>
