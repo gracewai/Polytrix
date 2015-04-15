@@ -1,7 +1,7 @@
 <div class="browse-view container">
   <div style="clear:both;margin:10px"></div>
   <div class="file {{viewOption}}" ng-controller="File"  ng-init="init(null,drive,false,true);"
-       ng-hide="(!currentPath || currentPath == drive.cache.cachedIndex.rootIndex)" ng-click="getFileIndex(parentIndex)">
+       ng-hide="(!currentPath || currentPath == drive.cache.cachedIndex.rootIndex)" ng-click="getFileIndex(parentIndex);">
     <div class="field">Go Upper</div>
   </div>
   <div ng-repeat="file in files | filter:myFilter | orderBy: ['is_file','name']" ng-hide="file._raw.labels.trashed" ng-controller="File"

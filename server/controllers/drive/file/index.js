@@ -1,21 +1,25 @@
 
-module.exports.upload = require('./upload');
-module.exports.download = require('./download');
-module.exports.operation = require('./operation');
+var uploadHandler = require('./upload');
+module.exports.upload = uploadHandler.upload;
+module.exports.createAndUpload = uploadHandler.createAndUpload;
 
-module.exports.list = function(req, res) {
-	console.log('routing rest.js /api/fileIndex/:driveId');
+var download = require('./download');
+var operation = require('./operation');
 
-	req.apiClient.metadata.listFile(req.params.fileId)
-	.then(function(result)
-	{
-		result.logined = true;
-		res.send(result);
-	})
-	.done();
+var metadataHandler = require('./metadata');
+
+module.exports = {
+    upload:uploadHandler.upload,
+    createAndUpload:uploadHandler.createAndUpload,
+
+    download:download,
+    operation:operation,
+
+    list:metadataHandler.list,
+    getMetadata:metadataHandler.getMetadata,
+    patch:metadataHandler.patch,
+
 };
-
-
 
 // router.get('/api/across/:driveId',
 

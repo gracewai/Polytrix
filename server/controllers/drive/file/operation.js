@@ -86,3 +86,19 @@ module.exports.move = function(req,res){
 		}
 	});
 };
+
+module.exports.copy = function(req,res){
+
+};
+
+module.exports.create = function(req,res){
+
+};
+
+module.exports.rename = function(req,res){
+
+};
+
+module.exports.remove = function(req,res){
+
+};

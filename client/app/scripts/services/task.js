@@ -88,10 +88,12 @@ angular.module('clientApp')
 	};
 
   Task.prototype.removeSubTask = function(subTask){
+    var target;
     if(typeof subTask === 'string'){
       var id = subTask;
       for(var i = this.subTask.length-1;i>=0;i--){
         if(this.subTask[i].id === id){
+          target = this.subTask[i];
           this.subTask.splice(i,1);
           break;
         }
@@ -99,11 +101,13 @@ angular.module('clientApp')
     }else{
       for(var i = this.subTask.length-1;i>=0;i--){
         if(this.subTask[i] === subTask){
+          target = this.subTask[i];
           this.subTask.splice(i,1);
           break;
         }
       }
     }
+    if(target)this.totalItems -= target.totalItems;
   };
 
 	//Overrideing event

@@ -2,7 +2,7 @@
 //
 //
 //	Task
-//	
+//
 //
 //
 //
@@ -11,6 +11,19 @@ angular.module('clientApp')
 .controller('taskDirectiveCtrl',['$scope',function($scope){
 	$scope.openst = false;
 	$scope.Math = Math;
+  var parent = $scope.$parent.$parent.$parent.$parent;
+
+    $scope.removeTask = function(task){
+      $scope.val.removeSubTask(task);
+    };
+    $scope.removeFromParent = function(){
+      if(parent.removeTask){
+        parent.removeTask($scope.val);
+      }
+    };
+    $scope.hasParent = !!parent.removeTask;
+    console.log($scope.hasParent);
+    console.log($scope);
 }])
 .directive('task', function(){
 	return {

@@ -48,9 +48,17 @@ module.exports.updateAccountDetails = function(req,res, next){
 };
 
 module.exports.streamBegin = function(req,res,next){
-	req.event.beginTime = new Date();
+	req.streamBeginTime = new Date();
 	next();
 };
+module.exports.streamEnd = function(req,res,next){
+    var streamEndTime = new Date();
+    if(!req.streamBeginTime){
+        return;
+    }
+    var timeUsed = streamEndTime - req.streamBeginTime;
+};
+module.exports.endRoute = function(req,res){};
 
 module.exports.genertateShortenUrl = function(req,res,next){
 	var api_key = '31e735f3da507cb3b3c8c4909b35152d544c7595f956498b791ef56faab1a5461f929a0e337057b8574b3edf422a1d15e0f5aea4745525152b672711';

@@ -2,7 +2,8 @@
 
 angular.module('clientApp')
 	.controller('uploadCtrl',['$scope', 'UploadTask', '$q',function($scope, UploadTask, $q){
-	var task = $scope.task = new UploadTask.Task.MonitorTask('rootTask');
+	  var task = $scope.task = new UploadTask.Task.MonitorTask('rootTask');
+    var $outerScope = $scope.$parent;
 
 	setTimeout(function(){
 		$("#ajaxfile").on('change',onChange);
@@ -35,7 +36,15 @@ angular.module('clientApp')
 		var files = $(this)[0].files;
 		for(var i = 0; i < files.length;i++){
 			var file = files[i];
-			task.addSubTask(new UploadTask.MultipartTask('root',file,file));
+      if($outerScope.selectedDrive){
+        var destination = {
+          drive:$outerScope.selectedDrive,
+          folder:$outerScope.destination[$outerScope.selectedDrive]
+        };
+        task.addSubTask(new UploadTask.MultipartTask(destination,file,file));
+      }else{
+        console.error('cannot find destination to upload');
+      }
 		}
 		$scope.$apply();
 	}
@@ -51,7 +60,7 @@ angular.module('clientApp')
 		if(items[0] && items[0].webkitGetAsEntry){
 			handleWebkitGetAsEntry(items)
 			.then(function(task){
-				
+
 			});
 		}
 	}
@@ -70,11 +79,23 @@ angular.module('clientApp')
 	function handleWebkitGetAsEntry(items){
 		function handleItem(item){
 			if (item) {
-				return UploadTask.createSuitableTask('root', item)
-				.then(function(_task){
-					task.addSubTask(_task);
-					return task;
-				});
+
+        if($outerScope.selectedDrive){
+          var destination = {
+            drive:$outerScope.selectedDrive,
+            folder:$outerScope.destination[$outerScope.selectedDrive]
+          };
+          return UploadTask.createSuitableTask(destination, item)
+            .then(function(_task){
+              task.addSubTask(_task);
+              return task;
+            });
+        }else{
+          console.error('cannot find destination to upload');
+          return $q(function(r){r(task);});
+        }
+
+
 			}else{
 				return $q(function(r){r(task);});
 			}
@@ -92,4 +113,8 @@ angular.module('clientApp')
 
 		return forloop(0);
 	}
+
+    function init(outerScope){
+      $outerScope = outerScope;
+    }
 }]);

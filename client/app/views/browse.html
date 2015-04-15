@@ -137,7 +137,7 @@
 			</div>
 		</div>
 		<!-- upload task -->
-		<div ng-controller="uploadCtrl">
+		<div ng-controller="uploadCtrl" ng-init="init()">
 <!-- <div id="bgdiv"></div>
 <div id="upload_grid">
 </div>
@@ -277,11 +277,12 @@
 	</div>
 
 
-
+selectedDrive:{{selectedDrive}}
+  selectedDestination:{{destination[selectedDrive]}}
 	<div class="menu" style="margin-top:5px;">
 		<div id="driveTabs" class="ui pointing secondary menu">
-			<a class="active item" data-tab="all">All</a>
-			<a ng-repeat="drive in drives" class="item" data-tab="{{drive.id}}">{{getDriveName(drive.type)}}</a>
+			<a class="active item" data-tab="all" ng-click="selectTab(null)">All</a>
+			<a ng-repeat="drive in drives" class="item" data-tab="{{drive.id}}" ng-click="selectTab(drive)">{{getDriveName(drive.type)}}</a>
 		</div>
 
 		<div class="ui active tab" data-tab="all">

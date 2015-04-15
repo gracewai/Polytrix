@@ -104,7 +104,8 @@ router.post('/api/account/update',
 // @param driveId
 // @param fileId
 router.get('/api/drive/:driveId/:fileId/',
-	Middlewares.functionNotImplemented);
+    Middlewares.functionNotImplemented,
+    DriveCtrl.file.getMetadata);
 
 // Download the file (redirect to the file's download link)
 // @param driveId
@@ -117,21 +118,27 @@ router.get('/api/drive/:driveId/:fileId/download/',
 // @param fileId - the destination folder's id
 // @param name - the name of the new file or folder
 router.get('/api/drive/:driveId/:fileId/new/',
-	Middlewares.functionNotImplemented);
+    Middlewares.functionNotImplemented,
+    DriveCtrl.file.operation.create);
 
 // Create and upload a file
 // @param driveId
 // @param fileId - the destination folder's id
 // @param name - the name of the new file or folder
+// @param (in multipart body) size - the size of the file
 router.post('/api/drive/:driveId/:fileId/new/',
-	Middlewares.functionNotImplemented);
+    Middlewares.streamBegin,
+	DriveCtrl.file.createAndUpload,
+    Middlewares.streamEnd);
 
 // Upload the file
 // @param driveId
 // @param fileId
+// @param (in multipart body) size - the size of the file
 router.post('/api/drive/:driveId/:fileId/',
 	Middlewares.streamBegin,
-	DriveCtrl.file.upload);
+	DriveCtrl.file.upload,
+    Middlewares.streamEnd);
 
 //router.get('/api/share/:fileId', 
 //	Middlewares.generateShortenUrl);
@@ -146,21 +153,24 @@ router.get('/api/drive/:driveId/:fileId/list/',
 // @param driveId
 // @param fileId
 router.delete('/api/drive/:driveId/:fileId/',
-	Middlewares.functionNotImplemented);
+    Middlewares.functionNotImplemented,
+    DriveCtrl.file.operation.remove);
 
 // Rename the file or folder
 // @param driveId
 // @param fileId
 // @param name - new name
 router.patch('/api/drive/:driveId/:fileId/',
-	Middlewares.functionNotImplemented);
+    Middlewares.functionNotImplemented,
+	DriveCtrl.file.patch);
 
 // Copy the file
 // @param driveId
 // @param fileId
 // @param destinationFileId - the destination folder's id
 router.get('/api/drive/:driveId/:fileId/copy/',
-	Middlewares.functionNotImplemented);
+    Middlewares.functionNotImplemented,
+    DriveCtrl.file.operation.copy);
 
 // Move the file
 // @param driveId

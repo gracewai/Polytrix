@@ -13,6 +13,8 @@ angular.module('clientApp')
 		$scope.drives = [];
 		$scope.searchText = '';
 		$scope.viewOption = 'my-grid';
+    $scope.selectedDrive = null;
+    $scope.destination = {};
     $scope.filterTargets = {
       audio:false,
       video:false,
@@ -24,6 +26,17 @@ angular.module('clientApp')
       folder:false
     };
 
+    $scope.selectTab = function(drive){
+      if(!drive){
+        $scope.selectedDrive = null;
+        return;
+      }
+      $scope.selectedDrive = drive.id;
+      $scope.destination[$scope.selectedDrive] = $scope.destination[$scope.selectedDrive] || drive.rootPath;
+    };
+    $scope.getSelectedDestination = function(){
+      return $scope.destination[$scope.selectedDrive];
+    };
 		$scope.search = function(){
 			if($scope.searchText){
 				console.clear();
@@ -126,6 +139,7 @@ angular.module('clientApp')
 	.controller('CombinedView',['$scope', 'UserInfo', 'Global',function($scope, UserInfo, Global){
 		var userInfo = null;
 		var drivelist = [];
+    var $outerScope = $scope.$parent;
 		$scope.files = [];
 		var drive = $scope.drive = {
 			id:null,
@@ -140,6 +154,8 @@ angular.module('clientApp')
 		$scope.switchAndView = function(id, drive){
 			$('#driveTabs>.item').tab('change tab', drive.id);
 			angular.element('#' + drive.id).scope().getFileIndex(id);
+      $outerScope.selectedDrive = drive.id;
+      $outerScope.destination[drive.id] = id;
 		};
 
 		$scope.getFileTitle = function(file){
@@ -188,12 +204,12 @@ angular.module('clientApp')
 			drivelist = Global.drives.val;
 		}
 
-
 		$scope.getClass = _browse_getClass_;
 		$scope.getFileTypeName = _browse_getFileType_;
 
 		UserInfo.onchange($scope,init);
 		init();
+
 		setTimeout($scope.getFileIndex,100);
 	}])
 	.controller('SingleDriveCtrl', ['$scope', '$resource', function ($scope, $resource) {
@@ -201,8 +217,11 @@ angular.module('clientApp')
 		$scope.currentPath = null;
 		$scope.parentIndex = null;
 		$scope.files = [];
+    var $outerScope = $scope.$parent;
 
 		$scope.clickOnFolder = function(file){
+      $outerScope.selectedDrive = drive.id;
+      $outerScope.destination[drive.id] = file.identifier;
 			$scope.getFileIndex(file.identifier);
 		};
 
@@ -240,10 +259,11 @@ angular.module('clientApp')
 				if($scope.currentPath == path && index && index[0]){//view not changed
 					$scope.files = index;
 				}
-			})
+			});
 		};
 
 		$scope.init = function(_drive){
+
 			drive = $scope.drive = _drive;
 			$scope.parentIndex = drive.rootPath;
 			$scope.getFileIndex();

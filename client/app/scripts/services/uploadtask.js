@@ -10,7 +10,7 @@
 angular.module('clientApp')
   .service('UploadTask', ['Task','$q' , function (Task,$q) {
 
-  var uploadUrl='/test/uploadtask/' ;
+  var uploadUrl='/api/drive/'; //:driveId/:fileId/new';
 
   //
 	//	MultipartTask : Task
@@ -20,6 +20,7 @@ angular.module('clientApp')
 		this.file = file;
 		this.webkitEntry = webkitEntry;
 		this.destination = destination;
+    console.log('MultipartTask created:',destination.drive,destination.folder);
 	};
 	MultipartTask.prototype = Object.create(Task.prototype);
 	MultipartTask.prototype.constructor = MultipartTask;
@@ -30,11 +31,11 @@ angular.module('clientApp')
 		var file_data = file;
 		var form_data = new FormData();
 		var path = webkitEntry.fullpath;
-		form_data.append("path",destination + path);
-		form_data.append("filesize",file.size);
+		form_data.append("size",file.size);
+    //form_data.append("filename",file.name);
 		form_data.append("file",file_data);
 		$.ajax({
-			url: uploadUrl,
+			url: uploadUrl + encodeURIComponent(destination.drive) +'/'+ encodeURIComponent(destination.folder) + '/new',
 			type: 'post',
 			//dataType: 'text',
 			xhr: function(){
@@ -77,7 +78,7 @@ angular.module('clientApp')
 	ChunckedTask.prototype = Object.create(Task.prototype);
 	ChunckedTask.prototype.constructor = ChunckedTask;
 	ChunckedTask.prototype.execute = function(success, fail, progress){
-		
+
 	};
 
 	//

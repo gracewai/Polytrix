@@ -9,16 +9,17 @@
 		</div>
 	</div>
 
+  <button ng-show="hasParent" ng-click="removeFromParent()">del</button>
 	<button class="toggle left" ng-show="val.subTask.length" ng-click="openst = !openst">{{openst ? "-" : "+"}}</button>
 	<button class="toggle left" style="opacity:0;" ng-hide="val.subTask.length"></button>
 	<div class="left">
-		<span>{{val.id}}</span> | 
+		<span>{{val.id}}</span> |
 		status:{{val.status}} |
 		items:{{val.totalItems}} |
 		times left:{{val.timesLeft > 0 ? Math.round(val.timesLeft) : 0}} <br>
 
 		<progress value="{{val.progress}}"></progress>
-		
+
 		<div ng-show="openst">
 			<sub-tasks val="val.subTask"></sub-tasks>
 		</div>
