@@ -8,14 +8,19 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('SettingsCtrl', function ($scope) {
+  .controller('SettingsCtrl',['$scope', 'UserInfo', '$resource', function ($scope, UserInfo, $resource) {
   	$scope.selectedSection = 'user_account_tab';
   	$scope.option = 'link step';
-  	$scope.select=function(selection){
+  	$scope.select = function(selection){
   		$scope.selectedSection = selection;
   		$('.step').removeClass('active');
   		$('#'+selection).addClass('active');
   		$scope.option = 'active step';
+      setTimeout(function(){
+          $('.ui.search.dropdown').dropdown();
+  $('.ui.checkbox').checkbox();
+    $('.ui.buttons').tab();
+      })
   	};
     $scope.getName = function(id){
       switch(id){
@@ -39,6 +44,12 @@ angular.module('clientApp')
         break;
       }
     }
-  });
+    $scope.settingCache = {
+      password: 'placeholder',
+      confirm_password: 'placeholder',
+    }
+    $scope.user = UserInfo.get();
+
+  }]);
 
 
